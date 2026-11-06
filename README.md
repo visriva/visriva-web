@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Visriva
 
-## Getting Started
+Marketing site for **Visriva** — corporate event stations in Bengaluru (photo booths, AI & merchandise, games & VR). Built with **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS v4**, and **Supabase** for quote leads.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local
+# fill .env.local (see below)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and set:
 
-## Learn More
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Yes (prod) | Canonical URL for metadata, sitemap, robots |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Recommended | `wa.me` link after quote submit |
+| `NEXT_PUBLIC_SUPABASE_URL` | For saved leads | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | For saved leads | Inserts leads server-side only — never expose to the client |
+| `ADMIN_PASSWORD` | For `/admin` | Simple studio password for lead inbox |
+| `ADMIN_SESSION_SECRET` | For `/admin` | Cookie signing secret |
+| `NEXT_PUBLIC_GSTIN`, social URLs | Optional | Footer and contact |
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Apply the SQL in `supabase/migrations/20261106153000_leads_and_services.sql` in the Supabase SQL editor (or CLI) before expecting inserts to succeed.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Push this repo to GitHub (see below).
+2. In [Vercel](https://vercel.com): **Add New Project** → import the GitHub repo → Framework Preset: Next.js.
+3. Add the same variables as `.env.example` in **Project → Settings → Environment Variables** (Production + Preview).
+4. Redeploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+CLI (from repo root, logged in as `vercel login`):
+
+```bash
+vercel link --yes --project visriva
+vercel --prod
+```
+
+## GitHub
+
+Create a repository (e.g. `visriva-web`) and push:
+
+```bash
+git remote add origin https://github.com/YOUR_ORG/visriva-web.git
+git push -u origin main
+```
+
+If `gh` shows an invalid token, run `gh auth login -h github.com` and try again. To create and push in one step:
+
+```bash
+gh repo create YOUR_ORG/visriva-web --public --source=. --remote=origin --push
+```
+
+## Cloudflare (optional)
+
+Point the domain to Vercel (CNAME to `cname.vercel-dns.com` or A records per Vercel docs), enable the orange-cloud proxy, and add page rules or Cache Rules as needed; static assets on Vercel are already edge-cached.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server locally |
+| `npm run lint` | ESLint |
+
+## License
+
+Private — Visriva. All rights reserved.
