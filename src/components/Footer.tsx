@@ -1,6 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { gstin, instagramUrl, linkedinUrl, navigation } from "@/lib/site";
+import {
+  brandName,
+  businessName,
+  contactEmail,
+  gstin,
+  instagramUrl,
+  linkedinUrl,
+  navigation,
+  phoneDisplay,
+  phoneTel,
+} from "@/lib/site";
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
 export function Footer() {
@@ -23,8 +33,9 @@ export function Footer() {
             className="h-24 w-24 object-cover ring-1 ring-gold/40"
           />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-mist/80">
-            Photo booths, AI merchandise, and games for corporate events in Bengaluru.
-            Owned inventory. One crew from load-in to last print.
+            {businessName} · {brandName}. Photo booths, AI merchandise, games, and live gifting.
+            Based in Bengaluru, travelling across India. Owned inventory. One crew from load-in to
+            last print.
           </p>
         </div>
 
@@ -55,6 +66,16 @@ export function Footer() {
           <ul className="mt-5 space-y-3 text-sm leading-relaxed text-cream/90">
             <li>Bengaluru, Karnataka, India</li>
             <li>
+              <a href={`tel:${phoneTel}`} className="link-gold">
+                {phoneDisplay}
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${contactEmail}`} className="link-gold">
+                {contactEmail}
+              </a>
+            </li>
+            <li>
               {whatsapp ? (
                 <a href={whatsapp} className="link-gold" target="_blank" rel="noreferrer">
                   WhatsApp the studio
@@ -70,16 +91,12 @@ export function Footer() {
             <li>Bengaluru transit ₹2,000 – ₹4,000.</li>
           </ul>
           <div className="mt-6 flex gap-5 text-sm">
-            {instagramUrl ? (
-              <a href={instagramUrl} className="link-gold text-champagne" target="_blank" rel="noreferrer">
-                Instagram
-              </a>
-            ) : null}
-            {linkedinUrl ? (
-              <a href={linkedinUrl} className="link-gold text-champagne" target="_blank" rel="noreferrer">
-                LinkedIn
-              </a>
-            ) : null}
+            <a href={instagramUrl} className="link-gold text-champagne" target="_blank" rel="noreferrer">
+              Instagram
+            </a>
+            <a href={linkedinUrl} className="link-gold text-champagne" target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
           </div>
         </div>
       </div>

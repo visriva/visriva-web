@@ -2,10 +2,29 @@ export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 ).replace(/\/$/, "");
 
+/** Legal / schema name from Visriva house copy */
+export const businessName = "Visriva Live Station";
+
+export const brandName = "Visriva";
+
 export const gstin = process.env.NEXT_PUBLIC_GSTIN || "";
 
-export const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL || "";
-export const linkedinUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL || "";
+/** Defaults from studio records; override via env on Vercel */
+export const phoneDisplay =
+  process.env.NEXT_PUBLIC_PHONE_DISPLAY || "+91 88844 84828";
+
+export const phoneTel =
+  (process.env.NEXT_PUBLIC_PHONE_TEL || "+918884484828").replace(/\s/g, "");
+
+export const contactEmail =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "visriva.work@gmail.com";
+
+export const instagramUrl =
+  process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/visriva.co";
+
+export const linkedinUrl =
+  process.env.NEXT_PUBLIC_LINKEDIN_URL ||
+  "https://www.linkedin.com/company/visriva";
 
 /**
  * Confirm these three figures before the site is announced.
@@ -73,6 +92,20 @@ export const processSteps = [
     n: "03",
     title: "One crew",
     body: "We load in, run every station, and wrap. You stay with your guests.",
+  },
+] as const;
+
+/** Rooms we speak to (from legacy house copy) */
+export const audiences = [
+  {
+    title: "Weddings and sangeet",
+    copy:
+      "A calm station beside the dance floor. Guests leave with a print, a magnet, or both — and the couple keeps the night in objects, not only in a drive.",
+  },
+  {
+    title: "Corporate and launches",
+    copy:
+      "One crew, one visual system, and GST-ready invoicing. For galas, offsites, exhibitions, and brand moments that need a queue that moves.",
   },
 ] as const;
 

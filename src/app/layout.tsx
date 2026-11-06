@@ -30,9 +30,9 @@ const cinzel = Cinzel({
   display: "swap",
 });
 
-const title = "Visriva · Live stations for corporate events in Bangalore";
+const title = "Visriva · Live stations for corporate events and weddings · Bengaluru";
 const description =
-  "Best live station vendor in Bangalore for corporate events. Photo booths, AI merchandise, VR, and DTF t-shirt printing. Owned inventory. One team, end to end.";
+  "Visriva Live Station — photo booths, AI and merchandise, games, and live gifting for corporate events and celebrations in Bengaluru and across India. Best live station vendor in Bangalore for booths and on-site keepsakes. Owned inventory. One team, end to end.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -43,12 +43,17 @@ export const metadata: Metadata = {
   description,
   applicationName: "Visriva",
   keywords: [
+    "Visriva",
+    "Visriva Live Station",
     "best live station vendor Bangalore",
     "corporate event photo booth Bangalore",
+    "wedding photo booth Bangalore",
+    "live magnet station",
     "VR station for corporate events India",
     "DTF t-shirt printing Bangalore",
     "AI photo booth Bangalore",
     "corporate event services Bengaluru",
+    "corporate event gifting India",
   ],
   openGraph: {
     type: "website",

@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# Legacy draft / reference copy (not part of the Next.js app)
+/oldfolder/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

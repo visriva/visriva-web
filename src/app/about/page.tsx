@@ -1,7 +1,7 @@
 import { PageHero } from "@/components/PageHero";
 import { GoldLink, Plate } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
-import { processSteps } from "@/lib/site";
+import { audiences, processSteps } from "@/lib/site";
 
 export const metadata = pageMeta(
   "About Visriva, Bengaluru",
@@ -30,7 +30,7 @@ export default function AboutPage() {
       <PageHero
         kicker="The house"
         title="One standard, from the first print to the last headset."
-        lede="Visriva is a Bengaluru studio for corporate floors. We own the stations and we staff them."
+        lede="Visriva Live Station is a Bengaluru house for corporate floors and celebrations. We own the stations and we staff them."
         image="/images/hero.jpg"
         alt="A full corporate reception"
       />
@@ -39,6 +39,14 @@ export default function AboutPage() {
           <article key={pillar.title} className="border-t border-gold/40 pt-6">
             <h2 className="font-display text-4xl italic text-cream">{pillar.title}</h2>
             <p className="mt-4 text-sm leading-relaxed text-mist/85">{pillar.body}</p>
+          </article>
+        ))}
+      </section>
+      <section className="mx-auto grid max-w-[1500px] gap-6 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:px-10">
+        {audiences.map((audience) => (
+          <article key={audience.title} className="border border-gold/25 bg-white/[0.03] p-8 backdrop-blur-sm">
+            <h2 className="font-display text-4xl italic text-cream">{audience.title}</h2>
+            <p className="mt-4 text-sm leading-relaxed text-mist/85">{audience.copy}</p>
           </article>
         ))}
       </section>

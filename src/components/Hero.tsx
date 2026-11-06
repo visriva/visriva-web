@@ -100,7 +100,7 @@ export function Hero({ film = false }: { film?: boolean }) {
       <div className="relative z-10 flex min-h-[100svh] flex-col justify-end px-5 pb-28 pt-32 sm:px-10 lg:px-16">
         <div className="flex items-start justify-between gap-6">
           <p className="font-royal text-[0.68rem] uppercase tracking-[0.34em] text-gold">
-            Bengaluru · Corporate events
+            Bengaluru · Corporate · Weddings
           </p>
           <button
             type="button"
@@ -112,11 +112,12 @@ export function Hero({ film = false }: { film?: boolean }) {
           </button>
         </div>
         <h1 className="mt-6 max-w-5xl font-display text-[clamp(3.4rem,8.4vw,8.4rem)] italic leading-[0.86] text-cream">
-          The whole floor, in one house.
+          Prints in the room. Objects they keep.
         </h1>
         <p className="mt-6 max-w-xl text-base leading-relaxed text-champagne/90 sm:text-lg">
-          Photo booths, AI merchandise, and games. Owned inventory. One crew from
-          load-in to the last print. You host the room.
+          Studio capture and live stations for company floors and celebrations — photo booths, AI
+          and merchandise, games, and gifting. Owned inventory. One crew from load-in to the last
+          print. You host the room.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <GoldLink href="/quote">Request a quote</GoldLink>
