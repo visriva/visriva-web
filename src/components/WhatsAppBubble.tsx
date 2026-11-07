@@ -1,6 +1,12 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
 export function WhatsAppBubble() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/live")) return null;
+
   const href = whatsAppLink(WHATSAPP_GREETING);
 
   return (

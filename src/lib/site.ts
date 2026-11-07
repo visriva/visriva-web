@@ -126,6 +126,7 @@ export const navigation: NavItem[] = [
       { href: "/games-vr", label: "Games & VR", note: "From ₹6,000" },
     ],
   },
+  { href: "/live", label: "Live Studio" },
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
   { href: "/client-requirements", label: "Client Requirements" },

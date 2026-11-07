@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   brandName,
   businessName,
@@ -14,6 +17,9 @@ import {
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/live")) return null;
+
   const whatsapp = whatsAppLink(WHATSAPP_GREETING);
   const links = navigation.flatMap((item) =>
     item.children
