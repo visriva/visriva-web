@@ -13,7 +13,7 @@ import {
 import { Suspense } from "react";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { StudioGlassNav } from "@/components/StudioGlassNav";
 import { JsonLd } from "@/components/JsonLd";
 import { WhatsAppBubble } from "@/components/WhatsAppBubble";
 import { brandLogoSrc, siteUrl } from "@/lib/site";
@@ -132,8 +132,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           aria-hidden
           className="pointer-events-none fixed inset-6 z-[39] hidden border border-white/[0.04] lg:block"
         />
-        <Suspense fallback={<div className="h-24" />}>
-          <Header />
+        <Suspense fallback={<div className="h-[4.5rem]" />}>
+          <StudioGlassNav />
         </Suspense>
         {children}
         <Footer />

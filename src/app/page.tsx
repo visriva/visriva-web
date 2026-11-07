@@ -1,3 +1,5 @@
+import { BookingProvider } from "@/components/booking/BookingContext";
+import { BookingTray } from "@/components/booking/BookingTray";
 import { LuxuryInteractivePlatform } from "@/components/luxury/LuxuryInteractivePlatform";
 import { pageMeta } from "@/lib/seo";
 
@@ -9,8 +11,11 @@ export const metadata = pageMeta(
 
 export default function HomePage() {
   return (
-    <div id="content" className="min-h-screen">
-      <LuxuryInteractivePlatform />
-    </div>
+    <BookingProvider>
+      <div className="min-h-screen pb-24">
+        <LuxuryInteractivePlatform />
+      </div>
+      <BookingTray />
+    </BookingProvider>
   );
 }

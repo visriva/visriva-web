@@ -338,6 +338,14 @@ const LUXURY_TO_SERVICE: Record<string, string> = {
   "reflex-games": "catch-baton",
 };
 
+export function formatINR(amount: number) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
 export function getLuxuryStationPrice(
   station: LuxuryStation,
   toteBagTierIndex: number,

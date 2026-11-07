@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { GalleryView } from "@/components/GalleryView";
+import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { MoodSection } from "@/components/MoodSection";
 import { pageMeta } from "@/lib/seo";
 
@@ -28,6 +29,7 @@ export default function GalleryPage() {
           <GalleryView films={films} />
         </div>
       </div>
+      <StudioPageBridge />
     </MoodSection>
   );
 }

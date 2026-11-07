@@ -7,6 +7,7 @@ import { OccasionStrip } from "@/components/snap/OccasionStrip";
 import { PrintFormats } from "@/components/snap/PrintFormats";
 import { RentPaths } from "@/components/snap/RentPaths";
 import { StationSpecs } from "@/components/snap/StationSpecs";
+import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { WhyVisriva } from "@/components/snap/WhyVisriva";
 import { MoodSection } from "@/components/MoodSection";
 import { GoldLink } from "@/components/ui";
@@ -131,6 +132,8 @@ export default function PhotoBoothsPage() {
           <RateList services={servicesIn("photo-booths")} />
         </div>
       </section>
+
+      <StudioPageBridge />
 
       <section className="px-4 pb-10 sm:px-6 lg:px-10">
         <PolicyStrip />

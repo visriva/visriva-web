@@ -39,21 +39,8 @@ import {
   Gift
 } from 'lucide-react';
 import Link from 'next/link';
-import { VisrivaMark } from '@/components/VisrivaMark';
+import { StationRateCard } from '@/components/booking/StationRateCard';
 import { SITE_THEME } from '@/lib/luxury-stations';
-
-function StudioLogo({ large = false }: { large?: boolean }) {
-  return (
-    <VisrivaMark
-      priority
-      className={
-        large
-          ? "h-20 w-auto max-w-[11rem] object-contain"
-          : "h-12 w-auto max-w-[9rem] object-contain sm:h-14 sm:max-w-[10rem]"
-      }
-    />
-  );
-}
 
 // ============================================================================
 // MAIN APPLICATION COMPONENT
@@ -109,36 +96,14 @@ export function LuxuryInteractivePlatform() {
   }, []);
 
   return (
-    <div
-      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-      className="min-h-screen bg-[#040D0A] text-[#FAF8F5] selection:bg-[#C9A227] selection:text-[#040D0A] pb-12 relative overflow-x-hidden"
-    >
-      {/* Google Fonts Injection */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-
-        @keyframes pulseGold {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.4); }
-          50% { box-shadow: 0 0 0 10px rgba(201, 162, 39, 0); }
-        }
-        .gold-pulse {
-          animation: pulseGold 2.5s infinite;
-        }
-        .luxury-grid-bg {
-          background-size: 40px 40px;
-          background-image: 
-            linear-gradient(to right, rgba(201, 162, 39, 0.05) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(201, 162, 39, 0.05) 1px, transparent 1px);
-        }
-      `}</style>
-
+    <div className="relative min-h-screen overflow-x-hidden bg-[#040D0A] pt-[4.5rem] text-cream selection:bg-gold selection:text-deep">
       {/* =====================================================================
           TOP LIVE TICKER BAR (Synced with Admin Daily Updates Concept)
       ===================================================================== */}
       <div className="bg-[#072A1F] border-b border-[#C9A227]/20 py-2 px-4 text-xs">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#C9A227]/15 border border-[#C9A227]/40 text-[#E5C158] font-medium" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="mood-nav-chimela inline-flex items-center gap-1.5 rounded border border-gold/40 bg-gold/15 px-2 py-0.5 font-medium text-gold-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
               LIVE FLEET STATUS
             </span>
@@ -146,7 +111,7 @@ export function LuxuryInteractivePlatform() {
               100% In-House Hardware Fleet · DNP DS620A/RX1 Print Servers & Dual VR Rigs Ready Across Bengaluru
             </span>
           </div>
-          <div className="flex items-center gap-4 ml-auto" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <div className="ml-auto flex items-center gap-4 font-mono text-xs">
             <span className="text-[#8FA89B]">
               GUESTS SERVED: <strong className="text-[#E5C158]">{liveGuestTicker.toLocaleString()}</strong>
             </span>
@@ -159,59 +124,6 @@ export function LuxuryInteractivePlatform() {
           </div>
         </div>
       </div>
-
-      {/* =====================================================================
-          STICKY LUXURY HEADER
-      ===================================================================== */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#040D0A]/85 border-b border-[#C9A227]/20 transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-          <Link href="/" className="shrink-0" aria-label="Visriva marketing site">
-            <StudioLogo />
-          </Link>
-
-          {/* Center Navigation */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-[#FAF8F5]/80">
-            <Link href="/photo-booths" className="hover:text-[#E5C158] transition-colors">
-              Photo Booths
-            </Link>
-            <Link href="/ai-merchandise" className="hover:text-[#E5C158] transition-colors">
-              AI & Live Merch
-            </Link>
-            <Link href="/games-vr" className="hover:text-[#E5C158] transition-colors">
-              VR & Games
-            </Link>
-            <Link href="/client-requirements" className="hover:text-[#E5C158] transition-colors">
-              Venue Specs
-            </Link>
-            <Link href="/gallery" className="hover:text-[#E5C158] transition-colors">
-              Gallery
-            </Link>
-            <button
-              type="button"
-              onClick={() => setShowGiveawayModal(true)}
-              className="text-[#F4EBD0] hover:text-[#E5C158] transition-colors flex items-center gap-1"
-            >
-              <QrCode className="w-3.5 h-3.5 text-[#C9A227]" /> Giveaway
-            </button>
-          </nav>
-
-          {/* Right Status + Primary Gold CTA */}
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0B3D2E]/80 border border-[#C9A227]/30 text-xs text-[#F4EBD0]">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-              <span>Booking Now: Corporate Season</span>
-            </div>
-
-            <Link
-              href="/quote"
-              className="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] font-bold text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(201,162,39,0.35)] hover:shadow-[0_0_35px_rgba(229,193,88,0.6)] hover:scale-[1.02] active:scale-[0.99] transition-all flex items-center gap-2"
-            >
-              <span>Request a quote</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </header>
 
       {/* =====================================================================
           HERO SECTION (3-Second High-Conviction Hook)
@@ -230,13 +142,10 @@ export function LuxuryInteractivePlatform() {
                 BENGALURU’S PREMIER LIVE ENGAGEMENT STUDIO
               </div>
 
-              <h1
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                className="text-4xl sm:text-6xl lg:text-[66px] font-bold leading-[1.04] tracking-tight text-[#FAF8F5]"
-              >
-                Crowds Around Every Corner.{' '}
-                <span className="italic font-semibold bg-gradient-to-r from-[#F4EBD0] via-[#E5C158] to-[#C9A227] bg-clip-text text-transparent">
-                  Zero Vendor Chaos.
+              <h1 className="type-display text-4xl leading-[1.04] sm:text-6xl lg:text-[66px] text-cream">
+                Crowds around every corner.{' '}
+                <span className="type-display-italic bg-gradient-to-r from-champagne via-gold-2 to-gold bg-clip-text text-transparent">
+                  Zero vendor chaos.
                 </span>
               </h1>
 
@@ -258,11 +167,11 @@ export function LuxuryInteractivePlatform() {
                 </Link>
 
                 <Link
-                  href="/photo-booths#packages"
+                  href="/#rate-card"
                   className="px-6 py-4 rounded-xl bg-[#0B3D2E]/60 hover:bg-[#0B3D2E] text-[#F4EBD0] border border-[#C9A227]/40 font-semibold text-sm sm:text-base transition-all flex items-center gap-2"
                 >
                   <Camera className="w-4 h-4 text-[#E5C158]" />
-                  <span>View booth packages</span>
+                  <span>Open rate card</span>
                 </Link>
 
                 <Link
@@ -435,22 +344,18 @@ export function LuxuryInteractivePlatform() {
         </div>
       </section>
 
+      <StationRateCard />
+
       {/* =====================================================================
           WHY PLANNERS BOOK VISRIVA IN 60 SECONDS (Comparison Matrix)
       ===================================================================== */}
       <section className="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            className="text-xs uppercase tracking-[0.2em] text-[#C9A227] mb-2"
-          >
-            ONE SELF-SUFFICIENT PARTNER · ZERO SUB-VENDOR EXCUSES
-          </div>
-          <h2
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-            className="text-3xl sm:text-5xl font-bold text-[#FAF8F5]"
-          >
-            Why Corporate Event Planners Don’t Sweat With Us
+          <p className="mood-nav-chimela mb-2 text-gold">
+            One self-sufficient partner · zero sub-vendor excuses
+          </p>
+          <h2 className="mood-logotype mood-logotype-epstonik text-3xl text-cream sm:text-5xl">
+            Why corporate planners don’t sweat with us
           </h2>
         </div>
 
@@ -506,25 +411,6 @@ export function LuxuryInteractivePlatform() {
       </section>
 
       {/* =====================================================================
-          FOOTER
-      ===================================================================== */}
-      <footer className="bg-[#040D0A] border-t border-[#C9A227]/25 py-12 px-4 sm:px-6 lg:px-8 text-xs text-[#8FA89B]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div>
-            <StudioLogo large />
-            <p className="mt-3 max-w-md text-[#8FA89B]">
-              End-to-end corporate live engagement stations, high-speed instant photo booths, live tote & apparel printing, and commercial VR setups across Bengaluru and South India.
-            </p>
-          </div>
-          <div className="space-y-1.5 text-left sm:text-right" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-            <div className="text-[#F4EBD0] font-semibold">VISRIVA LIVE STATION · BENGALURU</div>
-            <div>Instagram: @visrivalivestation · Domain: visriva.com</div>
-            <div>18% GST B2B Corporate Billing · 50% Advance Date Lock</div>
-          </div>
-        </div>
-      </footer>
-
-      {/* =====================================================================
           MODAL 3: /GIVEAWAY GUEST QR FUNNEL PREVIEW
       ===================================================================== */}
       {showGiveawayModal && (
@@ -541,10 +427,7 @@ export function LuxuryInteractivePlatform() {
               <Gift className="w-3.5 h-3.5" />
               VISRIVA.COM/GIVEAWAY PREVIEW
             </div>
-            <h3
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              className="text-3xl font-bold text-[#FAF8F5]"
-            >
+            <h3 className="type-display text-3xl text-cream">
               Win a Custom Photo Magnet & Keychain Hamper
             </h3>
             <p className="text-xs text-[#F4EBD0]/80 mt-1">

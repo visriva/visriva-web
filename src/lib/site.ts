@@ -125,13 +125,14 @@ export const navigation: NavItem[] = [
     label: "Experiences",
     children: [
       { href: "/photo-booths", label: "Photo Booths", note: "From ₹15,000" },
-      { href: "/ai-merchandise", label: "AI & Merchandise", note: "From ₹25,000" },
-      { href: "/games-vr", label: "Games & VR", note: "From ₹6,000" },
+      { href: "/ai-merchandise", label: "AI & Live Merch", note: "From ₹25,000" },
+      { href: "/games-vr", label: "VR & Games", note: "From ₹6,000" },
     ],
   },
-  { href: "/about", label: "About" },
+  { href: "/#rate-card", label: "Rate card" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/client-requirements", label: "Client Requirements" },
+  { href: "/client-requirements", label: "Venue Specs" },
+  { href: "/about", label: "About" },
 ];
 
 export const galleryItems = [

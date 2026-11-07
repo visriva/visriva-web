@@ -1,6 +1,7 @@
 import { ArFootprint } from "@/components/ArFootprint";
 import { MoodSection } from "@/components/MoodSection";
 import { RequirementsList } from "@/components/RequirementsList";
+import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
 
@@ -44,6 +45,7 @@ export default function RequirementsPage() {
           </div>
         </div>
       </MoodSection>
+      <StudioPageBridge />
     </main>
   );
 }

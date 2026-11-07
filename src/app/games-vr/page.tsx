@@ -1,5 +1,6 @@
 import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
+import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { GoldLink, Plate } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
 import { getService } from "@/lib/services";
@@ -49,6 +50,8 @@ export default function GamesPage() {
           ))}
         </div>
       </section>
+      <StudioPageBridge />
+
       <section className="px-4 pb-16 sm:px-6 lg:px-10">
         <PolicyStrip />
         <div className="mx-auto mt-10 max-w-[1500px]">

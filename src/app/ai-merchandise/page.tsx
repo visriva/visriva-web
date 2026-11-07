@@ -1,5 +1,6 @@
 import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
+import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { RateList } from "@/components/RateList";
 import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
@@ -42,6 +43,8 @@ export default function AiMerchandisePage() {
       <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
         <RateList services={servicesIn("ai-merchandise")} />
       </section>
+      <StudioPageBridge />
+
       <section className="px-4 pb-16 sm:px-6 lg:px-10">
         <PolicyStrip />
         <div className="mx-auto mt-10 max-w-[1500px]">
