@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { brandLogoSrc } from "@/lib/site";
 
 export function pageMeta(title: string, description: string, path: string): Metadata {
   return {
@@ -9,13 +10,13 @@ export function pageMeta(title: string, description: string, path: string): Meta
       title: `${title} · Visriva`,
       description,
       url: path,
-      images: ["/brand/visriva-green.png"],
+      images: [brandLogoSrc],
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} · Visriva`,
       description,
-      images: ["/brand/visriva-green.png"],
+      images: [brandLogoSrc],
     },
   };
 }

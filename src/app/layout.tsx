@@ -16,7 +16,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { WhatsAppBubble } from "@/components/WhatsAppBubble";
-import { siteUrl } from "@/lib/site";
+import { brandLogoSrc, siteUrl } from "@/lib/site";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -92,7 +92,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: "/brand/visriva-green.png",
+        url: brandLogoSrc,
         width: 1200,
         height: 1200,
         alt: "Visriva golden lotus emblem",
@@ -103,11 +103,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/brand/visriva-green.png"],
+    images: [brandLogoSrc],
   },
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
-  icons: { icon: "/brand/visriva-green.png", apple: "/brand/visriva-green.png" },
+  icons: { icon: brandLogoSrc, apple: brandLogoSrc },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

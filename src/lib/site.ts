@@ -7,6 +7,9 @@ export const businessName = "Visriva Live Station";
 
 export const brandName = "Visriva";
 
+/** Primary logo (mark + wordmark) served from /public/brand */
+export const brandLogoSrc = "/brand/visriva-mark.png";
+
 export const gstin = process.env.NEXT_PUBLIC_GSTIN || "";
 
 /** Defaults from studio records; override via env on Vercel */

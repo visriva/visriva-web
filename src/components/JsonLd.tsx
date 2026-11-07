@@ -1,5 +1,5 @@
 import { services } from "@/lib/services";
-import { businessName, contactEmail, phoneTel, siteUrl } from "@/lib/site";
+import { brandLogoSrc, businessName, contactEmail, phoneTel, siteUrl } from "@/lib/site";
 
 export function JsonLd() {
   const data = {
@@ -10,7 +10,7 @@ export function JsonLd() {
     description:
       "Visriva Live Station runs photo booths, AI merchandise, games, and live gifting for corporate events and celebrations. Based in Bengaluru, travelling across India. Owned inventory. One team, end to end.",
     url: siteUrl,
-    image: `${siteUrl}/brand/visriva-green.png`,
+    image: `${siteUrl}${brandLogoSrc}`,
     email: contactEmail,
     address: {
       "@type": "PostalAddress",

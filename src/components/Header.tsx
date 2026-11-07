@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { isImmersiveRoute } from "@/lib/chrome";
+import { VisrivaMark } from "@/components/VisrivaMark";
 import { navigation } from "@/lib/site";
 
 function isCurrent(pathname: string, href: string) {
@@ -58,17 +58,10 @@ export function Header() {
           aria-label="Visriva home"
         >
           <span className="absolute -inset-2 rounded-full bg-gold/0 transition duration-500 group-hover:bg-gold/10" />
-          <Image
-            src="/brand/visriva-green.png"
-            alt="Visriva"
-            width={320}
-            height={320}
+          <VisrivaMark
             priority
-            className="relative h-[3.25rem] w-[3.25rem] object-cover shadow-[0_0_24px_rgba(201,162,39,0.15)] ring-1 ring-gold/60 transition duration-500 group-hover:ring-gold sm:h-[3.5rem] sm:w-[3.5rem]"
+            className="relative h-[3.25rem] w-auto max-w-[8.75rem] object-contain drop-shadow-[0_0_20px_rgba(201,162,39,0.2)] transition duration-500 group-hover:drop-shadow-[0_0_28px_rgba(201,162,39,0.35)] sm:h-[3.75rem] sm:max-w-[9.5rem]"
           />
-          <span className="hidden font-royal text-[0.62rem] uppercase tracking-[0.28em] text-champagne/80 sm:block">
-            Live Station
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">

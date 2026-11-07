@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { VisrivaMark } from "@/components/VisrivaMark";
 import { isImmersiveRoute } from "@/lib/chrome";
 import {
   brandName,
@@ -36,13 +36,7 @@ export function Footer() {
       />
       <div className="mx-auto grid max-w-[1500px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
         <div className="lg:col-span-5">
-          <Image
-            src="/brand/visriva-green.png"
-            alt="Visriva"
-            width={160}
-            height={160}
-            className="h-24 w-24 object-cover ring-1 ring-gold/40"
-          />
+          <VisrivaMark className="h-28 w-auto max-w-[10.5rem] object-contain" />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-mist/80">
             {businessName} · {brandName}. Photo booths, AI merchandise, games, and live gifting.
             Based in Bengaluru, travelling across India. Owned inventory. One crew from load-in to

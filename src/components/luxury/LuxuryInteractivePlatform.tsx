@@ -39,90 +39,21 @@ import {
   Gift
 } from 'lucide-react';
 import Link from 'next/link';
+import { VisrivaMark } from '@/components/VisrivaMark';
 import { SITE_THEME } from '@/lib/luxury-stations';
 
-// ============================================================================
-// CUSTOM SVG GOLDEN LOTUS LOGO COMPONENT
-// ============================================================================
-const VisrivaLogo = ({ size = 'md' }) => {
-  const dims = size === 'lg' ? 'w-12 h-12' : 'w-10 h-10';
+function StudioLogo({ large = false }: { large?: boolean }) {
   return (
-    <div className="flex items-center gap-3.5 group cursor-pointer select-none">
-      <div
-        className={`${dims} relative rounded-xl bg-gradient-to-br from-[#0B3D2E] to-[#040D0A] border border-[#C9A227]/50 flex items-center justify-center shadow-[0_0_25px_rgba(201,162,39,0.2)] group-hover:border-[#E5C158] transition-all duration-300`}
-      >
-        {/* Subtle inner gold ring */}
-        <div className="absolute inset-1 rounded-lg border border-[#C9A227]/20 pointer-events-none" />
-        {/* Golden Lotus / Leaf SVG Emblem */}
-        <svg
-          viewBox="0 0 64 64"
-          className="w-7 h-7 text-[#C9A227] group-hover:scale-105 transition-transform duration-300"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#F4EBD0" />
-              <stop offset="45%" stopColor="#C9A227" />
-              <stop offset="100%" stopColor="#8F6B10" />
-            </linearGradient>
-          </defs>
-          {/* Center Lotus Petal */}
-          <path
-            d="M32 8C26 18 23 28 32 44C41 28 38 18 32 8Z"
-            fill="url(#goldGrad)"
-          />
-          {/* Left Inner Petal */}
-          <path
-            d="M29 43C18 36 14 25 18 15C23 21 26 30 29 43Z"
-            fill="url(#goldGrad)"
-            opacity="0.88"
-          />
-          {/* Right Inner Petal */}
-          <path
-            d="M35 43C46 36 50 25 46 15C41 21 38 30 35 43Z"
-            fill="url(#goldGrad)"
-            opacity="0.88"
-          />
-          {/* Left Outer Leaf */}
-          <path
-            d="M26 45C13 43 7 34 8 24C15 28 21 35 26 45Z"
-            fill="url(#goldGrad)"
-            opacity="0.65"
-          />
-          {/* Right Outer Leaf */}
-          <path
-            d="M38 45C51 43 57 34 56 24C49 28 43 35 38 45Z"
-            fill="url(#goldGrad)"
-            opacity="0.65"
-          />
-          {/* Base Royal Cradle */}
-          <path
-            d="M16 49C24 53 40 53 48 49"
-            stroke="url(#goldGrad)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-          <circle cx="32" cy="55" r="2" fill="#E5C158" />
-        </svg>
-      </div>
-      <div className="flex flex-col">
-        <span
-          style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          className="text-2xl sm:text-3xl font-bold tracking-[0.14em] uppercase bg-gradient-to-r from-[#F4EBD0] via-[#E5C158] to-[#C9A227] bg-clip-text text-transparent leading-none"
-        >
-          visriva
-        </span>
-        <span
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-          className="text-[9px] tracking-[0.32em] text-[#8FA89B] uppercase mt-1"
-        >
-          LIVE STATION · BLR
-        </span>
-      </div>
-    </div>
+    <VisrivaMark
+      priority
+      className={
+        large
+          ? "h-20 w-auto max-w-[11rem] object-contain"
+          : "h-12 w-auto max-w-[9rem] object-contain sm:h-14 sm:max-w-[10rem]"
+      }
+    />
   );
-};
+}
 
 // ============================================================================
 // MAIN APPLICATION COMPONENT
@@ -235,7 +166,7 @@ export function LuxuryInteractivePlatform() {
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#040D0A]/85 border-b border-[#C9A227]/20 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           <Link href="/" className="shrink-0" aria-label="Visriva marketing site">
-            <VisrivaLogo />
+            <StudioLogo />
           </Link>
 
           {/* Center Navigation */}
@@ -580,7 +511,7 @@ export function LuxuryInteractivePlatform() {
       <footer className="bg-[#040D0A] border-t border-[#C9A227]/25 py-12 px-4 sm:px-6 lg:px-8 text-xs text-[#8FA89B]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <VisrivaLogo size="md" />
+            <StudioLogo large />
             <p className="mt-3 max-w-md text-[#8FA89B]">
               End-to-end corporate live engagement stations, high-speed instant photo booths, live tote & apparel printing, and commercial VR setups across Bengaluru and South India.
             </p>
