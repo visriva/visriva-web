@@ -1,11 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { isImmersiveRoute } from "@/lib/chrome";
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
 export function WhatsAppBubble() {
   const pathname = usePathname();
-  if (pathname.startsWith("/live")) return null;
+  if (isImmersiveRoute(pathname)) return null;
 
   const href = whatsAppLink(WHATSAPP_GREETING);
 

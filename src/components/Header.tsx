@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { isImmersiveRoute } from "@/lib/chrome";
 import { navigation } from "@/lib/site";
 
 function isCurrent(pathname: string, href: string) {
@@ -40,7 +41,7 @@ export function Header() {
     };
   }, [open]);
 
-  if (pathname.startsWith("/live")) return null;
+  if (isImmersiveRoute(pathname)) return null;
 
   return (
     <header

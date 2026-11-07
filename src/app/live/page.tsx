@@ -1,16 +1,6 @@
-import { LuxuryInteractivePlatform } from "@/components/luxury/LuxuryInteractivePlatform";
-import { pageMeta } from "@/lib/seo";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata = pageMeta(
-  "Live engagement studio — compose your floor",
-  "Interactive Visriva rate card, floor simulator, and instant WhatsApp quote for photo booths, AI merch, and VR across Bengaluru.",
-  "/live",
-);
-
-export default function LivePlatformPage() {
-  return (
-    <div id="content" className="min-h-screen">
-      <LuxuryInteractivePlatform />
-    </div>
-  );
+/** Former live-studio URL — homepage is now the interactive platform. */
+export default function LiveLegacyRedirect() {
+  permanentRedirect("/");
 }

@@ -128,7 +128,7 @@ export function Hero({ film = false }: { film?: boolean }) {
           print. You host the room.
         </p>
         <div className="mt-10 flex flex-wrap gap-4">
-          <GoldLink href="/live#rate-card">Live studio</GoldLink>
+          <GoldLink href="/#rate-card">Live studio</GoldLink>
           <GoldLink href="/quote">Book now</GoldLink>
           <GoldLink href="/photo-booths#packages">View packages</GoldLink>
           <GhostLink href="/gallery">See the floor</GhostLink>

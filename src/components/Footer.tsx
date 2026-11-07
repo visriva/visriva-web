@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isImmersiveRoute } from "@/lib/chrome";
 import {
   brandName,
   businessName,
@@ -18,7 +19,7 @@ import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
 export function Footer() {
   const pathname = usePathname();
-  if (pathname.startsWith("/live")) return null;
+  if (isImmersiveRoute(pathname)) return null;
 
   const whatsapp = whatsAppLink(WHATSAPP_GREETING);
   const links = navigation.flatMap((item) =>
