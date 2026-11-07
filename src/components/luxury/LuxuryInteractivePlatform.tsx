@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Camera,
   Sparkles,
@@ -39,14 +39,7 @@ import {
   Gift
 } from 'lucide-react';
 import Link from 'next/link';
-import {
-  INITIAL_STATIONS,
-  SITE_THEME,
-  buildQuoteSelection,
-  getLuxuryStationPrice,
-  type LuxuryStation,
-} from '@/lib/luxury-stations';
-import { whatsAppNumber } from '@/lib/whatsapp';
+import { SITE_THEME } from '@/lib/luxury-stations';
 
 // ============================================================================
 // CUSTOM SVG GOLDEN LOTUS LOGO COMPONENT
@@ -135,34 +128,11 @@ const VisrivaLogo = ({ size = 'md' }) => {
 // MAIN APPLICATION COMPONENT
 // ============================================================================
 export function LuxuryInteractivePlatform() {
-  // Pre-select 2 signature stations so the visitor immediately experiences the Instant Block flow
-  const [selectedIds, setSelectedIds] = useState(['unlimited-dslr', 'tote-bag-station']);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [toteBagTierIndex, setToteBagTierIndex] = useState(0); // 0 = 100 bags (25k), 1 = 200 bags (40k)
-  const [pvcCardCount, setPvcCardCount] = useState(100); // Default 100 cards * 120 = 12,000
-
-  // Floor Plan & Environment State
-  const [isOutdoorVenue, setIsOutdoorVenue] = useState(false);
   const [activeHeroPreview, setActiveHeroPreview] = useState(0);
   const [liveGuestTicker, setLiveGuestTicker] = useState(14820);
   const [ambientSound, setAmbientSound] = useState(false);
-
-  // Instant Block Form State
-  const [eventDate, setEventDate] = useState('2026-12-18');
-  const [venueName, setVenueName] = useState('JW Marriott / Manyata Tech Park');
-  const [clientName, setClientName] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [clientPhone, setClientPhone] = useState('');
-  const [headcount, setHeadcount] = useState('250');
-  const [requirementsChecked, setRequirementsChecked] = useState(true);
-
-  // Modals & Interactive Overlays
-  const [showBookingModal, setShowBookingModal] = useState(false);
-  const [showArModal, setShowArModal] = useState(false);
   const [showGiveawayModal, setShowGiveawayModal] = useState(false);
-  const [copiedWhatsApp, setCopiedWhatsApp] = useState(false);
   const [giveawaySubmitted, setGiveawaySubmitted] = useState(false);
-  const [drawerExpanded, setDrawerExpanded] = useState(false);
 
   // Increment live guest counter subtly for social proof
   useEffect(() => {
@@ -207,154 +177,10 @@ export function LuxuryInteractivePlatform() {
     return () => clearInterval(timer);
   }, []);
 
-  // Calculate dynamic price for a station
-  const getStationPrice = (station: LuxuryStation) =>
-    getLuxuryStationPrice(station, toteBagTierIndex, pvcCardCount);
-
-  // Toggle station selection
-  const persistLead = useCallback(async () => {
-    const selected = buildQuoteSelection(selectedIds, toteBagTierIndex, pvcCardCount);
-    try {
-      await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          selected,
-          venue: venueName,
-          city: "Bengaluru",
-          eventDate,
-          headcount,
-          name: clientName,
-          company: companyName,
-          phone: clientPhone,
-          notes: `Live studio package · ${isOutdoorVenue ? "Outdoor" : "Indoor"}`,
-          acceptedTerms: requirementsChecked,
-        }),
-      });
-    } catch {
-      /* WhatsApp handoff still works offline */
-    }
-  }, [
-    selectedIds,
-    toteBagTierIndex,
-    pvcCardCount,
-    venueName,
-    eventDate,
-    headcount,
-    clientName,
-    companyName,
-    clientPhone,
-    requirementsChecked,
-    isOutdoorVenue,
-  ]);
-
-  const toggleStation = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
-  // Selected stations full objects
-  const selectedStations = useMemo(() => {
-    return INITIAL_STATIONS.filter((s) => selectedIds.includes(s.id));
-  }, [selectedIds, toteBagTierIndex, pvcCardCount]);
-
-  // Financial & Technical Calculations
-  const financials = useMemo(() => {
-    const subtotal = selectedStations.reduce(
-      (sum, s) => sum + getStationPrice(s),
-      0
-    );
-    const transitEstimate = selectedStations.length > 0 ? 3000 : 0; // Midpoint of ₹2,000–4,000 BLR transit
-    const taxableAmount = subtotal + transitEstimate;
-    const gstAmount = Math.round(taxableAmount * 0.18);
-    const grandTotal = taxableAmount + gstAmount;
-    const advanceDeposit = Math.round(grandTotal * 0.5);
-    const totalSqFt = selectedStations.length * 64; // 8ft x 8ft = 64 sq ft per station
-    const totalPlugPoints = selectedStations.length;
-
-    return {
-      subtotal,
-      transitEstimate,
-      gstAmount,
-      grandTotal,
-      advanceDeposit,
-      totalSqFt,
-      totalPlugPoints,
-    };
-  }, [selectedStations, toteBagTierIndex, pvcCardCount]);
-
-  // Filtered stations for the Bento Rate Card
-  const filteredStations = useMemo(() => {
-    if (activeCategory === 'all') return INITIAL_STATIONS;
-    return INITIAL_STATIONS.filter((s) => s.category === activeCategory);
-  }, [activeCategory]);
-
-  // Format INR currency
-  const formatINR = (num: number) => {
-    return '₹' + Number(num).toLocaleString('en-IN');
-  };
-
-  // Build formatted WhatsApp payload
-  const whatsappMessage = useMemo(() => {
-    const stationLines = selectedStations
-      .map((s, i) => {
-        let extra = '';
-        if (s.id === 'tote-bag-station') {
-          extra = ` (${s.tiers?.[toteBagTierIndex]?.label ?? "Tier"})`;
-        } else if (s.id === 'pvc-id-cards') {
-          extra = ` (${pvcCardCount} Cards @ ₹120/card)`;
-        }
-        return `${i + 1}. ${s.name}${extra} — ${formatINR(getStationPrice(s))}`;
-      })
-      .join('\n');
-
-    return (
-      `*VISRIVA LIVE STATION — DATE BLOCK REQUEST*\n` +
-      `----------------------------------------\n` +
-      `*Selected Stations (${selectedStations.length}):*\n` +
-      `${stationLines || 'None selected yet'}\n\n` +
-      `*Commercial Estimate:*\n` +
-      `• Stations Subtotal: ${formatINR(financials.subtotal)}\n` +
-      `• Bengaluru Fleet Transit: ₹2,000 – ₹4,000\n` +
-      `• 18% B2B GST Applicable\n` +
-      `• *50% Date-Lock Advance:* ~${formatINR(financials.advanceDeposit)}\n\n` +
-      `*Event Logistics:*\n` +
-      `• Date: ${eventDate || 'TBD'}\n` +
-      `• Venue/Area: ${venueName || 'Bengaluru'}\n` +
-      `• Setting: ${isOutdoorVenue ? 'Outdoor (Canopy Required)' : 'Indoor Ballroom/Hall'}\n` +
-      `• Expected Crowd: ~${headcount || '200'} Guests\n` +
-      `• Space & Power: ${financials.totalSqFt} sq.ft (${selectedStations.length} × 8x8ft) | ${financials.totalPlugPoints} × 220V 15A Points\n` +
-      `• 6-Hr Advance Load-In Acknowledged: ${requirementsChecked ? 'YES' : 'Pending'}\n\n` +
-      `*Client Contact:*\n` +
-      `• Name: ${clientName || 'Corporate Planner'}\n` +
-      `• Company: ${companyName || 'Direct Inquiry'}\n` +
-      `• Phone: ${clientPhone || 'Provided on WhatsApp'}`
-    );
-  }, [
-    selectedStations,
-    financials,
-    eventDate,
-    venueName,
-    isOutdoorVenue,
-    headcount,
-    requirementsChecked,
-    clientName,
-    companyName,
-    clientPhone,
-    toteBagTierIndex,
-    pvcCardCount,
-  ]);
-
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div
       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-      className="min-h-screen bg-[#040D0A] text-[#FAF8F5] selection:bg-[#C9A227] selection:text-[#040D0A] pb-36 relative overflow-x-hidden"
+      className="min-h-screen bg-[#040D0A] text-[#FAF8F5] selection:bg-[#C9A227] selection:text-[#040D0A] pb-12 relative overflow-x-hidden"
     >
       {/* Google Fonts Injection */}
       <style>{`
@@ -414,46 +240,23 @@ export function LuxuryInteractivePlatform() {
 
           {/* Center Navigation */}
           <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-[#FAF8F5]/80">
-            <button
-              onClick={() => {
-                setActiveCategory('photo-booths');
-                scrollToSection('rate-card');
-              }}
-              className="hover:text-[#E5C158] transition-colors"
-            >
+            <Link href="/photo-booths" className="hover:text-[#E5C158] transition-colors">
               Photo Booths
-            </button>
-            <button
-              onClick={() => {
-                setActiveCategory('ai-merch');
-                scrollToSection('rate-card');
-              }}
-              className="hover:text-[#E5C158] transition-colors"
-            >
+            </Link>
+            <Link href="/ai-merchandise" className="hover:text-[#E5C158] transition-colors">
               AI & Live Merch
-            </button>
-            <button
-              onClick={() => {
-                setActiveCategory('games-vr');
-                scrollToSection('rate-card');
-              }}
-              className="hover:text-[#E5C158] transition-colors"
-            >
+            </Link>
+            <Link href="/games-vr" className="hover:text-[#E5C158] transition-colors">
               VR & Games
-            </button>
-            <button
-              onClick={() => scrollToSection('floor-simulator')}
-              className="hover:text-[#E5C158] transition-colors flex items-center gap-1"
-            >
-              <Layers className="w-3.5 h-3.5 text-[#C9A227]" /> Floor Simulator
-            </button>
-            <button
-              onClick={() => scrollToSection('venue-specs')}
-              className="hover:text-[#E5C158] transition-colors"
-            >
+            </Link>
+            <Link href="/client-requirements" className="hover:text-[#E5C158] transition-colors">
               Venue Specs
-            </button>
+            </Link>
+            <Link href="/gallery" className="hover:text-[#E5C158] transition-colors">
+              Gallery
+            </Link>
             <button
+              type="button"
               onClick={() => setShowGiveawayModal(true)}
               className="text-[#F4EBD0] hover:text-[#E5C158] transition-colors flex items-center gap-1"
             >
@@ -468,13 +271,13 @@ export function LuxuryInteractivePlatform() {
               <span>Booking Now: Corporate Season</span>
             </div>
 
-            <button
-              onClick={() => setShowBookingModal(true)}
+            <Link
+              href="/quote"
               className="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] font-bold text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(201,162,39,0.35)] hover:shadow-[0_0_35px_rgba(229,193,88,0.6)] hover:scale-[1.02] active:scale-[0.99] transition-all flex items-center gap-2"
             >
-              <span>Lock Your Event Date</span>
+              <span>Request a quote</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -515,30 +318,29 @@ export function LuxuryInteractivePlatform() {
 
               {/* Primary & Secondary CTAs */}
               <div className="flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  onClick={() => scrollToSection('rate-card')}
+                <Link
+                  href="/quote"
                   className="px-7 py-4 rounded-xl bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] font-bold text-sm sm:text-base tracking-wide shadow-[0_0_30px_rgba(201,162,39,0.4)] hover:shadow-[0_0_45px_rgba(229,193,88,0.7)] hover:scale-[1.02] transition-all flex items-center gap-2.5 gold-pulse"
                 >
-                  <span>Build Your Package & Lock Date</span>
+                  <span>Request a quote</span>
                   <ArrowRight className="w-5 h-5" />
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => scrollToSection('floor-simulator')}
+                <Link
+                  href="/photo-booths#packages"
                   className="px-6 py-4 rounded-xl bg-[#0B3D2E]/60 hover:bg-[#0B3D2E] text-[#F4EBD0] border border-[#C9A227]/40 font-semibold text-sm sm:text-base transition-all flex items-center gap-2"
                 >
-                  <Layers className="w-4 h-4 text-[#E5C158]" />
-                  <span>Interactive Floor Simulator</span>
-                </button>
+                  <Camera className="w-4 h-4 text-[#E5C158]" />
+                  <span>View booth packages</span>
+                </Link>
 
-                <button
-                  onClick={() => setShowArModal(true)}
+                <Link
+                  href="/client-requirements"
                   className="px-4 py-4 rounded-xl bg-[#040D0A]/80 hover:border-[#E5C158] text-[#8FA89B] hover:text-[#F4EBD0] border border-[#C9A227]/25 text-xs sm:text-sm transition-all flex items-center gap-2"
-                  title="Preview 8x8ft station footprint at your venue"
                 >
                   <Maximize2 className="w-4 h-4 text-[#C9A227]" />
-                  <span>8×8ft AR Venue Check</span>
-                </button>
+                  <span>Venue requirements</span>
+                </Link>
               </div>
 
               {/* Technical Proof Strip */}
@@ -703,452 +505,6 @@ export function LuxuryInteractivePlatform() {
       </section>
 
       {/* =====================================================================
-          INTERACTIVE 12-STATION RATE CARD (Click to Add & Block Immediately)
-      ===================================================================== */}
-      <section id="rate-card" className="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
-          <div>
-            <div
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              className="text-xs uppercase tracking-[0.2em] text-[#C9A227] mb-2"
-            >
-              TRANSPARENT STARTING RATES · NO CALL REQUIRED TO SEE PRICING
-            </div>
-            <h2
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              className="text-3xl sm:text-5xl font-bold text-[#FAF8F5]"
-            >
-              Select Your Stations. Lock Your Package.
-            </h2>
-          </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2">
-            {[
-              { id: 'all', label: 'All Stations (12)', icon: Sparkles },
-              { id: 'photo-booths', label: 'Studio Photo Booths (5)', icon: Camera },
-              { id: 'ai-merch', label: 'AI & Live Merch (5)', icon: Award },
-              { id: 'games-vr', label: 'VR & Reflex Games (2)', icon: Gamepad2 },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeCategory === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveCategory(tab.id)}
-                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 border ${
-                    isActive
-                      ? 'bg-[#C9A227] text-[#040D0A] border-[#E5C158] shadow-[0_0_20px_rgba(201,162,39,0.3)]'
-                      : 'bg-[#072A1F]/70 text-[#F4EBD0] border-[#C9A227]/25 hover:border-[#C9A227]/60'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 12-Station Luxury Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredStations.map((station) => {
-            const isSelected = selectedIds.includes(station.id);
-            const effectivePrice = getStationPrice(station);
-
-            return (
-              <div
-                key={station.id}
-                className={`group relative rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 border ${
-                  isSelected
-                    ? 'bg-gradient-to-b from-[#0B3D2E] to-[#072A1F] border-[#E5C158] shadow-[0_0_35px_rgba(201,162,39,0.22)]'
-                    : 'bg-[#072A1F]/45 hover:bg-[#072A1F]/80 border-[#C9A227]/25 hover:border-[#C9A227]/60'
-                }`}
-              >
-                <div>
-                  {/* Top Badges */}
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#040D0A]/70 text-[#F4EBD0] border border-[#C9A227]/25">
-                      {station.categoryLabel}
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      {station.popular && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#C9A227]/20 text-[#E5C158] border border-[#C9A227]/40">
-                          MOST BOOKED
-                        </span>
-                      )}
-                      <span
-                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        className="text-[11px] text-[#8FA89B] bg-[#040D0A]/60 px-2 py-0.5 rounded"
-                      >
-                        {station.footprint}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Station Name & Price */}
-                  <h3
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                    className="text-2xl font-bold text-[#FAF8F5] group-hover:text-[#F4EBD0] transition-colors"
-                  >
-                    {station.name}
-                  </h3>
-
-                  <div className="mt-2 flex items-baseline justify-between gap-2 pb-4 border-b border-[#C9A227]/15">
-                    <div>
-                      <span
-                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        className="text-xl sm:text-2xl font-bold text-[#E5C158]"
-                      >
-                        {station.id === 'tote-bag-station'
-                          ? `${formatINR(effectivePrice)} (${station.tiers?.[toteBagTierIndex]?.label ?? "Tier"})`
-                          : station.id === 'pvc-id-cards'
-                          ? `${formatINR(effectivePrice)} (${pvcCardCount} cards)`
-                          : station.priceDisplay}
-                      </span>
-                    </div>
-                    <span
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      className="text-xs text-[#F4EBD0]/80"
-                    >
-                      {station.duration}
-                    </span>
-                  </div>
-
-                  {/* Interactive Tier Toggle for Tote Bags */}
-                  {station.hasTierToggle && station.tiers && (
-                    <div className="my-3 p-2 rounded-xl bg-[#040D0A]/70 border border-[#C9A227]/25 flex items-center justify-between gap-2">
-                      {station.tiers.map((tier, idx) => (
-                        <button
-                          key={tier.label}
-                          onClick={() => setToteBagTierIndex(idx)}
-                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
-                            toteBagTierIndex === idx
-                              ? 'bg-[#C9A227] text-[#040D0A]'
-                              : 'text-[#8FA89B] hover:text-[#FAF8F5]'
-                          }`}
-                        >
-                          {tier.label} · {formatINR(tier.price)}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Interactive Card Quantity Slider for PVC ID Cards */}
-                  {station.hasCardSlider && (
-                    <div className="my-3 p-3 rounded-xl bg-[#040D0A]/70 border border-[#C9A227]/25">
-                      <div className="flex justify-between text-xs mb-1.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                        <span className="text-[#8FA89B]">Spot Card Quantity:</span>
-                        <span className="text-[#E5C158] font-bold">{pvcCardCount} Cards (@ ₹120)</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="50"
-                        max="500"
-                        step="25"
-                        value={pvcCardCount}
-                        onChange={(e) => setPvcCardCount(Number(e.target.value))}
-                        className="w-full accent-[#C9A227] cursor-pointer h-1.5 bg-[#0B3D2E] rounded-lg"
-                      />
-                    </div>
-                  )}
-
-                  {/* Pitch Copy */}
-                  <p className="mt-3 text-sm text-[#FAF8F5]/80 leading-relaxed">
-                    {station.description}
-                  </p>
-
-                  {/* Deliverables List */}
-                  <ul className="mt-4 space-y-1.5 text-xs text-[#F4EBD0]/90">
-                    {station.deliverables.map((item, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#C9A227] shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Bottom Hardware Badge & Instant Select Button */}
-                <div className="mt-6 pt-4 border-t border-[#C9A227]/20 space-y-3">
-                  <div
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                    className="flex items-center justify-between text-[11px] text-[#8FA89B]"
-                  >
-                    <span>RIG: {station.hardwareBadge}</span>
-                    <span>{station.power}</span>
-                  </div>
-
-                  <button
-                    onClick={() => toggleStation(station.id)}
-                    className={`w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 ${
-                      isSelected
-                        ? 'bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] shadow-[0_0_20px_rgba(201,162,39,0.4)]'
-                        : 'bg-[#040D0A] hover:bg-[#0B3D2E] text-[#F4EBD0] border border-[#C9A227]/40 hover:border-[#E5C158]'
-                    }`}
-                  >
-                    {isSelected ? (
-                      <>
-                        <Check className="w-4 h-4 stroke-[2.5]" />
-                        <span>Selected in Event Package ({formatINR(effectivePrice)})</span>
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="w-4 h-4" />
-                        <span>Add Station to Event</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* =====================================================================
-          INTERACTIVE "BUILD YOUR EVENT" FLOOR PLAN SIMULATOR
-      ===================================================================== */}
-      <section
-        id="floor-simulator"
-        className="py-16 lg:py-24 bg-[#072A1F]/40 border-y border-[#C9A227]/25 relative"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
-            <div>
-              <div
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                className="text-xs uppercase tracking-[0.2em] text-[#E5C158] mb-2 flex items-center gap-2"
-              >
-                <Layers className="w-4 h-4" />
-                INTERACTIVE VENUE SPACE & POWER PLANNER
-              </div>
-              <h2
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                className="text-3xl sm:text-5xl font-bold text-[#FAF8F5]"
-              >
-                Build Your Event Floor Plan Live
-              </h2>
-              <p className="text-sm sm:text-base text-[#8FA89B] mt-2 max-w-2xl">
-                Every Visriva station requires an <strong className="text-[#F4EBD0]">8ft × 8ft dry, level footprint</strong> and a dedicated <strong className="text-[#F4EBD0]">220–240V AC power point within 15ft</strong>. Toggle stations below to visualize your venue layout.
-              </p>
-            </div>
-
-            {/* Indoor vs Outdoor Venue Switch */}
-            <div className="flex items-center gap-3 bg-[#040D0A] p-2 rounded-xl border border-[#C9A227]/30 self-start">
-              <button
-                onClick={() => setIsOutdoorVenue(false)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${
-                  !isOutdoorVenue
-                    ? 'bg-[#C9A227] text-[#040D0A]'
-                    : 'text-[#8FA89B] hover:text-[#FAF8F5]'
-                }`}
-              >
-                <Building2 className="w-4 h-4" />
-                Indoor Ballroom
-              </button>
-              <button
-                onClick={() => setIsOutdoorVenue(true)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${
-                  isOutdoorVenue
-                    ? 'bg-[#C9A227] text-[#040D0A]'
-                    : 'text-[#8FA89B] hover:text-[#FAF8F5]'
-                }`}
-              >
-                <Umbrella className="w-4 h-4" />
-                Outdoor Lawn / Terrace
-              </button>
-            </div>
-          </div>
-
-          {/* Outdoor Warning Banner */}
-          {isOutdoorVenue && (
-            <div className="mb-6 p-4 rounded-xl bg-[#C9A227]/15 border border-[#E5C158] flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-3">
-                <Umbrella className="w-5 h-5 text-[#E5C158] shrink-0" />
-                <span className="text-xs sm:text-sm text-[#F4EBD0]">
-                  <strong>Outdoor Installation Rule Activated:</strong> Client must provide a protective waterproof overhead canopy for each 8ft × 8ft station to shield cameras, DNP printers, and VR optics from direct sun/rain.
-                </span>
-              </div>
-              <span
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                className="text-xs px-2.5 py-1 rounded bg-[#040D0A] text-[#E5C158] border border-[#C9A227]/40"
-              >
-                CANOPY REQUIRED
-              </span>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Quick-Toggle Palette */}
-            <div className="lg:col-span-4 bg-[#040D0A] border border-[#C9A227]/30 rounded-2xl p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-[#C9A227]/20 pb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#F4EBD0]">
-                  Tap to Place / Remove on Grid
-                </span>
-                <span
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  className="text-xs text-[#E5C158]"
-                >
-                  {selectedStations.length} Active
-                </span>
-              </div>
-
-              <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
-                {INITIAL_STATIONS.map((s) => {
-                  const active = selectedIds.includes(s.id);
-                  return (
-                    <button
-                      key={s.id}
-                      onClick={() => toggleStation(s.id)}
-                      className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-center justify-between gap-2 ${
-                        active
-                          ? 'bg-[#0B3D2E] border-[#C9A227] text-[#FAF8F5]'
-                          : 'bg-[#072A1F]/30 border-[#C9A227]/15 text-[#8FA89B] hover:border-[#C9A227]/40 hover:text-[#FAF8F5]'
-                      }`}
-                    >
-                      <div className="truncate">
-                        <div className="font-semibold truncate">{s.name}</div>
-                        <div
-                          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                          className="text-[11px] text-[#E5C158] mt-0.5"
-                        >
-                          {formatINR(getStationPrice(s))} · {s.footprint}
-                        </div>
-                      </div>
-                      <div
-                        className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                          active ? 'bg-[#C9A227] text-[#040D0A]' : 'bg-[#040D0A] text-[#8FA89B]'
-                        }`}
-                      >
-                        {active ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <Plus className="w-3.5 h-3.5" />}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Center/Right Architectural Floor Grid */}
-            <div className="lg:col-span-8 bg-[#040D0A] border border-[#C9A227]/40 rounded-2xl p-6 luxury-grid-bg relative">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-6 border-b border-[#C9A227]/20">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#C9A227]" />
-                  <span
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                    className="text-xs text-[#F4EBD0] uppercase"
-                  >
-                    BALLROOM CAD SCHEMATIC (SCALE: 8FT × 8FT PER MODULE)
-                  </span>
-                </div>
-                <button
-                  onClick={() => setShowArModal(true)}
-                  className="text-xs text-[#E5C158] hover:underline flex items-center gap-1.5"
-                >
-                  <Eye className="w-3.5 h-3.5" /> Preview 8×8ft Camera Overlay
-                </button>
-              </div>
-
-              {/* Visual Grid Slots */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[280px]">
-                {selectedStations.map((station, index) => (
-                  <div
-                    key={station.id}
-                    className="relative rounded-xl bg-gradient-to-br from-[#0B3D2E] to-[#072A1F] border-2 border-[#C9A227] p-4 flex flex-col justify-between shadow-[0_0_25px_rgba(201,162,39,0.2)]"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span
-                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        className="text-[10px] px-2 py-0.5 rounded bg-[#C9A227] text-[#040D0A] font-bold"
-                      >
-                        ZONE 0{index + 1} · {station.footprint}
-                      </span>
-                      <button
-                        onClick={() => toggleStation(station.id)}
-                        className="text-[#8FA89B] hover:text-red-400 transition-colors"
-                        title="Remove station"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-
-                    <div className="my-3">
-                      <div className="text-sm font-bold text-[#FAF8F5] leading-snug">
-                        {station.name}
-                      </div>
-                      <div
-                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                        className="text-xs text-[#E5C158] mt-1"
-                      >
-                        {formatINR(getStationPrice(station))}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      className="pt-2 border-t border-[#C9A227]/25 flex items-center justify-between text-[10px] text-[#F4EBD0]/80"
-                    >
-                      <span className="flex items-center gap-1">
-                        <Zap className="w-3 h-3 text-[#E5C158]" /> 220V ≤15ft
-                      </span>
-                      <span>{isOutdoorVenue ? '⛺ Canopy' : '🏢 Indoor'}</span>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Empty Add Slot Placeholder */}
-                <button
-                  onClick={() => scrollToSection('rate-card')}
-                  className="rounded-xl border-2 border-dashed border-[#C9A227]/30 hover:border-[#E5C158] bg-[#072A1F]/20 hover:bg-[#072A1F]/40 p-4 flex flex-col items-center justify-center text-center min-h-[140px] transition-all group"
-                >
-                  <div className="w-9 h-9 rounded-full bg-[#0B3D2E] border border-[#C9A227]/40 flex items-center justify-center text-[#E5C158] group-hover:scale-110 transition-transform mb-2">
-                    <Plus className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-semibold text-[#F4EBD0]">
-                    + Add Another 8×8ft Station
-                  </span>
-                  <span className="text-[11px] text-[#8FA89B] mt-0.5">
-                    Click any station on the left
-                  </span>
-                </button>
-              </div>
-
-              {/* Bottom Telemetry Readout */}
-              <div
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                className="mt-6 pt-4 border-t border-[#C9A227]/25 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs"
-              >
-                <div className="bg-[#072A1F]/70 p-3 rounded-lg border border-[#C9A227]/20">
-                  <div className="text-[#8FA89B] text-[10px]">TOTAL FLOOR FOOTPRINT</div>
-                  <div className="text-sm font-bold text-[#FAF8F5] mt-0.5">
-                    {financials.totalSqFt} sq.ft ({selectedStations.length}×8x8)
-                  </div>
-                </div>
-                <div className="bg-[#072A1F]/70 p-3 rounded-lg border border-[#C9A227]/20">
-                  <div className="text-[#8FA89B] text-[10px]">220V 15A PLUG POINTS</div>
-                  <div className="text-sm font-bold text-[#E5C158] mt-0.5">
-                    {financials.totalPlugPoints} Dedicated Outlets
-                  </div>
-                </div>
-                <div className="bg-[#072A1F]/70 p-3 rounded-lg border border-[#C9A227]/20">
-                  <div className="text-[#8FA89B] text-[10px]">FABRICATION ACCESS</div>
-                  <div className="text-sm font-bold text-[#FAF8F5] mt-0.5">
-                    T-Minus 6 Hours
-                  </div>
-                </div>
-                <div className="bg-[#0B3D2E] p-3 rounded-lg border border-[#C9A227]">
-                  <div className="text-[#F4EBD0] text-[10px]">PACKAGE SUBTOTAL</div>
-                  <div className="text-sm font-bold text-[#E5C158] mt-0.5">
-                    {formatINR(financials.subtotal)}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
           WHY PLANNERS BOOK VISRIVA IN 60 SECONDS (Comparison Matrix)
       ===================================================================== */}
       <section className="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1197,7 +553,7 @@ export function LuxuryInteractivePlatform() {
             {
               pillar: 'Pricing Transparency',
               typical: 'Opaque "DM or call for quote" walls that waste 3 days of agency procurement time.',
-              visriva: 'Public starting rate card on visriva.com. Configure your stations and lock your date in 60 seconds.',
+              visriva: 'Public starting rates on photo-booth and merch pages, plus a quote wizard at visriva.com/quote.',
             },
           ].map((row, idx) => (
             <div
@@ -1219,234 +575,6 @@ export function LuxuryInteractivePlatform() {
       </section>
 
       {/* =====================================================================
-          PRE-BOOKING VENUE SPECS & COMMERCIAL TERMS (Clear 2-Column Checklist)
-      ===================================================================== */}
-      <section
-        id="venue-specs"
-        className="py-16 lg:py-20 bg-[#072A1F]/30 border-t border-[#C9A227]/25"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Column 1: 5-Point Venue Checklist */}
-            <div className="rounded-2xl bg-[#040D0A] border border-[#C9A227]/35 p-6 sm:p-8">
-              <div
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                className="text-xs uppercase tracking-widest text-[#C9A227] mb-2"
-              >
-                CLIENT REQUIREMENTS CHECKLIST
-              </div>
-              <h3
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                className="text-3xl font-bold text-[#FAF8F5] mb-6"
-              >
-                5 Things Your Venue Must Arrange
-              </h3>
-
-              <div className="space-y-4">
-                {[
-                  {
-                    code: '01 / SPACE',
-                    title: '8ft × 8ft Dry, Level Footprint Per Station',
-                    desc: 'Flat floor clearance required for backdrop frame, lighting stand, and guest queue.',
-                  },
-                  {
-                    code: '02 / POWER',
-                    title: 'Dedicated 220–240V AC Outlet Within 15 Feet',
-                    desc: 'Standard 15A three-pin socket per station to power commercial thermal printers and strobes.',
-                  },
-                  {
-                    code: '03 / ACCESS',
-                    title: 'Minimum 6-Hour Advance Venue Load-In',
-                    desc: 'Required prior to event doors opening for backdrop fabrication and local-network calibration.',
-                  },
-                  {
-                    code: '04 / OUTDOOR',
-                    title: 'Protective Canopy for Outdoor / Lawn Setups',
-                    desc: 'Mandatory waterproof overhead cover to protect lenses, thermal media, and VR sensors.',
-                  },
-                  {
-                    code: '05 / FURNITURE',
-                    title: '1 Sturdy Flat Table Per Station & Bay Access',
-                    desc: 'One standard banquet table per station plus clear trolley movement from vehicle bay.',
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.code}
-                    className="p-4 rounded-xl bg-[#072A1F]/50 border border-[#C9A227]/20 flex items-start gap-4"
-                  >
-                    <span
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      className="text-[11px] font-bold px-2.5 py-1 rounded bg-[#C9A227]/20 text-[#E5C158] border border-[#C9A227]/30 shrink-0"
-                    >
-                      {item.code}
-                    </span>
-                    <div>
-                      <div className="font-bold text-sm text-[#FAF8F5]">{item.title}</div>
-                      <div className="text-xs text-[#8FA89B] mt-0.5">{item.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Column 2: Commercial Terms & Instant Block Form */}
-            <div className="rounded-2xl bg-gradient-to-b from-[#0B3D2E] to-[#040D0A] border border-[#C9A227]/50 p-6 sm:p-8 flex flex-col justify-between">
-              <div>
-                <div
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  className="text-xs uppercase tracking-widest text-[#E5C158] mb-2"
-                >
-                  COMMERCIAL TERMS & INSTANT DATE BLOCKER
-                </div>
-                <h3
-                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                  className="text-3xl font-bold text-[#FAF8F5] mb-6"
-                >
-                  Lock Your Hardware & Date Now
-                </h3>
-
-                {/* Commercial Policy Pills */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                  <div className="p-3.5 rounded-xl bg-[#040D0A]/80 border border-[#C9A227]/30">
-                    <div
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      className="text-lg font-bold text-[#E5C158]"
-                    >
-                      50% Advance
-                    </div>
-                    <div className="text-xs text-[#8FA89B] mt-0.5">
-                      Non-refundable deposit locks dates & fleet
-                    </div>
-                  </div>
-                  <div className="p-3.5 rounded-xl bg-[#040D0A]/80 border border-[#C9A227]/30">
-                    <div
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      className="text-lg font-bold text-[#E5C158]"
-                    >
-                      18% GST
-                    </div>
-                    <div className="text-xs text-[#8FA89B] mt-0.5">
-                      Standard B2B corporate tax invoice
-                    </div>
-                  </div>
-                  <div className="p-3.5 rounded-xl bg-[#040D0A]/80 border border-[#C9A227]/30">
-                    <div
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                      className="text-lg font-bold text-[#E5C158]"
-                    >
-                      ₹2k – ₹4k
-                    </div>
-                    <div className="text-xs text-[#8FA89B] mt-0.5">
-                      Bengaluru fleet transit & logistics
-                    </div>
-                  </div>
-                </div>
-
-                {/* Quick Embedded Date Block Form */}
-                <div className="space-y-3.5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs text-[#F4EBD0] mb-1 font-medium">
-                        Event Date
-                      </label>
-                      <input
-                        type="date"
-                        value={eventDate}
-                        onChange={(e) => setEventDate(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/35 text-sm text-[#FAF8F5] focus:outline-none focus:border-[#E5C158]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-[#F4EBD0] mb-1 font-medium">
-                        Venue / Bengaluru Area
-                      </label>
-                      <input
-                        type="text"
-                        value={venueName}
-                        onChange={(e) => setVenueName(e.target.value)}
-                        placeholder="e.g. Whitefield / Manyata / Hotel"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/35 text-sm text-[#FAF8F5] focus:outline-none focus:border-[#E5C158]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                      <label className="block text-xs text-[#F4EBD0] mb-1 font-medium">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        value={clientName}
-                        onChange={(e) => setClientName(e.target.value)}
-                        placeholder="Optional"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/35 text-sm text-[#FAF8F5] focus:outline-none focus:border-[#E5C158]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-[#F4EBD0] mb-1 font-medium">
-                        Company / Brand
-                      </label>
-                      <input
-                        type="text"
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="Company Name"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/35 text-sm text-[#FAF8F5] focus:outline-none focus:border-[#E5C158]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-[#F4EBD0] mb-1 font-medium">
-                        WhatsApp Number
-                      </label>
-                      <input
-                        type="tel"
-                        value={clientPhone}
-                        onChange={(e) => setClientPhone(e.target.value)}
-                        placeholder="+91 98..."
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/35 text-sm text-[#FAF8F5] focus:outline-none focus:border-[#E5C158]"
-                      />
-                    </div>
-                  </div>
-
-                  <label className="flex items-start gap-2.5 pt-2 cursor-pointer text-xs text-[#F4EBD0]/90">
-                    <input
-                      type="checkbox"
-                      checked={requirementsChecked}
-                      onChange={(e) => setRequirementsChecked(e.target.checked)}
-                      className="mt-0.5 accent-[#C9A227]"
-                    />
-                    <span>
-                      We acknowledge the 8ft × 8ft space requirement, 220V power within 15ft, 6-hour advance venue access, and 50% non-refundable deposit policy.
-                    </span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-5 border-t border-[#C9A227]/30">
-                <div className="flex items-center justify-between text-xs mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                  <span className="text-[#F4EBD0]">
-                    {selectedStations.length} STATIONS SELECTED ({financials.totalSqFt} SQ.FT)
-                  </span>
-                  <span className="text-base font-bold text-[#E5C158]">
-                    Subtotal: {formatINR(financials.subtotal)}
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => setShowBookingModal(true)}
-                  className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] font-bold text-sm sm:text-base tracking-wide shadow-[0_0_30px_rgba(201,162,39,0.4)] hover:scale-[1.01] transition-all flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Generate Instant Quote & Block Date on WhatsApp</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
           FOOTER
       ===================================================================== */}
       <footer className="bg-[#040D0A] border-t border-[#C9A227]/25 py-12 px-4 sm:px-6 lg:px-8 text-xs text-[#8FA89B]">
@@ -1464,227 +592,6 @@ export function LuxuryInteractivePlatform() {
           </div>
         </div>
       </footer>
-
-      {/* =====================================================================
-          PERSISTENT STICKY "INSTANT BLOCK" BOTTOM DRAWER
-      ===================================================================== */}
-      <div className="fixed bottom-0 inset-x-0 z-50 bg-[#072A1F]/95 backdrop-blur-2xl border-t-2 border-[#C9A227] shadow-[0_-15px_50px_rgba(0,0,0,0.85)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
-          {/* Expandable Selected Station Pills Row */}
-          {drawerExpanded && (
-            <div className="pb-3 mb-3 border-b border-[#C9A227]/25 flex flex-wrap items-center gap-2">
-              {selectedStations.map((s) => (
-                <div
-                  key={s.id}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#040D0A] border border-[#C9A227]/40 text-xs text-[#FAF8F5]"
-                >
-                  <span className="font-medium">{s.name}</span>
-                  <span
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                    className="text-[#E5C158]"
-                  >
-                    {formatINR(getStationPrice(s))}
-                  </span>
-                  <button
-                    onClick={() => toggleStation(s.id)}
-                    className="text-[#8FA89B] hover:text-red-400"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-            {/* Left Package Summary */}
-            <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
-              <button
-                onClick={() => setDrawerExpanded(!drawerExpanded)}
-                className="flex items-center gap-2.5 text-left group"
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#C9A227] text-[#040D0A] font-bold flex items-center justify-center text-sm shadow-[0_0_15px_rgba(201,162,39,0.4)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                  {selectedStations.length}
-                </div>
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#F4EBD0] flex items-center gap-1">
-                    <span>Stations in Package</span>
-                    <span className="text-[#E5C158] underline ml-1 text-[11px]">
-                      {drawerExpanded ? 'Hide' : 'View List'}
-                    </span>
-                  </div>
-                  <div
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                    className="text-[11px] text-[#8FA89B]"
-                  >
-                    {financials.totalSqFt} sq.ft · {financials.totalPlugPoints}× 220V Outlets · 6-Hr Setup
-                  </div>
-                </div>
-              </button>
-
-              <div className="h-8 w-px bg-[#C9A227]/25 hidden sm:block" />
-
-              <div style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                <div className="text-[10px] uppercase text-[#8FA89B]">
-                  EST. STARTING TOTAL (+GST & BLR TRANSIT)
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-lg sm:text-xl font-bold text-[#E5C158]">
-                    {formatINR(financials.subtotal)}
-                  </span>
-                  <span className="text-[11px] text-[#F4EBD0]/80 hidden sm:inline">
-                    (50% Lock: ~{formatINR(financials.advanceDeposit)})
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Quick Inputs + Instant Block CTA */}
-            <div className="flex items-center gap-2.5 w-full md:w-auto">
-              <input
-                type="date"
-                value={eventDate}
-                onChange={(e) => setEventDate(e.target.value)}
-                className="hidden lg:block px-3 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/40 text-xs text-[#FAF8F5]"
-              />
-              <input
-                type="text"
-                value={venueName}
-                onChange={(e) => setVenueName(e.target.value)}
-                placeholder="Bengaluru Venue / Area"
-                className="hidden xl:block px-3 py-2.5 rounded-xl bg-[#040D0A] border border-[#C9A227]/40 text-xs text-[#FAF8F5] w-48"
-              />
-              <button
-                onClick={() => setShowBookingModal(true)}
-                className="flex-1 md:flex-initial px-6 py-3 rounded-xl bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] font-bold text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(201,162,39,0.45)] hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-              >
-                <span>Block This Date Now</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* =====================================================================
-          MODAL 1: INSTANT WHATSAPP QUOTE & SUPABASE LEAD CONFIRMATION
-      ===================================================================== */}
-      {showBookingModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#072A1F] border-2 border-[#C9A227] rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-[0_0_70px_rgba(201,162,39,0.35)] relative my-8">
-            <button
-              onClick={() => setShowBookingModal(false)}
-              className="absolute top-5 right-5 text-[#8FA89B] hover:text-[#FAF8F5]"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/50 text-[#E5C158] text-xs font-bold mb-3">
-              <CheckCircle2 className="w-4 h-4" />
-              PACKAGE READY TO LOCK
-            </div>
-
-            <h3
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              className="text-3xl font-bold text-[#FAF8F5]"
-            >
-              Instant WhatsApp Dispatch & Lead Lock
-            </h3>
-            <p className="text-xs sm:text-sm text-[#F4EBD0]/80 mt-1">
-              In production, this simultaneously saves your lead to Supabase (<code className="text-[#E5C158]">quote_leads</code>) and opens WhatsApp with your itemized station breakdown pre-filled.
-            </p>
-
-            {/* Pre-filled WhatsApp Payload Preview */}
-            <div className="mt-4 p-4 rounded-xl bg-[#040D0A] border border-[#C9A227]/35 font-mono text-xs text-[#F4EBD0] whitespace-pre-wrap max-h-64 overflow-y-auto leading-relaxed">
-              {whatsappMessage}
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center justify-end gap-3">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(whatsappMessage);
-                  setCopiedWhatsApp(true);
-                  setTimeout(() => setCopiedWhatsApp(false), 2500);
-                }}
-                className="px-4 py-3 rounded-xl bg-[#040D0A] hover:bg-[#0B3D2E] text-[#F4EBD0] border border-[#C9A227]/40 text-xs font-semibold flex items-center gap-2"
-              >
-                <Copy className="w-4 h-4 text-[#E5C158]" />
-                <span>{copiedWhatsApp ? 'Copied Quote Summary!' : 'Copy Summary Text'}</span>
-              </button>
-
-              <a
-                href={`https://wa.me/${whatsAppNumber()}?text=${encodeURIComponent(
-                  whatsappMessage
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => void persistLead()}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#C9A227] via-[#E5C158] to-[#C9A227] text-[#040D0A] font-bold text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_25px_rgba(201,162,39,0.4)]"
-              >
-                <Send className="w-4 h-4" />
-                <span>Launch WhatsApp with Pre-Filled Quote →</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================================
-          MODAL 2: 8x8 FT AR VENUE FOOTPRINT VISUALIZER
-      ===================================================================== */}
-      {showArModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#040D0A] border-2 border-[#C9A227] rounded-2xl max-w-xl w-full p-6 relative">
-            <button
-              onClick={() => setShowArModal(false)}
-              className="absolute top-4 right-4 text-[#8FA89B] hover:text-[#FAF8F5]"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              className="text-xs text-[#E5C158] uppercase tracking-wider mb-1"
-            >
-              AR VENUE RECCE TOOL // 8FT × 8FT CLEARANCE
-            </div>
-            <h3
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              className="text-2xl sm:text-3xl font-bold text-[#FAF8F5] mb-4"
-            >
-              Visualize Station Footprint at Your Venue
-            </h3>
-
-            {/* Simulated Camera Wireframe Viewfinder */}
-            <div className="relative h-64 rounded-xl bg-gradient-to-b from-[#072A1F] to-[#040D0A] border border-[#C9A227]/40 overflow-hidden flex items-center justify-center luxury-grid-bg">
-              {/* 3D Perspective Bounding Box */}
-              <div className="w-56 h-40 border-2 border-dashed border-[#E5C158] bg-[#C9A227]/10 rounded-lg flex flex-col items-center justify-center p-4 text-center relative shadow-[0_0_30px_rgba(201,162,39,0.25)]">
-                <span
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  className="text-xs font-bold text-[#040D0A] bg-[#E5C158] px-2 py-0.5 rounded"
-                >
-                  8ft Width × 8ft Depth × 8ft Height
-                </span>
-                <p className="text-xs text-[#F4EBD0] mt-2">
-                  Dry, level surface + 1 Banquet Table + 220V 15A Plug within 15ft
-                </p>
-                <div className="absolute -bottom-3 px-2 py-0.5 rounded bg-[#040D0A] border border-[#C9A227] text-[10px] text-[#E5C158]">
-                  ▲ FRONT QUEUE LINE
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={() => setShowArModal(false)}
-                className="px-5 py-2.5 rounded-xl bg-[#C9A227] text-[#040D0A] font-bold text-xs"
-              >
-                Got It — Close Viewfinder
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* =====================================================================
           MODAL 3: /GIVEAWAY GUEST QR FUNNEL PREVIEW
@@ -1752,15 +659,13 @@ export function LuxuryInteractivePlatform() {
 
             <div className="pt-3 border-t border-[#C9A227]/25 flex items-center justify-between text-xs">
               <span className="text-[#8FA89B]">Planning a corporate event?</span>
-              <button
-                onClick={() => {
-                  setShowGiveawayModal(false);
-                  scrollToSection('rate-card');
-                }}
+              <Link
+                href="/quote"
+                onClick={() => setShowGiveawayModal(false)}
                 className="text-[#E5C158] font-bold hover:underline"
               >
-                Get a Free Station Quote →
-              </button>
+                Get a station quote →
+              </Link>
             </div>
           </div>
         </div>

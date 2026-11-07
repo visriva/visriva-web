@@ -1,4 +1,4 @@
-/** Routes that ship their own header, footer, and WhatsApp (immersive studio). */
+/** Homepage runs the immersive studio (own chrome). */
 export function isImmersiveRoute(pathname: string) {
-  return pathname === "/" || pathname.startsWith("/live");
+  return pathname === "/";
 }

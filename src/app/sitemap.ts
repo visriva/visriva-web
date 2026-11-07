@@ -10,7 +10,6 @@ const paths = [
   "/gallery",
   "/client-requirements",
   "/quote",
-  "/classic",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

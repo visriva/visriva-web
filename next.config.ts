@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      { source: "/classic", destination: "/", permanent: true },
+      { source: "/classic/:path*", destination: "/", permanent: true },
+      { source: "/live", destination: "/", permanent: true },
+      { source: "/live/:path*", destination: "/", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -118,7 +118,7 @@ export type NavItem = {
 export const navigation: NavItem[] = [
   { href: "/", label: "Home" },
   {
-    href: "/#experiences",
+    href: "/photo-booths",
     label: "Experiences",
     children: [
       { href: "/photo-booths", label: "Photo Booths", note: "From ₹15,000" },
@@ -126,7 +126,6 @@ export const navigation: NavItem[] = [
       { href: "/games-vr", label: "Games & VR", note: "From ₹6,000" },
     ],
   },
-  { href: "/classic", label: "Classic home" },
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
   { href: "/client-requirements", label: "Client Requirements" },
