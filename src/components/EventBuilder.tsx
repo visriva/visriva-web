@@ -68,13 +68,13 @@ export function EventBuilder() {
   const activeGuest = placed[guest] ?? placed[0];
 
   return (
-    <section id="floor" className="scroll-mt-28 px-4 py-24 sm:px-6 lg:px-10">
+    <section className="scroll-mt-28 px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="font-royal text-[0.68rem] uppercase tracking-[0.32em] text-gold">
             Build your event
           </p>
-          <h2 className="mt-4 font-display text-5xl italic leading-[0.92] text-cream sm:text-6xl">
+          <h2 className="mood-logotype mood-logotype-aurelia mt-4 text-5xl leading-[0.95] sm:text-6xl">
             Compose the room before you book it.
           </h2>
           <p className="mt-5 max-w-md text-sm leading-relaxed text-mist/85 sm:text-base">

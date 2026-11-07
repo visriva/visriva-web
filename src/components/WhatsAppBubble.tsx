@@ -8,7 +8,7 @@ export function WhatsAppBubble() {
       href={href ?? "/quote"}
       target={href ? "_blank" : undefined}
       rel={href ? "noreferrer" : undefined}
-      className="whatsapp-bubble fixed bottom-5 right-4 z-[78] flex items-center gap-3 border border-gold/50 bg-emerald/95 px-4 py-3 text-cream shadow-2xl backdrop-blur-md transition hover:border-gold hover:bg-emerald sm:bottom-8 sm:right-8"
+      className="whatsapp-bubble glass-royal fixed bottom-5 right-4 z-[78] flex items-center gap-3 px-4 py-3.5 text-cream transition duration-500 hover:border-gold/60 sm:bottom-8 sm:right-8"
       aria-label="WhatsApp Visriva"
     >
       <span className="grid h-9 w-9 place-items-center rounded-full border border-gold/60 text-gold">

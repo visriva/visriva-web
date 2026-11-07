@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { MoodSection } from "@/components/MoodSection";
 import { QuoteWizard } from "@/components/QuoteWizard";
 import { pageMeta } from "@/lib/seo";
 
@@ -11,9 +12,11 @@ export const metadata = pageMeta(
 export default function QuotePage() {
   return (
     <main>
-      <Suspense fallback={<div className="min-h-[70svh]" />}>
-        <QuoteWizard />
-      </Suspense>
+      <MoodSection mood="beli">
+        <Suspense fallback={<div className="min-h-[70svh]" />}>
+          <QuoteWizard />
+        </Suspense>
+      </MoodSection>
     </main>
   );
 }

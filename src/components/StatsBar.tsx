@@ -40,12 +40,12 @@ function Stat({
 }) {
   const count = useCount(value, active);
   return (
-    <div className="px-5 py-6 sm:px-8">
-      <p className="font-display text-5xl italic text-cream sm:text-6xl">
+    <div className="relative px-6 py-8 sm:px-10">
+      <p className="type-display-italic text-5xl text-cream sm:text-6xl">
         {count}
-        {suffix}
+        <span className="text-gold-2">{suffix}</span>
       </p>
-      <p className="mt-2 font-royal text-[0.62rem] uppercase tracking-[0.26em] text-gold">
+      <p className="mt-3 font-royal text-[0.65rem] uppercase tracking-[0.3em] text-gold/90">
         {label}
       </p>
     </div>
@@ -73,10 +73,19 @@ export function StatsBar() {
     <section
       ref={ref}
       aria-label="Visriva in numbers"
-      className="relative z-20 mx-auto -mt-16 grid max-w-[1500px] border border-gold/30 bg-deep/80 backdrop-blur-xl sm:grid-cols-3"
+      className="glass-royal relative z-20 mx-auto -mt-20 grid max-w-[1500px] overflow-hidden sm:grid-cols-3"
     >
-      {stats.map((stat) => (
-        <Stat key={stat.label} {...stat} active={active} />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent"
+      />
+      {stats.map((stat, index) => (
+        <div
+          key={stat.label}
+          className={index > 0 ? "relative sm:border-l sm:border-gold/20" : undefined}
+        >
+          <Stat {...stat} active={active} />
+        </div>
       ))}
     </section>
   );

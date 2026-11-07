@@ -22,7 +22,11 @@ export function Footer() {
   );
 
   return (
-    <footer className="border-t border-gold/20 bg-deep">
+    <footer className="relative border-t border-gold/25 bg-gradient-to-b from-deep to-ink">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
+      />
       <div className="mx-auto grid max-w-[1500px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
         <div className="lg:col-span-5">
           <Image

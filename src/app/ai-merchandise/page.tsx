@@ -21,6 +21,7 @@ export default function AiMerchandisePage() {
   return (
     <main>
       <PageHero
+        mood="epstonik"
         kicker="AI and merchandise"
         title="A portrait they can carry home."
         lede="AI stations and live merchandise, run by the same house as the booths. Custom prompts are included."

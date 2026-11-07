@@ -42,25 +42,33 @@ export function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-[80] transition duration-500 ${
+      className={`fixed inset-x-0 top-0 z-[80] transition duration-700 ${
         solid || open
-          ? "border-b border-gold/20 bg-deep/90 backdrop-blur-xl"
-          : "bg-gradient-to-b from-ink/80 to-transparent"
+          ? "border-b border-gold/25 bg-deep/85 shadow-[0_8px_40px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
+          : "border-b border-transparent bg-gradient-to-b from-ink/90 via-ink/40 to-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
-        <Link href="/" className="relative z-[81] shrink-0" aria-label="Visriva home">
+      <div className="mx-auto flex h-[4.75rem] max-w-[1500px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
+        <Link
+          href="/"
+          className="group relative z-[81] flex shrink-0 items-center gap-3"
+          aria-label="Visriva home"
+        >
+          <span className="absolute -inset-2 rounded-full bg-gold/0 transition duration-500 group-hover:bg-gold/10" />
           <Image
             src="/brand/visriva-green.png"
             alt="Visriva"
             width={320}
             height={320}
             priority
-            className="h-14 w-14 object-cover ring-1 ring-gold/50 sm:h-16 sm:w-16"
+            className="relative h-[3.25rem] w-[3.25rem] object-cover shadow-[0_0_24px_rgba(201,162,39,0.15)] ring-1 ring-gold/60 transition duration-500 group-hover:ring-gold sm:h-[3.5rem] sm:w-[3.5rem]"
           />
+          <span className="hidden font-royal text-[0.62rem] uppercase tracking-[0.28em] text-champagne/80 sm:block">
+            Live Station
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           {navigation.map((item) =>
             item.children ? (
               <div
@@ -71,10 +79,10 @@ export function Header() {
               >
                 <button
                   type="button"
-                  className={`link-gold font-royal text-[0.68rem] uppercase tracking-[0.24em] ${
+                  className={`link-gold font-royal text-[0.72rem] uppercase tracking-[0.28em] ${
                     item.children.some((child) => isCurrent(pathname, child.href))
-                      ? "text-gold"
-                      : "text-cream/85"
+                      ? "text-gold-2"
+                      : "text-cream/88"
                   }`}
                   aria-expanded={experiencesOpen}
                   onFocus={() => setExperiencesOpen(true)}
@@ -86,7 +94,7 @@ export function Header() {
                     experiencesOpen ? "visible opacity-100" : "invisible opacity-0"
                   }`}
                 >
-                  <div className="border border-gold/30 bg-ink/95 p-2 shadow-2xl backdrop-blur-xl">
+                  <div className="glass-royal p-2">
                     {item.children.map((child) => (
                       <Link
                         key={child.href}
@@ -107,8 +115,8 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
-                className={`link-gold font-royal text-[0.68rem] uppercase tracking-[0.24em] ${
-                  isCurrent(pathname, item.href) ? "text-gold" : "text-cream/85"
+                className={`link-gold font-royal text-[0.72rem] uppercase tracking-[0.28em] ${
+                  isCurrent(pathname, item.href) ? "text-gold-2" : "text-cream/88"
                 }`}
               >
                 {item.label}
@@ -120,9 +128,13 @@ export function Header() {
         <div className="relative z-[81] flex items-center gap-3">
           <Link
             href="/quote"
-            className="hidden bg-gold px-5 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-deep transition hover:bg-gold-2 sm:inline-flex"
+            className="group relative hidden overflow-hidden border border-gold/70 bg-gradient-to-b from-gold-2 to-gold px-5 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-deep shadow-[0_8px_28px_rgba(201,162,39,0.2)] transition duration-500 hover:border-gold-3 sm:inline-flex"
           >
-            Request Quote
+            <span
+              aria-hidden
+              className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition duration-700 group-hover:translate-x-full"
+            />
+            <span className="relative">Request Quote</span>
           </Link>
           <button
             type="button"
@@ -164,7 +176,7 @@ export function Header() {
                       <Link
                         key={child.href}
                         href={child.href}
-                        className="font-display text-4xl italic text-cream"
+                        className="type-display-italic text-4xl text-cream"
                       >
                         {child.label}
                       </Link>
@@ -174,7 +186,7 @@ export function Header() {
               ) : (
                 <Link
                   href={item.href}
-                  className="border-t border-gold/20 py-3 font-display text-4xl italic text-cream"
+                  className="type-display-italic border-t border-gold/20 py-3 text-4xl text-cream"
                 >
                   {item.label}
                 </Link>

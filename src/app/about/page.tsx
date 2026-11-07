@@ -28,6 +28,7 @@ export default function AboutPage() {
   return (
     <main>
       <PageHero
+        mood="aurelia"
         kicker="The house"
         title="One standard, from the first print to the last headset."
         lede="Visriva Live Station is a Bengaluru house for corporate floors and celebrations. We own the stations and we staff them."

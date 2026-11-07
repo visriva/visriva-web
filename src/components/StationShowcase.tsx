@@ -16,7 +16,7 @@ export function StationShowcase() {
             <p className="font-royal text-[0.68rem] uppercase tracking-[0.32em] text-gold">
               The inventory
             </p>
-            <h2 id="showcase-title" className="mt-3 max-w-xl font-display text-5xl italic leading-none text-cream sm:text-6xl">
+            <h2 id="showcase-title" className="mood-logotype mood-logotype-chimela mt-3 max-w-xl text-3xl sm:text-4xl">
               Turn the station. See the footprint.
             </h2>
           </div>

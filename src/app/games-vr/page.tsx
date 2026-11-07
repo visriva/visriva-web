@@ -19,6 +19,7 @@ export default function GamesPage() {
   return (
     <main>
       <PageHero
+        mood="sansdiego"
         kicker="Games and VR"
         title="A queue, a headset, a reset."
         lede="Play stations for a corporate floor. Hosted, compact, and run by the same crew as the booth."

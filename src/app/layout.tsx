@@ -1,5 +1,15 @@
 import type { Metadata } from "next";
-import { Cinzel, Cormorant_Garamond, Outfit } from "next/font/google";
+import {
+  Bebas_Neue,
+  Caveat,
+  DM_Serif_Display,
+  Gloock,
+  Italiana,
+  Libre_Bodoni,
+  Manrope,
+  Pacifico,
+  Rye,
+} from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
@@ -8,27 +18,45 @@ import { JsonLd } from "@/components/JsonLd";
 import { WhatsAppBubble } from "@/components/WhatsAppBubble";
 import { siteUrl } from "@/lib/site";
 
-const outfit = Outfit({
+const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-outfit",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-manrope",
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
+const gloock = Gloock({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-gloock",
+  display: "swap",
+});
+
+const libreBodoni = Libre_Bodoni({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  variable: "--font-libre-bodoni",
   display: "swap",
 });
 
-const cinzel = Cinzel({
+const italiana = Italiana({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-cinzel",
+  weight: "400",
+  variable: "--font-italiana",
   display: "swap",
 });
+
+const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas", display: "swap" });
+const caveat = Caveat({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-caveat", display: "swap" });
+const rye = Rye({ subsets: ["latin"], weight: "400", variable: "--font-rye", display: "swap" });
+const epstonik = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-epstonik",
+  display: "swap",
+});
+const pacifico = Pacifico({ subsets: ["latin"], weight: "400", variable: "--font-pacifico", display: "swap" });
 
 const title = "Visriva · Live stations for corporate events and weddings · Bengaluru";
 const description =
@@ -86,9 +114,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
-      className={`${outfit.variable} ${cormorant.variable} ${cinzel.variable} h-full antialiased`}
+      className={`${manrope.variable} ${gloock.variable} ${libreBodoni.variable} ${italiana.variable} ${bebasNeue.variable} ${caveat.variable} ${rye.variable} ${epstonik.variable} ${pacifico.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-ink text-cream">
+      <body className="relative min-h-full bg-ink text-cream">
         <a
           href="#content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-gold focus:px-4 focus:py-2 focus:text-deep"
@@ -98,9 +126,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd />
         <div
           aria-hidden
-          className="pointer-events-none fixed inset-2 z-[40] hidden border border-gold/15 lg:block"
+          className="pointer-events-none fixed inset-3 z-[40] hidden border border-gold/10 shadow-[inset_0_0_80px_rgba(201,162,39,0.04)] lg:block"
         />
-        <Suspense fallback={<div className="h-20" />}>
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-6 z-[39] hidden border border-white/[0.04] lg:block"
+        />
+        <Suspense fallback={<div className="h-24" />}>
           <Header />
         </Suspense>
         {children}

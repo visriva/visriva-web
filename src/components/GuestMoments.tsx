@@ -37,7 +37,7 @@ export function GuestMoments({ films = false }: { films?: boolean }) {
         <p className="font-royal text-[0.68rem] uppercase tracking-[0.32em] text-gold">
           What guests experience
         </p>
-        <h2 id="guests-title" className="mt-3 max-w-2xl font-display text-5xl italic leading-none text-cream sm:text-6xl">
+        <h2 id="guests-title" className="mood-logotype mood-logotype-suster-selly mt-3 max-w-2xl text-5xl leading-none sm:text-6xl">
           Short loops. The part they remember.
         </h2>
         <div className="mt-10 grid gap-4 md:grid-cols-2">
@@ -109,7 +109,7 @@ function Moment({
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-6">
-        <h3 className="font-display text-4xl italic text-cream">{title}</h3>
+        <h3 className="mood-logotype mood-logotype-suster-selly text-4xl">{title}</h3>
         <p className="mt-2 max-w-sm text-sm text-champagne/90">{copy}</p>
       </div>
     </article>
