@@ -18,7 +18,7 @@ export default async function HomePage() {
   const catalog = await getPublishedCatalog();
   const featured = catalog.list.filter((service) => ["unlimited-dslr", "ai-station", "vr-station"].includes(service.id) && service.bookable !== false);
   return (
-    <main id="content" className="page-enter bg-[#003F26]">
+    <main id="content" className="page-enter bg-[#E6EFE3]">
       <Hero />
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar /></div>
 
@@ -42,9 +42,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[#0B5A3D] px-5 py-24 sm:px-8 lg:px-12">
+      <section className="bg-[#DCE9D8] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="section-kicker">Popular starting points</p><h2 className="display-heading mt-4 text-6xl text-[#F5F0DF] sm:text-7xl">Start with a<br/><em className="gold-gradient">guest favourite.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#617768]">A few popular stations to help you start your brief. We can tailor the final mix to your event.</p></div>
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="section-kicker">Popular starting points</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">Start with a<br/><em className="gold-gradient">guest favourite.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#617768]">A few popular stations to help you start your brief. We can tailor the final mix to your event.</p></div>
           <div className="mt-10"><RateList services={featured}/></div>
           <div className="mt-8 flex justify-end"><Link href="/quote" className="liquid-button inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.15em]">Build your event brief ↗</Link></div>
         </div>
@@ -59,9 +59,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[#064B35] px-5 py-20 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 rounded-[2rem] border border-[#B8A04D]/30 bg-[#052F20] px-7 py-14 shadow-[0_25px_70px_rgba(39,67,48,.08)] sm:px-12 lg:flex-row lg:items-end">
-          <div><p className="section-kicker">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#F5F0DF] sm:text-7xl">Your event deserves<br/><em className="gold-gradient">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-[#617768]">Tell us what you are planning. We will help you find the right experiences for your guests.</p></div>
+      <section className="bg-[#DCE9D8] px-5 py-20 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 rounded-[2rem] border border-[#CBDCC7] bg-[#F8F7EF] px-7 py-14 shadow-[0_25px_70px_rgba(39,67,48,.08)] sm:px-12 lg:flex-row lg:items-end">
+          <div><p className="section-kicker">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#244936] sm:text-7xl">Your event deserves<br/><em className="gold-gradient">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-[#617768]">Tell us what you are planning. We will help you find the right experiences for your guests.</p></div>
           <Link href="/quote" className="liquid-button shrink-0 rounded-full px-8 py-4 text-xs font-semibold uppercase tracking-[.15em]">Start your event brief ↗</Link>
         </div>
       </section>
