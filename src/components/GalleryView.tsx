@@ -31,8 +31,8 @@ export function GalleryView({ films }: { films: boolean }) {
       </button>)}
     </div>
     <div className="mt-16 border-t border-[#cbdcc7] pt-12">
-      <p className="section-kicker">Moving pictures</p><h2 className="mt-3 font-display text-4xl text-[#294937]">The event, in motion.</h2>
-      <p className="mt-3 max-w-xl text-sm leading-7 text-[#718574]">Video slots are ready for the Visriva event archive. Add approved MP4 footage when available.</p>
+      <p className="section-kicker">Moving pictures</p><h2 className="mt-3 font-display text-4xl text-[#F5F0DF]">The event, in motion.</h2>
+      <p className="mt-3 max-w-xl text-sm leading-7 text-[#D2DED3]">Video slots are ready for the Visriva event archive. Add approved MP4 footage when available.</p>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         {galleryFilms.map((film)=><figure key={film.title} className="relative h-56 overflow-hidden rounded-2xl border border-[#cfddca] bg-[#dce9d8]">
           {films?<video className="h-full w-full object-cover" autoPlay muted loop playsInline poster={film.poster}><source src={film.src} type="video/mp4"/></video>:<Image src={film.poster} alt="" fill className="object-cover" sizes="33vw"/>}
