@@ -122,8 +122,8 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
           <GoldBurst />
           <div className="grid h-14 w-14 place-items-center rounded-full bg-[#dcead8] text-2xl text-[#52785b]">✓</div>
           <p className="section-kicker mt-7">Request received</p>
-          <h1 className="display-heading mt-3 text-6xl text-[#F5F0DF]">Your event brief<br/><em className="gold-gradient">is on its way.</em></h1>
-          <p className="mt-6 text-base leading-8 text-[#D2DED3]">{done.saved ? "Your request has been saved for the Visriva team. WhatsApp should also open with a copy of your brief." : "Your brief is ready in WhatsApp. Send that message so the studio receives the details directly."}</p>
+          <h1 className="display-heading mt-3 text-6xl text-[#244936]">Your event brief<br/><em className="gold-gradient">is on its way.</em></h1>
+          <p className="mt-6 text-base leading-8 text-[#617768]">{done.saved ? "Your request has been saved for the Visriva team. WhatsApp should also open with a copy of your brief." : "Your brief is ready in WhatsApp. Send that message so the studio receives the details directly."}</p>
           <div className="mt-8 grid gap-3 rounded-2xl bg-[#eaf1e6] p-5 text-sm text-[#4b6652]"><p><strong className="text-[#F5F0DF]">What happens next?</strong></p><p>01 · Our team checks the date and the selected stations.</p><p>02 · We share a tailored quote and event plan.</p><p>03 · Your date is confirmed once the advance is received.</p></div>
           {done.href ? <a href={done.href} target="_blank" rel="noreferrer" className="liquid-button mt-8 inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.15em]">Open WhatsApp brief ↗</a> : null}
           <div className="mt-8 flex flex-wrap gap-4"><Link href="/" className="text-sm font-semibold text-[#607768] underline underline-offset-4">Return home</Link><Link href="/gallery" className="text-sm font-semibold text-[#607768] underline underline-offset-4">Explore the gallery</Link></div>
@@ -180,7 +180,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                   </article>;
                 })}
               </div>
-              {filteredServices.length===0?<p className="mt-8 rounded-xl bg-[#edf3e9] p-6 text-sm text-[#D2DED3]">No experiences match that search. Try a different word or category.</p>:null}
+              {filteredServices.length===0?<p className="mt-8 rounded-xl bg-[#edf3e9] p-6 text-sm text-[#667B6B]">No experiences match that search. Try a different word or category.</p>:null}
             </div>:null}
 
             {step===1 ? <div>
