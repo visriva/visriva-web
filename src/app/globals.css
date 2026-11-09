@@ -5,14 +5,14 @@
   --font-display: var(--font-cormorant);
   --font-royal: var(--font-cinzel);
   --color-ink: #1F392B;
-  --color-deep: #E6EFE3;
+  --color-deep: #0B5A3D;
   --color-emerald: #8BAF91;
   --color-canopy: #DCE9D8;
   --color-gold: #B8A04D;
   --color-gold-2: #CDB96D;
   --color-champagne: #E9DFBD;
   --color-cream: #F8F7EF;
-  --color-mist: #667B6B;
+  --color-mist: #C6D5C8;
 }
 :root { color-scheme: light; }
 html { scroll-behavior:smooth; scroll-padding-top:6rem; }
