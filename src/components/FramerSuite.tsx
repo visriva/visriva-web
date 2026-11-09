@@ -46,8 +46,8 @@ export function PaperBackground({children}:{children:React.ReactNode}){
  return <div className="paper-surface relative overflow-hidden">{children}</div>;
 }
 
-export function MotionSubmitButton({children="Send enquiry",pending=false}:{children?:React.ReactNode;pending?:boolean}){
- return <button type="submit" disabled={pending} className="liquid-button group inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-60"><span>{pending?"Sending…":children}</span><span className="transition-transform group-hover:translate-x-1">{pending?"◌":"↗"}</span></button>;
+export function MotionSubmitButton({children="Send enquiry",pending=false,onClick}:{children?:React.ReactNode;pending?:boolean;onClick?:()=>void}){
+ return <button type="button" onClick={onClick} disabled={pending} className="liquid-button group inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-60"><span>{pending?"Sending…":children}</span><span className="transition-transform group-hover:translate-x-1">{pending?"◌":"↗"}</span></button>;
 }
 
 export function BackTrigger(){
