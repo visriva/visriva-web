@@ -1,7 +1,8 @@
-import { services } from "@/lib/services";
+import { getPublishedServices } from "@/lib/services-catalog";
 import { brandLogoSrc, businessName, contactEmail, phoneTel, siteUrl } from "@/lib/site";
 
-export function JsonLd() {
+export async function JsonLd() {
+  const services = await getPublishedServices();
   const data = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -34,15 +35,17 @@ export function JsonLd() {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Visriva stations",
-      itemListElement: services.map((service) => ({
-        "@type": "Offer",
-        name: service.name,
-        description: service.summary,
-        priceCurrency: "INR",
-        ...(service.fromPrice != null ? { price: service.fromPrice } : {}),
-        ...(service.unitPrice ? { price: service.unitPrice } : {}),
-        url: `${siteUrl}${service.category === "photo-booths" ? "/photo-booths" : service.category === "games" ? "/games-vr" : "/ai-merchandise"}`,
-      })),
+      itemListElement: services
+        .filter((service) => service.bookable !== false)
+        .map((service) => ({
+          "@type": "Offer",
+          name: service.name,
+          description: service.summary,
+          priceCurrency: "INR",
+          ...(service.fromPrice != null ? { price: service.fromPrice } : {}),
+          ...(service.unitPrice ? { price: service.unitPrice } : {}),
+          url: `${siteUrl}${service.category === "photo-booths" ? "/photo-booths" : service.category === "games" ? "/games-vr" : "/ai-merchandise"}`,
+        })),
     },
   };
 

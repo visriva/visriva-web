@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cleanBlock, cleanText } from "@/lib/format";
-import { estimate, getService } from "@/lib/services";
+import { estimateWithLookup } from "@/lib/services";
+import { getPublishedCatalog } from "@/lib/services-catalog";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 type Incoming = {
@@ -61,17 +62,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Use a real start and end time." }, { status: 400 });
   }
 
+  const catalog = await getPublishedCatalog();
+  const lookup = (id: string) => catalog.getService(id);
+
   const selected: Record<string, number> = {};
   if (body.selected && typeof body.selected === "object") {
     for (const [id, raw] of Object.entries(body.selected)) {
-      const service = getService(id);
+      const service = lookup(id);
       const quantity = typeof raw === "number" ? raw : Number(raw);
       if (!service || !Number.isFinite(quantity) || quantity <= 0 || quantity > 5000) continue;
       selected[id] = Math.round(quantity);
     }
   }
 
-  const priced = estimate(selected);
+  const priced = estimateWithLookup(selected, lookup);
   let headcount: number | null = null;
   if (typeof body.headcount === "number" || (typeof body.headcount === "string" && body.headcount.trim())) {
     const parsed = Number(body.headcount);

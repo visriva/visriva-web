@@ -4,7 +4,7 @@ import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { RateList } from "@/components/RateList";
 import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
-import { servicesIn } from "@/lib/services";
+import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
   "AI photo booth and DTF t-shirt printing Bangalore",
@@ -18,7 +18,9 @@ const story = [
   { n: "03", title: "Keep", body: "Magnets and keychains in a run of 300. PVC cards at ₹120 each. Shirts on a live DTF press, quoted to the run." },
 ];
 
-export default function AiMerchandisePage() {
+export default async function AiMerchandisePage() {
+  const catalog = await getPublishedCatalog();
+  const merchServices = catalog.servicesIn("ai-merchandise");
   return (
     <main>
       <PageHero
@@ -40,7 +42,7 @@ export default function AiMerchandisePage() {
         </div>
       </section>
       <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
-        <RateList services={servicesIn("ai-merchandise")} />
+        <RateList services={merchServices} />
       </section>
       <StudioPageBridge />
 

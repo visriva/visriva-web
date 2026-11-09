@@ -33,9 +33,13 @@ export function RateList({ services }: { services: Service[] }) {
             </p>
             <div className="mt-6 flex items-center justify-between gap-4">
               <p className="text-lg text-gold-2">{service.priceLabel}</p>
-              <Link href={`/quote?services=${service.id}`} className="link-gold text-[0.68rem] uppercase tracking-[0.18em] text-cream">
-                Add to quote
-              </Link>
+              {service.comingSoon || service.bookable === false ? (
+                <span className="text-[0.68rem] uppercase tracking-[0.18em] text-mist">Coming soon</span>
+              ) : (
+                <Link href={`/quote?services=${service.id}`} className="link-gold text-[0.68rem] uppercase tracking-[0.18em] text-cream">
+                  Add to quote
+                </Link>
+              )}
             </div>
           </div>
         </article>

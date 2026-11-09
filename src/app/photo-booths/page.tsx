@@ -12,7 +12,7 @@ import { WhyVisriva } from "@/components/snap/WhyVisriva";
 import { MoodSection } from "@/components/MoodSection";
 import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
-import { servicesIn } from "@/lib/services";
+import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
   "Corporate event photo booth Bangalore",
@@ -20,7 +20,9 @@ export const metadata = pageMeta(
   "/photo-booths",
 );
 
-export default function PhotoBoothsPage() {
+export default async function PhotoBoothsPage() {
+  const catalog = await getPublishedCatalog();
+  const boothServices = catalog.servicesIn("photo-booths");
   return (
     <main>
       <PageHero
@@ -126,7 +128,7 @@ export default function PhotoBoothsPage() {
         <p className="type-eyebrow">Full rate card</p>
         <h2 className="type-display mt-4 text-3xl text-cream">Every booth SKU</h2>
         <div className="mt-10">
-          <RateList services={servicesIn("photo-booths")} />
+          <RateList services={boothServices} />
         </div>
       </section>
 

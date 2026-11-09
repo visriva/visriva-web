@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { MoodSection } from "@/components/MoodSection";
 import { QuoteWizard } from "@/components/QuoteWizard";
 import { pageMeta } from "@/lib/seo";
+import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
   "Request a quote",
@@ -9,12 +10,13 @@ export const metadata = pageMeta(
   "/quote",
 );
 
-export default function QuotePage() {
+export default async function QuotePage() {
+  const catalog = await getPublishedCatalog();
   return (
     <main>
       <MoodSection mood="beli">
         <Suspense fallback={<div className="min-h-[70svh]" />}>
-          <QuoteWizard />
+          <QuoteWizard catalog={catalog.list} bookable={catalog.bookable} />
         </Suspense>
       </MoodSection>
     </main>
