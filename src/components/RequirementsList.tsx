@@ -15,7 +15,7 @@ export function RequirementsList() {
             <button
               type="button"
               onClick={() => setChecked((current) => ({ ...current, [item.title]: !current[item.title] }))}
-              className={`grid w-full grid-cols-[auto_1fr] gap-5 border px-5 py-6 text-left transition ${
+              className={`grid w-full grid-cols-[auto_1fr] gap-5 rounded-2xl border bg-[#f8f7ef] px-5 py-6 text-left shadow-[0_8px_26px_rgba(39,67,48,.04)] transition ${
                 on ? "border-gold bg-gold/10" : "border-gold/25 hover:border-gold/60"
               }`}
               aria-pressed={on}
