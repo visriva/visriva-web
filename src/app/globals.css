@@ -51,3 +51,22 @@ body[data-menu="open"] .whatsapp-bubble { display:none; }
 .hero-grid { background-image:linear-gradient(rgba(184,160,77,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(184,160,77,.055) 1px,transparent 1px); background-size:40px 40px; mask-image:linear-gradient(to bottom,black 65%,transparent 100%); }
 .hero-display { font-family:var(--font-cinzel),serif; font-weight:900; text-transform:uppercase; text-shadow:0 2px 0 rgba(255,255,255,.08); }
 .gold-gradient { background:linear-gradient(100deg,#f1df9a 5%,#c6a83e 50%,#f4e5a8 95%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+
+/* Framer-inspired motion and interaction primitives */
+.experience-flip-wrap { perspective:1400px; animation:deck-enter .65s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes deck-enter { from {opacity:0;transform:translateY(22px) scale(.985)} to {opacity:1;transform:translateY(0) scale(1)} }
+.experience-flip { display:block; min-height:420px; perspective:1400px; }
+.experience-flip-inner { position:relative; min-height:420px; transform-style:preserve-3d; transition:transform .85s cubic-bezier(.2,.75,.2,1); }
+.experience-flip.is-flipped .experience-flip-inner { transform:rotateY(180deg); }
+.experience-face { position:absolute; inset:0; min-height:420px; overflow:hidden; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.experience-back { display:flex; flex-direction:column; transform:rotateY(180deg); }
+.experience-flip:focus-visible { outline:2px solid #d1bd73; outline-offset:5px; border-radius:1.4rem; }
+.bouncy-tab { position:relative; }
+.bouncy-tab.is-active { animation:pill-pop .35s cubic-bezier(.2,1.5,.5,1) both; }
+@keyframes pill-pop { 0%{transform:scale(.92)} 70%{transform:scale(1.06)} 100%{transform:scale(1)} }
+.deck-arrow { display:grid; height:42px; width:42px; place-items:center; border:1px solid rgb(184 160 77 / 35%); border-radius:50%; color:#e8d9a5; transition:all .25s ease; }
+.deck-arrow:hover:not(:disabled) { background:#b8a04d; color:#032216; transform:translateY(-2px); }
+.deck-arrow:disabled { opacity:.3; cursor:not-allowed; }
+.glass-panel { border:1px solid rgb(184 160 77 / 28%); background:linear-gradient(135deg,rgb(12 68 45 / 76%),rgb(2 19 12 / 88%)); box-shadow:0 24px 70px rgb(0 0 0 / 24%); backdrop-filter:blur(22px); }
+@media (prefers-reduced-motion:reduce) { .experience-flip-inner,.experience-flip-wrap,.bouncy-tab.is-active { animation:none; transition:none; } }
