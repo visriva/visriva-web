@@ -1,0 +1,15 @@
+---
+description: Lightweight always-on token limits. Load ECC skills only when the task matches.
+alwaysApply: true
+---
+
+# Token efficiency
+
+Correctness first. Keep this rule small. Do not paste skill bodies into every turn.
+
+- Search, then read only the matching lines. Skip `node_modules`, lockfiles, and build output unless the task is about them.
+- Do not re-read files already in context. Batch independent tool calls. Edit once.
+- Lead with the result. No tool dumps, file trees, or unchanged code.
+- Activate an ECC skill only when the task matches that skill. Do not load every capability on every turn.
+
+Spend more tokens for migrations, auth, data loss, or an unreproduced bug. Read the failing path only.
