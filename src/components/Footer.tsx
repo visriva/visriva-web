@@ -45,6 +45,6 @@ export function Footer(){
     <div className="flex flex-col items-start justify-between gap-6 border-t border-[#C9A227]/20 pt-7 lg:col-span-3 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0"><div><p className="section-kicker">Make it memorable</p><p className="mt-3 font-display text-3xl leading-[1.15] text-[#F5F0E5]">Your next event<br/><em className="gold-gradient">starts here.</em></p><p className="mt-4 max-w-xs text-xs leading-6 text-[#BDB49C]">Tell us what you are planning. We’ll help you build the right mix of experiences.</p></div><div className="flex flex-wrap gap-3"><TearTicket/><LightBulbButton/></div></div>
    </div>
   </div>
-  <div className="relative mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-4 px-2 py-6 text-[10px] text-[#A69E86]"><span>© 2026 Visriva. All rights reserved.</span><span>Experiences designed to bring people together.</span><Link href="/privacy" className="transition hover:text-[#D4AF37]">Privacy</Link></div>
+  <div className="relative mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-4 px-2 py-6 text-[10px] text-[#A69E86]"><span>© 2026 Visriva. All rights reserved.</span><span>Experiences designed to bring people together.</span></div>
  </footer>;
 }
