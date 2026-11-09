@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: "/brand/visriva-green.png",
+        url: "/brand/visriva-logo.png",
         width: 1200,
         height: 1200,
         alt: "Visriva golden lotus emblem",
@@ -70,11 +70,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/brand/visriva-green.png"],
+    images: ["/brand/visriva-logo.png"],
   },
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
-  icons: { icon: "/brand/visriva-green.png", apple: "/brand/visriva-green.png" },
+  icons: { icon: "/brand/visriva-logo.png", apple: "/brand/visriva-logo.png" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
