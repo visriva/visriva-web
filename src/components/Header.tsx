@@ -48,15 +48,15 @@ export function Header() {
           : "bg-gradient-to-b from-ink/80 to-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
+      <div className="mx-auto flex h-24 max-w-[1600px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
         <Link href="/" className="relative z-[81] shrink-0" aria-label="Visriva home">
           <Image
-            src="/brand/visriva-green.png"
+            src="/brand/visriva-logo.png"
             alt="Visriva"
-            width={320}
-            height={320}
+            width={800}
+            height={800}
             priority
-            className="h-14 w-14 object-cover ring-1 ring-gold/50 sm:h-16 sm:w-16"
+            className="h-[5.25rem] w-[5.25rem] object-contain sm:h-20 sm:w-20"
           />
         </Link>
 
