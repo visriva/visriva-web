@@ -36,7 +36,7 @@ export function ExperienceDeck({ services }: { services: Service[] }) {
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
           <div className="bouncy-tabs flex max-w-full gap-2 overflow-x-auto rounded-full border border-[#cbdcc7] bg-[#f8f7ef]/75 p-1.5 scrollbar-none" role="tablist" aria-label="Filter experiences">
-            {tabs.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={active === tab.id} onClick={() => changeTab(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-5 py-3 text-[10px] font-semibold uppercase tracking-[.14em] transition-all ${active === tab.id ? "is-active bg-[#294937] text-[#f8f7ef] shadow-[0_5px_20px_rgba(184,160,77,.22)]" : "text-[#607768] hover:bg-white/5 hover:text-white"}`}>{tab.label}</button>)}
+            {tabs.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={active === tab.id} onClick={() => changeTab(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-5 py-3 text-[10px] font-semibold uppercase tracking-[.14em] transition-all ${active === tab.id ? "is-active bg-[#294937] text-[#f8f7ef] shadow-[0_5px_20px_rgba(184,160,77,.22)]" : "text-[#607768] hover:bg-white hover:text-[#294937]"}`}>{tab.label}</button>)}
           </div>
           <div className="flex items-center gap-2">
             <button type="button" aria-label="Previous experiences" onClick={() => {setIndex((v)=>Math.max(0,v-1));setFlipped(null);}} disabled={index===0} className="deck-arrow">←</button>
@@ -56,7 +56,7 @@ export function ExperienceDeck({ services }: { services: Service[] }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#173d2b]/80 via-[#173d2b]/15 to-transparent"/>
                       <div className="absolute left-5 top-5 rounded-full border border-white/65 bg-[#244936]/55 px-3 py-2 text-[9px] font-semibold uppercase tracking-[.16em] text-white backdrop-blur">{categoryMeta[service.category].label}</div>
                       <div className="absolute inset-x-0 bottom-0 p-6">
-                        <div className="flex items-end justify-between gap-3"><div><p className="text-[10px] uppercase tracking-[.18em] text-[#947d34]">{service.footprint}</p><h3 className="mt-2 font-display text-4xl leading-none text-white">{service.name}</h3></div><span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/65 bg-white/20 text-xl text-white">↗</span></div>
+                        <div className="flex items-end justify-between gap-3"><div><p className="text-[10px] uppercase tracking-[.18em] text-[#f0e2af]">{service.footprint}</p><h3 className="mt-2 font-display text-4xl leading-none text-white">{service.name}</h3></div><span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/65 bg-white/20 text-xl text-white">↗</span></div>
                         <div className="mt-5 flex items-center justify-between border-t border-white/25 pt-4 text-xs"><span className="text-white/85">{service.priceLabel}</span><span className="font-semibold uppercase tracking-[.12em] text-[#efdfaa]">Tap to explore</span></div>
                       </div>
                     </div>
