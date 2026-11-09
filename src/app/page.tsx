@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EventBuilder } from "@/components/EventBuilder";
 import { Hero } from "@/components/Hero";
 import { Reveal } from "@/components/Reveal";
 import { StatsBar } from "@/components/StatsBar";
@@ -66,6 +67,8 @@ export default async function HomePage() {
       <section className="overflow-hidden bg-[#22251e] py-5 text-white">
         <div className="marquee-track gap-10">{Array.from({length:2}).map((_,copy)=><p key={copy} className="flex shrink-0 gap-10 text-xs font-semibold uppercase tracking-[.22em] text-[#e9d6a9]">{["AI photo experiences","Live merchandise","Instant keepsakes","VR engagement","Interactive games","Brand activations"].map(item=><span key={item} className="px-5">{item} <span className="ml-8 text-[#c69b4b]">✳</span></span>)}</p>)}</div>
       </section>
+
+      <EventBuilder />
 
       <section className="px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[.85fr_1.15fr]">
