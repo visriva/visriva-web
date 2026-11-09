@@ -26,17 +26,17 @@ export function ExperienceDeck({ services }: { services: Service[] }) {
   }
 
   return (
-    <section id="experiences" className="relative overflow-hidden bg-[#dce9d8] px-5 py-24 text-[#203f30] sm:px-8 lg:px-12">
-      <div className="pointer-events-none absolute -right-40 top-0 h-[34rem] w-[34rem] rounded-full bg-[#bad0b5]/40 blur-[120px]" />
+    <section id="experiences" className="relative overflow-hidden bg-[#003F26] px-5 py-24 text-[#F5F0DF] sm:px-8 lg:px-12">
+      <div className="pointer-events-none absolute -right-40 top-0 h-[34rem] w-[34rem] rounded-full bg-[#0B6A47]/20 blur-[120px]" />
       <div className="relative mx-auto max-w-[1500px]">
         <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
           <div><p className="section-kicker">The Visriva experience collection</p><h2 className="mt-4 max-w-3xl font-display text-6xl leading-[.9] sm:text-7xl">Pick the moment.<br/><em className="gold-gradient">We make it happen.</em></h2></div>
-          <p className="max-w-md text-sm leading-7 text-[#667b6b]">Browse our live stations, interactive photo experiences and custom keepsake bars. Tap any card to see what guests get to experience.</p>
+          <p className="max-w-md text-sm leading-7 text-[#D2DED3]">Browse our live stations, interactive photo experiences and custom keepsake bars. Tap any card to see what guests get to experience.</p>
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
-          <div className="bouncy-tabs flex max-w-full gap-2 overflow-x-auto rounded-full border border-[#cbdcc7] bg-[#f8f7ef]/75 p-1.5 scrollbar-none" role="tablist" aria-label="Filter experiences">
-            {tabs.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={active === tab.id} onClick={() => changeTab(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-5 py-3 text-[10px] font-semibold uppercase tracking-[.14em] transition-all ${active === tab.id ? "is-active bg-[#294937] text-[#f8f7ef] shadow-[0_5px_20px_rgba(184,160,77,.22)]" : "text-[#607768] hover:bg-white hover:text-[#294937]"}`}>{tab.label}</button>)}
+          <div className="bouncy-tabs flex max-w-full gap-2 overflow-x-auto rounded-full border border-[#B8A04D]/30 bg-[#052F20]/75 p-1.5 scrollbar-none" role="tablist" aria-label="Filter experiences">
+            {tabs.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={active === tab.id} onClick={() => changeTab(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-5 py-3 text-[10px] font-semibold uppercase tracking-[.14em] transition-all ${active === tab.id ? "is-active bg-[#B8A04D] text-[#003F26] shadow-[0_5px_20px_rgba(184,160,77,.22)]" : "text-[#607768] hover:bg-white hover:text-[#294937]"}`}>{tab.label}</button>)}
           </div>
           <div className="flex items-center gap-2">
             <button type="button" aria-label="Previous experiences" onClick={() => {setIndex((v)=>Math.max(0,v-1));setFlipped(null);}} disabled={index===0} className="deck-arrow">←</button>
@@ -61,21 +61,21 @@ export function ExperienceDeck({ services }: { services: Service[] }) {
                       </div>
                     </div>
                   </div>
-                  <div className="experience-face experience-back rounded-[1.35rem] border border-[#c7d8c2] bg-[radial-gradient(circle_at_top_right,#eef4e9,#d8e8d3_65%)] p-7">
-                    <span className="text-[10px] uppercase tracking-[.2em] text-[#947d34]">The guest experience</span>
-                    <h3 className="mt-5 font-display text-4xl leading-none text-[#203f30]">{service.name}</h3>
-                    <p className="mt-5 text-sm leading-7 text-[#617768]">{service.summary}</p>
-                    <div className="mt-6 border-t border-[#c7d8c2] pt-5"><p className="text-[9px] uppercase tracking-[.2em] text-[#947d34]">What is included</p><ul className="mt-3 space-y-2 text-xs leading-5 text-[#405b48]">{service.includes.slice(0,4).map((item)=><li key={item}>✳ {item}</li>)}</ul></div>
-                    <div className="mt-auto flex items-center justify-between gap-3 pt-6"><span className="font-display text-2xl text-[#947d34]">{service.priceLabel}</span><span className="text-xs uppercase tracking-[.12em] text-[#947d34]">Back to image ↻</span></div>
+                  <div className="experience-face experience-back rounded-[1.35rem] border border-[#B8A04D]/30 bg-[radial-gradient(circle_at_top_right,#0D5A3D,#052F20_70%)] p-7">
+                    <span className="text-[10px] uppercase tracking-[.2em] text-[#D1BD73]">The guest experience</span>
+                    <h3 className="mt-5 font-display text-4xl leading-none text-[#F5F0DF]">{service.name}</h3>
+                    <p className="mt-5 text-sm leading-7 text-[#D2DED3]">{service.summary}</p>
+                    <div className="mt-6 border-t border-[#B8A04D]/25 pt-5"><p className="text-[9px] uppercase tracking-[.2em] text-[#D1BD73]">What is included</p><ul className="mt-3 space-y-2 text-xs leading-5 text-[#E6E9D8]">{service.includes.slice(0,4).map((item)=><li key={item}>✳ {item}</li>)}</ul></div>
+                    <div className="mt-auto flex items-center justify-between gap-3 pt-6"><span className="font-display text-2xl text-[#D1BD73]">{service.priceLabel}</span><span className="text-xs uppercase tracking-[.12em] text-[#D1BD73]">Back to image ↻</span></div>
                   </div>
                 </div>
               </button>
-              <Link href={categoryMeta[service.category].href} className="mt-3 inline-flex text-[10px] font-semibold uppercase tracking-[.17em] text-[#947d34] transition hover:translate-x-1">Explore category ↗</Link>
+              <Link href={categoryMeta[service.category].href} className="mt-3 inline-flex text-[10px] font-semibold uppercase tracking-[.17em] text-[#D1BD73] transition hover:translate-x-1">Explore category ↗</Link>
             </article>;
           })}
         </div>
-        {visible.length===0 && <p className="rounded-2xl border border-[#b8a04d]/20 p-10 text-center text-sm text-[#667b6b]">New experiences are being added. Contact our team for a custom setup.</p>}
-        <div className="mt-12 flex flex-col items-center justify-between gap-5 rounded-2xl border border-[#cbdcc7] bg-[#f8f7ef]/80 p-6 sm:flex-row sm:p-8"><div><p className="section-kicker">Need a tailored setup?</p><p className="mt-2 font-display text-3xl text-[#203f30]">Build a mix that fits your event.</p></div><Link href="/quote" className="liquid-button rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.16em]">Start your event brief ↗</Link></div>
+        {visible.length===0 && <p className="rounded-2xl border border-[#b8a04d]/20 p-10 text-center text-sm text-[#D2DED3]">New experiences are being added. Contact our team for a custom setup.</p>}
+        <div className="mt-12 flex flex-col items-center justify-between gap-5 rounded-2xl border border-[#B8A04D]/30 bg-[#052F20]/80 p-6 sm:flex-row sm:p-8"><div><p className="section-kicker">Need a tailored setup?</p><p className="mt-2 font-display text-3xl text-[#F5F0DF]">Build a mix that fits your event.</p></div><Link href="/quote" className="liquid-button rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.16em]">Start your event brief ↗</Link></div>
       </div>
     </section>
   );
