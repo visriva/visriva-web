@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { navigation } from "@/lib/site";
+import { SwipeLettersLink } from "@/components/ui";
 
 export function Header() {
   const pathname = usePathname();
@@ -32,7 +33,7 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <button type="button" onClick={()=>{setSearchOpen(!searchOpen);setQuery("");}} aria-label="Search services" aria-expanded={searchOpen} className="grid h-10 w-10 place-items-center rounded-full border border-[#C9D7C4] bg-white/65 text-[#355642] transition hover:border-[#B8A04D] hover:bg-[#E8EFE4]"><svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button>
-          <Link href="/quote" className="liquid-button hidden rounded-full px-6 py-3 text-[.67rem] font-semibold uppercase tracking-[.14em] sm:inline-flex">Plan your event <span aria-hidden className="ml-2">↗</span></Link>
+          <SwipeLettersLink href="/quote" label="Plan your event" className="hidden px-6 py-3 text-[.67rem] sm:inline-flex"/>
           <button type="button" onClick={()=>setOpen(!open)} aria-label={open?"Close navigation":"Open navigation"} aria-expanded={open} className="grid h-10 w-10 place-items-center rounded-full border border-[#C9D7C4] text-[#355642] lg:hidden"><span className="text-xl leading-none">{open?"×":"☰"}</span></button>
         </div>
       </div>
