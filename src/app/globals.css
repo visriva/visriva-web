@@ -63,6 +63,6 @@ body[data-menu="open"] .whatsapp-bubble { display:none; }
 .deck-arrow { display:grid; height:42px; width:42px; place-items:center; border:1px solid rgb(184 160 77 / 35%); border-radius:50%; color:#E9DFBD; transition:all .25s ease; }
 .deck-arrow:hover:not(:disabled) { background:#B8A04D; color:#003F26; transform:translateY(-2px); }
 .deck-arrow:disabled { opacity:.3; cursor:not-allowed; }
-.glass-panel { border:1px solid rgb(184 160 77 / 28%); background:linear-gradient(135deg,rgb(8 71 47 / 94%),rgb(3 43 29 / 96%)); color:#F5F0DF; box-shadow:0 24px 70px rgb(0 0 0 / 24%); backdrop-filter:blur(22px); }
+.glass-panel { border:1px solid rgb(184 160 77 / 30%); background:linear-gradient(135deg,rgb(248 247 239 / 97%),rgb(231 239 226 / 97%)); color:#203F30; box-shadow:0 24px 70px rgb(0 0 0 / 13%); backdrop-filter:blur(22px); }
 .soft-card { border:1px solid #D7DCCB; background:#F8F7EF; box-shadow:0 12px 36px rgb(0 0 0 / 8%); }
 @media (prefers-reduced-motion:reduce) { html{scroll-behavior:auto} *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important} .reveal-out,.reveal-in{opacity:1;transform:none} .experience-flip-inner,.experience-flip-wrap,.bouncy-tab.is-active{animation:none;transition:none} }
