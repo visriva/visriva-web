@@ -4,101 +4,65 @@ import { ExperienceDeck } from "@/components/ExperienceDeck";
 import { Hero } from "@/components/Hero";
 import { Reveal } from "@/components/Reveal";
 import { StatsBar } from "@/components/StatsBar";
-import { GoldLink } from "@/components/ui";
-import { categoryMeta, type ServiceCategory } from "@/lib/services";
+import { RateList } from "@/components/RateList";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { processSteps } from "@/lib/site";
 
-const houses: { key: ServiceCategory; image: string; description: string; tag: string }[] = [
-  { key: "photo-booths", image: "/images/reception.jpg", tag: "Capture the moment", description: "Portraits, instant prints and roaming photo experiences that turn guests into part of the story." },
-  { key: "ai-merchandise", image: "/images/workshop.jpg", tag: "Make it personal", description: "AI portraits and live customisation stations. Guests create something that feels uniquely theirs." },
-  { key: "games", image: "/images/stage.jpg", tag: "Bring on the play", description: "VR and interactive challenges that spark a little friendly competition across the room." },
-];
-
-const benefits = [
-  ["01", "One creative partner", "A single team plans, installs and runs your stations—so the experience feels connected from start to finish."],
-  ["02", "Experiences people join", "Beautifully hosted stations invite guests in. No complicated instructions, no awkward waiting around."],
-  ["03", "Keepsakes worth keeping", "Personalised prints and merchandise turn a great event into something guests take home."],
+const promises = [
+  { n: "01", title: "One creative partner", body: "A single team plans, installs and runs your stations, so every touchpoint feels connected." },
+  { n: "02", title: "Experiences people join", body: "Thoughtful hosting and simple interactions invite every guest to take part." },
+  { n: "03", title: "Keepsakes worth keeping", body: "Personalised prints and merchandise turn a brilliant event into a memory guests can take home." },
 ];
 
 export default async function HomePage() {
   const catalog = await getPublishedCatalog();
+  const featured = ["unlimited-dslr", "ai-station", "vr-station"].map((id) => catalog.getService(id)).filter((item) => item && item.bookable !== false);
   return (
-    <main id="content" className="page-enter">
+    <main id="content" className="page-enter bg-[#e6efe3]">
       <Hero />
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar /></div>
 
-      <section id="experiences" className="scroll-mt-28 bg-[#030e0a] px-5 py-24 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1500px]">
-          <Reveal>
-            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-              <div><p className="section-kicker">Find your kind of memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#f5f0df] sm:text-7xl">Experiences that<br /><em className="text-[#d1bd73]">bring the room alive.</em></h2></div>
-              <p className="max-w-sm text-sm leading-7 text-[#b7c5b7]">From a single photo moment to a full floor of interactive stations, build an experience that fits your event.</p>
-            </div>
-          </Reveal>
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            {houses.map((house, index) => {
-              const meta = categoryMeta[house.key];
-              const services = catalog.servicesIn(house.key);
-              const starting = services.find((service) => service.fromPrice != null);
-              return (
-                <Reveal key={house.key} delay={index * 100}>
-                  <Link href={meta.href} className="image-card group block">
-                    <div className="relative aspect-[.88] overflow-hidden rounded-[1.5rem] bg-[#173c30]">
-                      <Image src={house.image} alt={meta.label} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 p-7 text-white">
-                        <p className="text-[.62rem] font-semibold uppercase tracking-[.2em] text-white/80">{house.tag}</p>
-                        <h3 className="mt-3 font-display text-5xl leading-none">{meta.label}</h3>
-                        <p className="mt-3 max-w-sm text-sm leading-6 text-white/85">{house.description}</p>
-                        <div className="mt-6 flex items-center justify-between border-t border-white/30 pt-4 text-xs">
-                          <span>{starting ? `From ${starting.priceLabel.replace("Starting ", "")}` : "Made to measure"}</span><span className="text-lg transition group-hover:translate-x-1">↗</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="overflow-hidden bg-[#04170f] py-5 text-white">
-        <div className="marquee-track gap-10">{Array.from({length:2}).map((_,copy)=><p key={copy} className="flex shrink-0 gap-10 text-xs font-semibold uppercase tracking-[.22em] text-[#e6d9a9]">{["AI photo experiences","Live merchandise","Instant keepsakes","VR engagement","Interactive games","Brand activations"].map(item=><span key={item} className="px-5">{item} <span className="ml-8 text-[#d0b74f]">✳</span></span>)}</p>)}</div>
-      </section>
-
       <ExperienceDeck services={catalog.list} />
 
-      <section className="bg-[#030e0a] px-5 py-24 sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[.85fr_1.15fr]">
-          <div className="relative min-h-[420px] overflow-hidden rounded-[1.5rem] bg-[#173c30]">
-            <Image src="/images/party.jpg" alt="Guests enjoying an event experience" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
-            <div className="absolute bottom-5 left-5 rounded-xl bg-[#073d2a]/95 px-5 py-4 shadow-lg"><p className="section-kicker">The Visriva difference</p><p className="mt-1 font-display text-2xl text-[#f5f0df]">Thoughtful details.<br />Seamless execution.</p></div>
-          </div>
+      <section className="bg-[#f8f7ef] px-5 py-24 sm:px-8 lg:px-12">
+        <div className="mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-[.95fr_1.05fr]">
+          <Reveal className="relative">
+            <div className="relative min-h-[420px] overflow-hidden rounded-[2rem] border border-white shadow-[0_24px_70px_rgba(39,67,48,.13)] sm:min-h-[540px]">
+              <Image src="/images/party.jpg" alt="Guests enjoying an event experience" fill sizes="(min-width:1024px) 48vw,100vw" className="object-cover"/>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#173d2b]/65 via-transparent to-transparent"/>
+              <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-white/65 bg-[#f8f7ef]/90 p-5 shadow-xl backdrop-blur-xl sm:right-auto sm:max-w-sm"><p className="section-kicker">The Visriva difference</p><p className="mt-2 font-display text-3xl leading-none text-[#294937]">Beautifully designed.<br/>Thoughtfully delivered.</p></div>
+            </div>
+          </Reveal>
           <div className="flex flex-col justify-center">
-            <p className="section-kicker">More than a station</p>
-            <h2 className="display-heading mt-4 text-6xl text-[#f5f0df] sm:text-7xl">A better kind of<br /><em className="text-[#d1bd73]">event energy.</em></h2>
-            <div className="mt-9 divide-y divide-[#b8a04d]/25 border-y border-[#b8a04d]/25">
-              {benefits.map(([n,title,body])=><article key={n} className="grid grid-cols-[48px_1fr] gap-4 py-5"><span className="pt-1 text-xs font-semibold text-[#d1bd73]">{n}</span><div><h3 className="font-semibold text-[#f5f0df]">{title}</h3><p className="mt-2 max-w-lg text-sm leading-7 text-[#b7c5b7]">{body}</p></div></article>)}
+            <Reveal><p className="section-kicker">More than a station</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">Bring people<br/><em className="gold-gradient">into the moment.</em></h2><p className="mt-6 max-w-xl text-base leading-8 text-[#667b6b]">The right event experience gives guests a reason to connect. We combine creative concepts, reliable equipment and on-ground hosting to make that happen.</p></Reveal>
+            <div className="mt-8 divide-y divide-[#d5e0d1] border-y border-[#d5e0d1]">
+              {promises.map((item,index)=><Reveal key={item.n} delay={index*80}><article className="grid grid-cols-[48px_1fr] gap-4 py-5"><span className="pt-1 text-xs font-bold text-[#a88f3e]">{item.n}</span><div><h3 className="font-semibold text-[#294937]">{item.title}</h3><p className="mt-2 max-w-lg text-sm leading-7 text-[#718574]">{item.body}</p></div></article></Reveal>)}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#073d2a] px-5 py-24 sm:px-8 lg:px-12">
+      <section className="bg-[#dce9d8] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
-          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#f5f0df] sm:text-7xl">From first idea<br /><em className="text-[#d1bd73]">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#b7c5b7]">A clear process keeps the planning easy and the event running smoothly.</p></div>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {processSteps.map((step,index)=><article key={step.n} className="border-t border-[#b8a04d]/30 pt-6"><span className="text-xs font-semibold text-[#d1bd73]">{step.n}</span><h3 className="mt-4 font-display text-4xl text-[#f5f0df]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#b7c5b7]">{step.body}</p></article>)}
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="section-kicker">Popular starting points</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">Start with a<br/><em className="gold-gradient">guest favourite.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#667b6b]">A few popular stations to help you start your brief. We can tailor the final mix to your event.</p></div>
+          <div className="mt-10"><RateList services={featured}/></div>
+          <div className="mt-8 flex justify-end"><Link href="/quote" className="liquid-button inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.15em]">Build your event brief ↗</Link></div>
+        </div>
+      </section>
+
+      <section className="bg-[#f8f7ef] px-5 py-24 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">From first idea<br/><em className="gold-gradient">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#667b6b]">A clear process keeps planning easy and lets you focus on your guests.</p></div>
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {processSteps.map((step,index)=><Reveal key={step.n} delay={index*90}><article className="h-full rounded-2xl border border-[#d1dfcd] bg-white/70 p-7 transition hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(39,67,48,.08)]"><span className="inline-grid h-10 w-10 place-items-center rounded-full bg-[#e7efe3] text-xs font-semibold text-[#947d34]">{step.n}</span><h3 className="mt-5 font-display text-4xl text-[#294937]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#718574]">{step.body}</p></article></Reveal>)}
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-24 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 overflow-hidden rounded-[1.75rem] bg-[#031f16] px-7 py-14 text-white sm:px-12 lg:flex-row lg:items-end">
-          <div><p className="text-[.65rem] font-semibold uppercase tracking-[.22em] text-[#d2b574]">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl sm:text-7xl">Your event deserves<br /><em className="text-[#e0c58b]">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-white/70">Tell us what you are planning. We'll help you find the right mix of experiences for your guests.</p></div>
-          <GoldLink href="/quote" className="shrink-0 bg-[#b8a04d] text-[#003319] hover:bg-[#f5f0df]">Start your event brief ↗</GoldLink>
+      <section className="bg-[#cbdcc6] px-5 py-20 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 rounded-[2rem] border border-white/70 bg-[#e4eee0] px-7 py-14 shadow-[0_25px_70px_rgba(39,67,48,.08)] sm:px-12 lg:flex-row lg:items-end">
+          <div><p className="section-kicker">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#244936] sm:text-7xl">Your event deserves<br/><em className="gold-gradient">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-[#667b6b]">Tell us what you are planning. We will help you find the right experiences for your guests.</p></div>
+          <Link href="/quote" className="liquid-button shrink-0 rounded-full px-8 py-4 text-xs font-semibold uppercase tracking-[.15em]">Start your event brief ↗</Link>
         </div>
       </section>
     </main>
