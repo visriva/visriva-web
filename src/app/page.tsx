@@ -7,6 +7,7 @@ import { StatsBar } from "@/components/StatsBar";
 import { RateList } from "@/components/RateList";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { processSteps } from "@/lib/site";
+import { DynamicIslandNav,QuoteDeck,WaveRevealButton } from "@/components/FramerSuite";
 
 const promises = [
   { n: "01", title: "One creative partner", body: "A single team plans, installs and runs your stations, so every touchpoint feels connected." },
@@ -20,9 +21,11 @@ export default async function HomePage() {
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
       <Hero />
+      <div className="relative z-30 mx-auto -mt-4 mb-8 w-fit"><DynamicIslandNav active="Explore Visriva"/></div>
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar /></div>
 
       <ExperienceDeck services={catalog.list} />
+      <section className="bg-[#E6EFE3] px-5 pb-16 sm:px-8 lg:px-12"><div className="mx-auto max-w-[1500px]"><QuoteDeck/></div></section>
 
       <section className="bg-[#F5F0DF] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-[.95fr_1.05fr]">
@@ -62,7 +65,7 @@ export default async function HomePage() {
       <section className="bg-[#DCE9D8] px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 rounded-[2rem] border border-[#CBDCC7] bg-[#F8F7EF] px-7 py-14 shadow-[0_25px_70px_rgba(39,67,48,.08)] sm:px-12 lg:flex-row lg:items-end">
           <div><p className="section-kicker">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#244936] sm:text-7xl">Your event deserves<br/><em className="gold-gradient">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-[#617768]">Tell us what you are planning. We will help you find the right experiences for your guests.</p></div>
-          <Link href="/quote" className="liquid-button shrink-0 rounded-full px-8 py-4 text-xs font-semibold uppercase tracking-[.15em]">Start your event brief ↗</Link>
+          <WaveRevealButton href="/quote" label="Start your event brief"/>
         </div>
       </section>
     </main>
