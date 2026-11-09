@@ -1,30 +1,55 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import type { Service } from "@/lib/services";
+import { useMemo,useRef,useState } from "react";
+import type { Service,ServiceCategory } from "@/lib/services";
+import { categoryMeta } from "@/lib/services";
 
-export function RateList({ services }: { services: Service[] }) {
-  if (!services.length) return <p className="rounded-2xl border border-dashed border-[#c6d7c1] bg-[#f8f7ef] p-8 text-sm text-[#6a806e]">New experiences are being added. Contact the Visriva team for a tailored brief.</p>;
-  return (
-    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-      {services.map((service,index)=>(
-        <article key={service.id} className="group overflow-hidden rounded-[1.5rem] border border-[#d2dfce] bg-[#f9faf4] shadow-[0_12px_35px_rgba(35,65,45,.055)] transition duration-500 hover:-translate-y-1 hover:border-[#b4caae] hover:shadow-[0_22px_50px_rgba(35,65,45,.11)]">
-          <div className="relative h-56 overflow-hidden bg-[#dce9d8]">
-            <Image src={service.image} alt={service.name} fill sizes="(min-width:1280px) 30vw,(min-width:640px) 50vw,100vw" className="object-cover transition duration-700 group-hover:scale-105"/>
-            <span className="absolute left-4 top-4 rounded-full border border-white/75 bg-[#f8f7ef]/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[.16em] text-[#49654f]">{service.footprint}</span>
-            {service.comingSoon||service.bookable===false?<span className="absolute right-4 top-4 rounded-full bg-[#294937] px-3 py-1.5 text-[9px] font-semibold uppercase tracking-wider text-white">Coming soon</span>:null}
-          </div>
-          <div className="p-6">
-            <p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#9a843a]">Visriva experience · 0{index+1}</p>
-            <h2 className="mt-2 font-display text-4xl leading-none text-[#294937]">{service.name}</h2>
-            <p className="mt-4 text-sm leading-7 text-[#718574]">{service.summary}</p>
-            {service.includes.length?<ul className="mt-4 space-y-2 text-xs text-[#506a57]">{service.includes.slice(0,4).map(item=><li key={item} className="flex gap-2"><span className="text-[#a88f3e]">✳</span>{item}</li>)}</ul>:null}
-            <div className="mt-6 flex items-center justify-between gap-4 border-t border-[#e3ebe0] pt-5">
-              <div><p className="text-[9px] uppercase tracking-[.16em] text-[#8b9a8b]">Starting investment</p><p className="mt-1 text-sm font-semibold text-[#294937]">{service.priceLabel}</p></div>
-              {service.comingSoon||service.bookable===false?<span className="text-xs text-[#839284]">Ask us</span>:<Link href={"/quote?services="+service.id} className="inline-flex items-center gap-2 rounded-full border border-[#c4d5bf] px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[.12em] text-[#49654f] transition hover:border-[#a88f3e] hover:bg-[#e8efe4]">Add to brief ↗</Link>}
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-  );
+type Filter="all"|ServiceCategory;
+const tabs:{id:Filter;label:string}[]=[
+ {id:"all",label:"All experiences"},
+ {id:"photo-booths",label:"Photo booths"},
+ {id:"ai-merchandise",label:"AI & merchandise"},
+ {id:"games",label:"Games & VR"},
+];
+
+export function RateList({services}:{services:Service[]}){
+ const [active,setActive]=useState<Filter>("all");
+ const [expanded,setExpanded]=useState<string|null>(null);
+ const rail=useRef<HTMLDivElement>(null);
+ const filtered=useMemo(()=>active==="all"?services:services.filter(item=>item.category===active),[active,services]);
+ const available=filtered.filter(service=>service.bookable!==false&&!service.comingSoon);
+ function changeFilter(id:Filter){setActive(id);setExpanded(null);rail.current?.scrollTo({left:0,behavior:"smooth"});}
+ return <div>
+  <div className="mb-7 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+   <div className="bouncy-tabs flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/80 bg-[#F8F7EF]/90 p-1.5 scrollbar-none" role="tablist" aria-label="Filter rate card">
+    {tabs.map(tab=><button key={tab.id} type="button" role="tab" aria-selected={active===tab.id} onClick={()=>changeFilter(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-5 py-3 text-[10px] font-bold uppercase tracking-[.12em] ${active===tab.id?"is-active bg-[#294937] text-white":"text-[#607768] hover:bg-[#EAF1E6]"}`}>{tab.label}</button>)}
+   </div>
+   <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[.14em] text-[#819181]"><span>{filtered.length} options</span><span className="h-1 w-1 rounded-full bg-[#B8A04D]"/><span>{available.length} bookable now</span></div>
+  </div>
+  <div ref={rail} className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+   {filtered.map((service,index)=>{
+    const isOpen=expanded===service.id;
+    return <article key={service.id} className={`group relative overflow-hidden rounded-[1.55rem] border bg-[#F9FAF4] shadow-[0_12px_35px_rgba(35,65,45,.055)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(35,65,45,.12)] ${isOpen?"border-[#A88F3E] shadow-[0_0_0_1px_rgba(168,143,62,.18)]":"border-[#D2DFCE] hover:border-[#B4CAAE]"}`}>
+     <div className="relative h-56 overflow-hidden bg-[#DCE9D8]">
+      <Image src={service.image} alt={service.name} fill sizes="(min-width:1280px) 30vw,(min-width:640px) 50vw,100vw" className="object-cover transition duration-700 group-hover:scale-105"/>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#173D2B]/50 via-transparent to-transparent"/>
+      <span className="absolute left-4 top-4 rounded-full border border-white/75 bg-[#F8F7EF]/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.16em] text-[#49654F]">{categoryMeta[service.category].label}</span>
+      {service.comingSoon||service.bookable===false?<span className="absolute right-4 top-4 rounded-full bg-[#294937] px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider text-white">Coming soon</span>:<span className="absolute right-4 top-4 rounded-full border border-white/70 bg-[#F8F7EF]/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider text-[#49654F]">Available</span>}
+      <span className="absolute bottom-4 left-4 rounded-full border border-white/50 bg-[#173D2B]/40 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[.14em] text-white backdrop-blur">{service.footprint}</span>
+     </div>
+     <div className="p-6">
+      <div className="flex items-start justify-between gap-3"><div><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#9A843A]">Visriva · {String(index+1).padStart(2,"0")}</p><h2 className="mt-2 font-display text-[2rem] leading-[.98] text-[#294937]">{service.name}</h2></div><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#E7EFE3] text-sm text-[#947D34] transition group-hover:rotate-45">✳</span></div>
+      <div className="mt-4 flex items-end justify-between gap-3 border-t border-[#E3EBE0] pt-4"><div><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-[#8B9A8B]">Starting investment</p><p className="mt-1 font-display text-3xl text-[#294937]">{service.priceLabel}</p></div><button type="button" aria-expanded={isOpen} onClick={()=>setExpanded(isOpen?null:service.id)} className="rounded-full border border-[#C4D5BF] px-4 py-2.5 text-[9px] font-bold uppercase tracking-[.13em] text-[#49654F] transition hover:border-[#A88F3E] hover:bg-[#E8EFE4]">{isOpen?"Less detail":"View details +"}</button></div>
+      <div className={`grid transition-all duration-300 ${isOpen?"grid-rows-[1fr] opacity-100":"grid-rows-[0fr] opacity-0"}`}><div className="overflow-hidden"><div className="mt-4 border-t border-[#E3EBE0] pt-4"><p className="text-xs leading-6 text-[#718574]">{service.summary}</p><ul className="mt-3 space-y-2 text-xs text-[#506A57]">{service.includes.slice(0,4).map(item=><li key={item} className="flex gap-2"><span className="text-[#A88F3E]">✳</span>{item}</li>)}</ul></div></div></div>
+      <div className="mt-5 flex items-center justify-between gap-3">
+       {service.comingSoon||service.bookable===false?<span className="text-[10px] text-[#839284]">Ask the studio about availability</span>:<Link href={"/quote?services="+service.id} className="liquid-button inline-flex w-full items-center justify-center rounded-full px-5 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">Add to event brief <span className="ml-2">↗</span></Link>}
+      </div>
+     </div>
+    </article>;
+   })}
+  </div>
+  {!filtered.length?<p className="rounded-2xl border border-dashed border-[#C6D7C1] bg-[#F8F7EF] p-8 text-sm text-[#6A806E]">No services are listed in this category yet. Contact the Visriva team for a tailored brief.</p>:null}
+ </div>;
 }
