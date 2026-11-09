@@ -29,11 +29,12 @@ export default async function GamesPage() {
       <section className="mx-auto grid max-w-[1500px] gap-6 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
         <article className="relative min-h-[32rem] overflow-hidden border border-gold/30 lg:col-span-7">
           <Plate src={vr.image} alt="" className="absolute inset-0" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#173d2b]/85 via-[#173d2b]/25 to-transparent" />
           <div className="relative z-10 flex h-full min-h-[32rem] flex-col justify-end p-8">
             <p className="font-royal text-[0.62rem] uppercase tracking-[0.24em] text-gold">{vr.footprint}</p>
-            <h2 className="mt-2 font-display text-6xl italic text-cream">{vr.name}</h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-champagne/90">{vr.summary}</p>
-            <p className="mt-6 text-xl text-gold-2">{vr.priceLabel}</p>
+            <h2 className="mt-2 font-display text-6xl italic text-white">{vr.name}</h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/90">{vr.summary}</p>
+            <p className="mt-6 text-xl text-[#f0dfaa]">{vr.priceLabel}</p>
           </div>
         </article>
         <div className="grid gap-6 lg:col-span-5">
