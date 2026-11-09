@@ -68,3 +68,13 @@ body[data-menu="open"] .whatsapp-bubble { display:none; }
 .glass-panel { border:1px solid rgb(91 126 91 / 20%); background:linear-gradient(135deg,rgb(252 252 246 / 96%),rgb(224 237 220 / 96%)); color:#203F30; box-shadow:0 24px 70px rgb(39 67 48 / 10%); backdrop-filter:blur(22px); }
 .soft-card { border:1px solid #D0DECC; background:#F9FAF4; box-shadow:0 12px 36px rgb(39 67 48 / 6%); }
 @media (prefers-reduced-motion:reduce) { html{scroll-behavior:auto} *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important} .reveal-out,.reveal-in{opacity:1;transform:none} .experience-flip-inner,.experience-flip-wrap,.bouncy-tab.is-active{animation:none;transition:none} }
+
+.swipe-letters { display:inline-flex; overflow:hidden; height:1.15em; align-items:flex-start; line-height:1.15; }
+.swipe-letter { display:inline-flex; flex-direction:column; height:1.15em; overflow:hidden; }
+.swipe-letter > span { display:block; flex:none; height:1.15em; transition:transform .42s cubic-bezier(.2,.8,.2,1); }
+.swipe-cta:hover .swipe-letter > span,.swipe-cta:focus-visible .swipe-letter > span { transform:translateY(-100%); }
+.swipe-cta > span:last-child { transition:transform .3s ease; }
+.swipe-cta:hover > span:last-child,.swipe-cta:focus-visible > span:last-child { transform:translate(3px,-2px); }
+.wizard-screen { animation:wizard-enter .42s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes wizard-enter { from {opacity:0;transform:translateY(12px)} to {opacity:1;transform:translateY(0)} }
+.rate-card-feature { background:linear-gradient(135deg,#fffef8 0%,#f2f6ed 100%); }
