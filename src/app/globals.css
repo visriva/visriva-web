@@ -152,3 +152,31 @@ h1,h2,h3,.hero-display,.display-heading,.section-title {
 @media(max-width:640px) {
  h1,h2,h3,.hero-display,.display-heading,.section-title { letter-spacing:.09em; }
 }
+
+
+/* Royal emerald glass treatment */
+.royal-hero { background-color:#050B08; }
+.royal-glass {
+ background:linear-gradient(145deg,rgba(16,35,25,.78),rgba(7,17,13,.82));
+ border:1px solid rgba(212,175,55,.34);
+ backdrop-filter:blur(24px) saturate(135%);
+ -webkit-backdrop-filter:blur(24px) saturate(135%);
+}
+.social-glass {
+ display:grid; width:42px; height:42px; place-items:center; border-radius:999px;
+ border:1px solid rgba(212,175,55,.34); color:#E8D9A8;
+ background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.015));
+ backdrop-filter:blur(12px); transition:transform .25s ease,border-color .25s ease,color .25s ease,background .25s ease;
+}
+.social-glass:hover { transform:translateY(-3px); border-color:#D4AF37; color:#07110D; background:#D4AF37; }
+.glass-footer-panel { background:linear-gradient(135deg,rgba(13,29,20,.92),rgba(5,11,8,.94)); border-color:rgba(201,162,39,.28); }
+.paper-surface { background-color:#0D1B14; background-image:radial-gradient(rgba(212,175,55,.08) .65px,transparent .65px); }
+.rate-card-feature { background:linear-gradient(135deg,#10251A 0%,#07110D 100%); }
+.bouncy-tabs { background:rgba(7,17,13,.88); border:1px solid rgba(201,162,39,.22); box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 8px 25px rgba(0,0,0,.22); }
+.deck-arrow { border-color:rgba(212,175,55,.4); color:#E8D9A8; background:rgba(7,17,13,.8); }
+.deck-arrow:hover:not(:disabled) { background:#C9A227; color:#07110D; }
+.editorial-orb-one { background:radial-gradient(circle,rgba(11,106,73,.3),rgba(11,106,73,0) 70%); }
+.editorial-orb-two { background:radial-gradient(circle,rgba(201,162,39,.12),rgba(201,162,39,0) 72%); }
+@media (prefers-reduced-motion:reduce) {
+ .social-glass,.royal-glass { transition:none; }
+}
