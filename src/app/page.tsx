@@ -16,7 +16,7 @@ const promises = [
 
 export default async function HomePage() {
   const catalog = await getPublishedCatalog();
-  const featured = ["unlimited-dslr", "ai-station", "vr-station"].map((id) => catalog.getService(id)).filter((item) => item && item.bookable !== false);
+  const featured = catalog.list.filter((service) => ["unlimited-dslr", "ai-station", "vr-station"].includes(service.id) && service.bookable !== false);
   return (
     <main id="content" className="page-enter bg-[#e6efe3]">
       <Hero />
