@@ -32,8 +32,8 @@ export default async function HomePage() {
         <div className="mx-auto max-w-[1500px]">
           <Reveal>
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-              <div><p className="section-kicker">Find your kind of memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#20211b] sm:text-7xl">Experiences that<br /><em className="text-[#a87824]">bring the room alive.</em></h2></div>
-              <p className="max-w-sm text-sm leading-7 text-[#69675e]">From a single photo moment to a full floor of interactive stations, build an experience that fits your event.</p>
+              <div><p className="section-kicker">Find your kind of memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#f5f0df] sm:text-7xl">Experiences that<br /><em className="text-[#d1bd73]">bring the room alive.</em></h2></div>
+              <p className="max-w-sm text-sm leading-7 text-[#b7c5b7]">From a single photo moment to a full floor of interactive stations, build an experience that fits your event.</p>
             </div>
           </Reveal>
           <div className="mt-12 grid gap-6 lg:grid-cols-3">
@@ -44,7 +44,7 @@ export default async function HomePage() {
               return (
                 <Reveal key={house.key} delay={index * 100}>
                   <Link href={meta.href} className="image-card group block">
-                    <div className="relative aspect-[.88] overflow-hidden rounded-[1.5rem] bg-[#e5ddcf]">
+                    <div className="relative aspect-[.88] overflow-hidden rounded-[1.5rem] bg-[#173c30]">
                       <Image src={house.image} alt={meta.label} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent" />
                       <div className="absolute inset-x-0 bottom-0 p-7 text-white">
@@ -72,33 +72,33 @@ export default async function HomePage() {
 
       <section className="px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[.85fr_1.15fr]">
-          <div className="relative min-h-[420px] overflow-hidden rounded-[1.5rem] bg-[#ded5c6]">
+          <div className="relative min-h-[420px] overflow-hidden rounded-[1.5rem] bg-[#173c30]">
             <Image src="/images/party.jpg" alt="Guests enjoying an event experience" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
-            <div className="absolute bottom-5 left-5 rounded-xl bg-[#fffdf8]/95 px-5 py-4 shadow-lg"><p className="section-kicker">The Visriva difference</p><p className="mt-1 font-display text-2xl text-[#22221c]">Thoughtful details.<br />Seamless execution.</p></div>
+            <div className="absolute bottom-5 left-5 rounded-xl bg-[#073d2a]/95 px-5 py-4 shadow-lg"><p className="section-kicker">The Visriva difference</p><p className="mt-1 font-display text-2xl text-[#f5f0df]">Thoughtful details.<br />Seamless execution.</p></div>
           </div>
           <div className="flex flex-col justify-center">
             <p className="section-kicker">More than a station</p>
-            <h2 className="display-heading mt-4 text-6xl text-[#20211b] sm:text-7xl">A better kind of<br /><em className="text-[#a87824]">event energy.</em></h2>
-            <div className="mt-9 divide-y divide-[#ddd5c8] border-y border-[#ddd5c8]">
-              {benefits.map(([n,title,body])=><article key={n} className="grid grid-cols-[48px_1fr] gap-4 py-5"><span className="pt-1 text-xs font-semibold text-[#a87824]">{n}</span><div><h3 className="font-semibold text-[#292a23]">{title}</h3><p className="mt-2 max-w-lg text-sm leading-7 text-[#69675e]">{body}</p></div></article>)}
+            <h2 className="display-heading mt-4 text-6xl text-[#f5f0df] sm:text-7xl">A better kind of<br /><em className="text-[#d1bd73]">event energy.</em></h2>
+            <div className="mt-9 divide-y divide-[#b8a04d]/25 border-y border-[#b8a04d]/25">
+              {benefits.map(([n,title,body])=><article key={n} className="grid grid-cols-[48px_1fr] gap-4 py-5"><span className="pt-1 text-xs font-semibold text-[#d1bd73]">{n}</span><div><h3 className="font-semibold text-[#f5f0df]">{title}</h3><p className="mt-2 max-w-lg text-sm leading-7 text-[#b7c5b7]">{body}</p></div></article>)}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#eae4d9] px-5 py-24 sm:px-8 lg:px-12">
+      <section className="bg-[#073d2a] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
-          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#20211b] sm:text-7xl">From first idea<br /><em className="text-[#a87824]">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#69675e]">A clear process keeps the planning easy and the event running smoothly.</p></div>
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#f5f0df] sm:text-7xl">From first idea<br /><em className="text-[#d1bd73]">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#b7c5b7]">A clear process keeps the planning easy and the event running smoothly.</p></div>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {processSteps.map((step,index)=><article key={step.n} className="border-t border-[#cfc5b4] pt-6"><span className="text-xs font-semibold text-[#a87824]">{step.n}</span><h3 className="mt-4 font-display text-4xl text-[#25251f]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#66645b]">{step.body}</p></article>)}
+            {processSteps.map((step,index)=><article key={step.n} className="border-t border-[#b8a04d]/30 pt-6"><span className="text-xs font-semibold text-[#d1bd73]">{step.n}</span><h3 className="mt-4 font-display text-4xl text-[#f5f0df]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#b7c5b7]">{step.body}</p></article>)}
           </div>
         </div>
       </section>
 
       <section className="px-5 py-24 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 overflow-hidden rounded-[1.75rem] bg-[#24271f] px-7 py-14 text-white sm:px-12 lg:flex-row lg:items-end">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 overflow-hidden rounded-[1.75rem] bg-[#031f16] px-7 py-14 text-white sm:px-12 lg:flex-row lg:items-end">
           <div><p className="text-[.65rem] font-semibold uppercase tracking-[.22em] text-[#d2b574]">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl sm:text-7xl">Your event deserves<br /><em className="text-[#e0c58b]">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-white/70">Tell us what you are planning. We'll help you find the right mix of experiences for your guests.</p></div>
-          <GoldLink href="/quote" className="shrink-0 bg-[#e2c27b] text-[#25251e] hover:bg-white">Start your event brief ↗</GoldLink>
+          <GoldLink href="/quote" className="shrink-0 bg-[#b8a04d] text-[#003319] hover:bg-[#f5f0df]">Start your event brief ↗</GoldLink>
         </div>
       </section>
     </main>
