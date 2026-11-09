@@ -54,7 +54,11 @@ export async function AdminScreen() {
     return (
       <main className="mx-auto max-w-xl px-4 pb-24 pt-36 text-sm text-mist">
         <h1 className="font-display text-5xl italic text-cream">Supabase is not connected.</h1>
-        <p className="mt-4">Add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY, and run the leads migration.</p>
+        <p className="mt-4">
+          Add <code className="text-gold-2">SUPABASE_SERVICE_ROLE_KEY</code> on Vercel (Settings → API →
+          service_role). Migration is already applied on project{" "}
+          <code className="text-gold-2">visriva-web</code>.
+        </p>
       </main>
     );
   }
