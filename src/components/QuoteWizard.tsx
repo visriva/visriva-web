@@ -117,8 +117,8 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
   if (done) {
     return (
-      <section className="min-h-[80svh] bg-[#003F26] px-5 pb-24 pt-32 sm:px-8">
-        <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#B8A04D]/25 bg-[#F5F0DF] p-7 shadow-[0_24px_70px_rgba(0,0,0,.22)] sm:p-12">
+      <section className="min-h-[80svh] bg-[#E6EFE3] px-5 pb-24 pt-32 sm:px-8">
+        <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#B8A04D]/25 bg-[#F8F7EF] p-7 shadow-[0_24px_70px_rgba(39,67,48,.09)] sm:p-12">
           <GoldBurst />
           <div className="grid h-14 w-14 place-items-center rounded-full bg-[#dcead8] text-2xl text-[#52785b]">✓</div>
           <p className="section-kicker mt-7">Request received</p>
@@ -143,28 +143,28 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
     <main id="content" className="min-h-screen bg-[#e6efe3] px-4 pb-24 pt-[112px] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1420px]">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div><p className="section-kicker">Visriva booking studio</p><h1 className="display-heading mt-2 text-5xl text-[#F5F0DF] sm:text-6xl">Let's plan something<br className="hidden sm:block"/><em className="gold-gradient">worth remembering.</em></h1><p className="mt-4 max-w-2xl text-sm leading-7 text-[#D2DED3]">Build your event request in a few simple steps. You can review everything before sending, and there is no payment at this stage.</p></div>
+          <div><p className="section-kicker">Visriva booking studio</p><h1 className="display-heading mt-2 text-5xl text-[#294937] sm:text-6xl">Let's plan something<br className="hidden sm:block"/><em className="gold-gradient">worth remembering.</em></h1><p className="mt-4 max-w-2xl text-sm leading-7 text-[#667B6B]">Build your event request in a few simple steps. You can review everything before sending, and there is no payment at this stage.</p></div>
           <Link href="/client-requirements" className="rounded-full border border-[#c2d4be] bg-[#f8f7ef]/80 px-5 py-3 text-xs font-semibold text-[#526f5a] transition hover:border-[#a88f3e]">Venue checklist ↗</Link>
         </div>
 
-        <div className="mb-6 rounded-2xl border border-[#B8A04D]/25 bg-[#052F20]/85 p-4 shadow-[0_8px_26px_rgba(39,67,48,.04)] sm:p-5">
+        <div className="mb-6 rounded-2xl border border-[#B8A04D]/25 bg-[#F8F7EF]/85 p-4 shadow-[0_8px_26px_rgba(39,67,48,.04)] sm:p-5">
           <div className="grid gap-3 sm:grid-cols-4">
             {steps.map((item,index)=>{
               const active=index===step;
               const complete=index<step;
-              return <button key={item.label} type="button" onClick={()=>{if(index<step){setStep(index);setError("");}}} disabled={index>step} className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active?"bg-[#0B5A3D]":complete?"opacity-100":"opacity-55"}`}>
+              return <button key={item.label} type="button" onClick={()=>{if(index<step){setStep(index);setError("");}}} disabled={index>step} className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active?"bg-[#E1EDDC]":complete?"opacity-100":"opacity-55"}`}>
                 <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold ${complete?"bg-[#355b42] text-white":active?"bg-[#b8a04d] text-[#203f30]":"border border-[#c7d8c2] text-[#79907d]"}`}>{complete?"✓":`0${index+1}`}</span>
-                <span><span className={`block text-xs font-semibold ${active||complete?"text-[#F5F0DF]":"text-[#B7C7B9]"}`}>{item.label}</span><span className="mt-1 block text-[10px] text-[#849386]">{item.helper}</span></span>
+                <span><span className={`block text-xs font-semibold ${active||complete?"text-[#294937]":"text-[#89988B]"}`}>{item.label}</span><span className="mt-1 block text-[10px] text-[#849386]">{item.helper}</span></span>
               </button>;
             })}
           </div>
-          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#064B35]"><div className="h-full rounded-full bg-gradient-to-r from-[#0B8054] to-[#B8A04D] transition-all duration-500" style={{width:`${((step+1)/steps.length)*100}%`}}/></div>
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#E1E9DD]"><div className="h-full rounded-full bg-gradient-to-r from-[#0B8054] to-[#B8A04D] transition-all duration-500" style={{width:`${((step+1)/steps.length)*100}%`}}/></div>
         </div>
 
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="min-w-0 rounded-[1.75rem] border border-[#B8A04D]/25 bg-[#F5F0DF] p-5 shadow-[0_20px_60px_rgba(39,67,48,.07)] sm:p-8">
+          <section className="min-w-0 rounded-[1.75rem] border border-[#D4E0D0] bg-[#F8F7EF] p-5 shadow-[0_20px_60px_rgba(39,67,48,.07)] sm:p-8">
             {step===0 ? <div>
-              <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="section-kicker">Step 01 · Experiences</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">What would you like at your event?</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">Select one or more stations. You can adjust quantities and review the estimate on the side.</p></div><span className="rounded-full bg-[#e6efe3] px-3 py-2 text-xs text-[#58725d]">{selectedCount} selected</span></div>
+              <div className="wizard-screen flex flex-wrap items-end justify-between gap-4"><div><p className="section-kicker">Step 01 · Experiences</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">What would you like at your event?</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">Select one or more stations. You can adjust quantities and review the estimate on the side.</p></div><span className="rounded-full bg-[#e6efe3] px-3 py-2 text-xs text-[#58725d]">{selectedCount} selected</span></div>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row"><input className="field" value={search} onChange={(event)=>setSearch(event.target.value)} placeholder="Search experiences..." aria-label="Search experiences"/><div className="flex flex-wrap gap-2">{categories.map((item)=><button key={item.id} type="button" onClick={()=>setFilter(item.id)} className={`rounded-full px-4 py-2.5 text-[10px] font-semibold transition ${filter===item.id?"bg-[#355b42] text-white shadow-md":"border border-[#d4e0d0] bg-white text-[#627768] hover:border-[#a88f3e]"}`}>{item.label}</button>)}</div></div>
               <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {filteredServices.map((service)=>{
@@ -183,7 +183,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
               {filteredServices.length===0?<p className="mt-8 rounded-xl bg-[#edf3e9] p-6 text-sm text-[#667B6B]">No experiences match that search. Try a different word or category.</p>:null}
             </div>:null}
 
-            {step===1 ? <div>
+            {step===1 ? <div className="wizard-screen">
               <p className="section-kicker">Step 02 · Event details</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">Tell us about the event.</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">Share whatever you know right now. Our team can confirm the remaining details with you.</p>
               <div className="mt-8 grid gap-5 sm:grid-cols-2">
                 <Field label="Venue / location" value={draft.venue} onChange={(value)=>setField("venue",value)} placeholder="Venue name or area"/>
@@ -197,7 +197,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
               <p className="mt-5 rounded-xl bg-[#edf3e9] p-4 text-xs leading-6 text-[#6b7f6e]">Not sure about every detail? That's absolutely fine. Send the basics and we can help you shape the plan.</p>
             </div>:null}
 
-            {step===2 ? <div>
+            {step===2 ? <div className="wizard-screen">
               <p className="section-kicker">Step 03 · Your details</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">Who should we get in touch with?</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">We will use these details only to follow up on your event request.</p>
               <div className="mt-8 grid gap-5 sm:grid-cols-2">
                 <Field label="Your name" value={draft.name} onChange={(value)=>setField("name",value)} placeholder="Full name"/>
@@ -209,7 +209,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
               <p className="mt-5 rounded-xl bg-[#edf3e9] p-4 text-xs leading-6 text-[#6b7f6e]">Please provide at least one way for us to reach you—phone or email.</p>
             </div>:null}
 
-            {step===3 ? <div>
+            {step===3 ? <div className="wizard-screen">
               <p className="section-kicker">Step 04 · Review your request</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">One last look.</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">Check the selections and event information before sending your brief.</p>
               <div className="mt-8 rounded-2xl border border-[#d4e0d0] bg-white p-5">
                 <div className="flex items-center justify-between"><h3 className="font-semibold text-[#244936]">Selected experiences</h3><button type="button" onClick={()=>setStep(0)} className="text-xs font-semibold text-[#947d34] underline underline-offset-4">Edit selection</button></div>
