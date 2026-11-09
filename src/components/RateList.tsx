@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo,useRef,useState } from "react";
 import type { Service,ServiceCategory } from "@/lib/services";
+import { SwipeLettersLink } from "@/components/ui";
 import { categoryMeta } from "@/lib/services";
 
 type Filter="all"|ServiceCategory;
@@ -44,7 +45,7 @@ export function RateList({services}:{services:Service[]}){
       <div className="mt-4 flex items-end justify-between gap-3 border-t border-[#E3EBE0] pt-4"><div><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-[#8B9A8B]">Starting investment</p><p className="mt-1 font-display text-3xl text-[#294937]">{service.priceLabel}</p></div><button type="button" aria-expanded={isOpen} onClick={()=>setExpanded(isOpen?null:service.id)} className="rounded-full border border-[#C4D5BF] px-4 py-2.5 text-[9px] font-bold uppercase tracking-[.13em] text-[#49654F] transition hover:border-[#A88F3E] hover:bg-[#E8EFE4]">{isOpen?"Less detail":"View details +"}</button></div>
       <div className={`grid transition-all duration-300 ${isOpen?"grid-rows-[1fr] opacity-100":"grid-rows-[0fr] opacity-0"}`}><div className="overflow-hidden"><div className="mt-4 border-t border-[#E3EBE0] pt-4"><p className="text-xs leading-6 text-[#718574]">{service.summary}</p><ul className="mt-3 space-y-2 text-xs text-[#506A57]">{service.includes.slice(0,4).map(item=><li key={item} className="flex gap-2"><span className="text-[#A88F3E]">✳</span>{item}</li>)}</ul></div></div></div>
       <div className="mt-5 flex items-center justify-between gap-3">
-       {service.comingSoon||service.bookable===false?<span className="text-[10px] text-[#839284]">Ask the studio about availability</span>:<Link href={"/quote?services="+service.id} className="liquid-button inline-flex w-full items-center justify-center rounded-full px-5 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">Add to event brief <span className="ml-2">↗</span></Link>}
+       {service.comingSoon||service.bookable===false?<span className="text-[10px] text-[#839284]">Ask the studio about availability</span>:<SwipeLettersLink href={"/quote?services="+service.id} label="Add to event brief" className="w-full px-5 py-3.5 text-[10px]"/>}
       </div>
      </div>
     </article>;
