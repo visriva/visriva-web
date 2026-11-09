@@ -16,11 +16,11 @@ export function Footer() {
       <div className="mx-auto grid max-w-[1500px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
         <div className="lg:col-span-5">
           <Image
-            src="/brand/visriva-green.png"
+            src="/brand/visriva-logo.png"
             alt="Visriva"
-            width={160}
-            height={160}
-            className="h-24 w-24 object-cover ring-1 ring-gold/40"
+            width={800}
+            height={800}
+            className="h-32 w-32 object-contain"
           />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-mist/80">
             Photo booths, AI merchandise, and games for corporate events in Bengaluru.
