@@ -2,16 +2,17 @@ import Image from "next/image";
 
 export function PageHero({ kicker, title, lede, image, alt }: { kicker: string; title: string; lede: string; image: string; alt: string }) {
   return (
-    <section className="relative overflow-hidden bg-[#e9e2d6] pt-[76px]">
-      <div className="mx-auto grid min-h-[560px] max-w-[1500px] items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:px-12">
+    <section className="relative overflow-hidden bg-[#dce9d8] pt-[78px]">
+      <div className="pointer-events-none absolute -right-24 top-12 h-96 w-96 rounded-full bg-[#b6cfb1]/60 blur-[90px]" />
+      <div className="relative mx-auto grid min-h-[540px] max-w-[1500px] items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:px-12">
         <div className="relative z-10">
           <p className="section-kicker">{kicker}</p>
-          <h1 className="display-heading mt-6 max-w-2xl text-[clamp(3.5rem,6.7vw,6.8rem)] text-[#20211b]">{title}</h1>
-          <p className="mt-6 max-w-xl text-base leading-8 text-[#5d5b52] sm:text-lg">{lede}</p>
+          <h1 className="display-heading mt-6 max-w-2xl text-[clamp(3.5rem,6.7vw,6.8rem)] text-[#244936]">{title}</h1>
+          <p className="mt-6 max-w-xl text-base leading-8 text-[#617768] sm:text-lg">{lede}</p>
         </div>
-        <div className="relative min-h-[350px] overflow-hidden rounded-[1.75rem] sm:min-h-[470px]">
+        <div className="relative min-h-[350px] overflow-hidden rounded-[1.75rem] border border-white/70 shadow-[0_20px_60px_rgba(39,67,48,.12)] sm:min-h-[470px]">
           <Image src={image} alt={alt} fill priority sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#193d2b]/25 to-transparent" />
         </div>
       </div>
     </section>
