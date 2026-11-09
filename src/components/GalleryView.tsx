@@ -29,7 +29,7 @@ export function GalleryView({ films }: { films: boolean }) {
             type="button"
             onClick={() => setFilter(item)}
             className={`border px-4 py-2 font-royal text-[0.62rem] uppercase tracking-[0.2em] ${
-              filter === item ? "border-[#24251e] bg-[#24251e] text-white" : "border-[#d5cdbf] bg-white/60 text-[#57564d] hover:border-[#a87824]"
+              filter === item ? "border-[#b8a04d] bg-[#b8a04d] text-[#032216]" : "border-[#b8a04d]/30 bg-[#062619]/70 text-[#d9dfd2] hover:border-[#d1bd73] hover:text-white"
             }`}
           >
             {item}
@@ -44,27 +44,27 @@ export function GalleryView({ films }: { films: boolean }) {
             onClick={() => setOpen(item)}
             className="mb-4 block w-full break-inside-avoid text-left"
           >
-            <figure className="image-card relative overflow-hidden rounded-2xl border border-[#e6dfd3] bg-white">
+            <figure className="image-card relative overflow-hidden rounded-2xl border border-[#b8a04d]/25 bg-[#062619]">
               <div className={`relative ${item.tall ? "h-[28rem]" : "h-64"}`}>
                 <Image src={item.src} alt={item.alt} fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover transition duration-700 hover:scale-105" />
               </div>
-              <figcaption className="flex items-center justify-between bg-white px-4 py-3 text-sm text-[#292a23]">
+              <figcaption className="flex items-center justify-between bg-[#062619] px-4 py-3 text-sm text-[#f5f0df]">
                 <span>{item.caption}</span>
-                <span className="text-[.62rem] font-semibold uppercase tracking-[.15em] text-[#9a702b]">{item.tag}</span>
+                <span className="text-[.62rem] font-semibold uppercase tracking-[.15em] text-[#d1bd73]">{item.tag}</span>
               </figcaption>
             </figure>
           </button>
         ))}
       </div>
 
-      <div className="mt-16 border-t border-[#e2dacd] pt-12">
-        <h2 className="font-display text-4xl text-[#25251f]">Film slots</h2>
-        <p className="mt-3 max-w-xl text-sm leading-7 text-[#68665d]">
+      <div className="mt-16 border-t border-[#b8a04d]/25 pt-12">
+        <h2 className="font-display text-4xl text-[#f5f0df]">Film slots</h2>
+        <p className="mt-3 max-w-xl text-sm leading-7 text-[#b7c5b7]">
           Drop mp4 files into public/films using the names below. Until then the frame holds a still.
         </p>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {galleryFilms.map((film) => (
-            <figure key={film.title} className="relative h-56 overflow-hidden rounded-2xl border border-[#e6dfd3]">
+            <figure key={film.title} className="relative h-56 overflow-hidden rounded-2xl border border-[#b8a04d]/25">
               {films ? (
                 <video className="h-full w-full object-cover" autoPlay muted loop playsInline poster={film.poster}>
                   <source src={film.src} type="video/mp4" />
@@ -74,7 +74,7 @@ export function GalleryView({ films }: { films: boolean }) {
               )}
               <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-sm text-white">
                 {film.title}
-                <span className="mt-1 block text-[.6rem] font-semibold uppercase tracking-[.15em] text-[#f0d89e]">
+                <span className="mt-1 block text-[.6rem] font-semibold uppercase tracking-[.15em] text-[#e5cf83]">
                   {film.src.replace("/films/", "")}
                 </span>
               </figcaption>
