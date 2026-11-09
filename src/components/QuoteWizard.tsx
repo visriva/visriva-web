@@ -146,7 +146,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
           <li>3. A 50% non-refundable advance holds the crew.</li>
         </ol>
         {done.href ? (
-          <a href={done.href} target="_blank" rel="noreferrer" className="mt-8 inline-flex bg-gold px-6 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-deep">
+          <a href={done.href} target="_blank" rel="noreferrer" className="liquid-button mt-8 inline-flex rounded-full px-7 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.22em]">
             Open the WhatsApp brief
           </a>
         ) : null}
@@ -162,13 +162,13 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
       <div className="lg:col-span-8">
         <p className="font-royal text-[0.68rem] uppercase tracking-[0.32em] text-gold">Quote / Book</p>
         <h1 className="mt-3 font-display text-5xl italic leading-none text-cream sm:text-6xl">Tell us the floor.</h1>
-        <ol className="mt-8 grid grid-cols-4 gap-2">
+        <ol className="mt-8 grid grid-cols-4 gap-2 rounded-2xl border border-gold/20 bg-[#061b12]/70 p-4 backdrop-blur-xl">
           {steps.map((label, index) => (
             <li key={label}>
               <button
                 type="button"
                 onClick={() => index < step && setStep(index)}
-                className={`w-full border-t-2 pt-3 text-left font-royal text-[0.58rem] uppercase tracking-[0.18em] ${
+                className={`w-full rounded-lg border-t-2 pt-3 text-left font-royal text-[0.58rem] uppercase tracking-[0.18em] transition ${
                   index <= step ? "border-gold text-gold" : "border-gold/20 text-mist/50"
                 }`}
               >
@@ -194,7 +194,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                         const active = Boolean(quantity);
                         const canBook = service.bookable !== false;
                         return (
-                          <article key={service.id} className={`border p-3 ${active ? "border-gold bg-gold/10" : "border-gold/25"} ${!canBook ? "opacity-70" : ""}`}>
+                          <article key={service.id} className={`group rounded-2xl border p-4 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,.2)] ${active ? "border-gold bg-gold/15 shadow-[0_0_0_1px_rgba(184,160,77,.2)]" : "border-gold/25 bg-[#062619]/70 hover:border-gold/60"} ${!canBook ? "opacity-70" : ""}`}>
                             <button
                               type="button"
                               disabled={!canBook}
@@ -202,7 +202,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                               className="grid w-full grid-cols-[88px_1fr] gap-3 text-left disabled:cursor-not-allowed"
                             >
                               <span
-                                className="h-20 bg-cover bg-center grayscale"
+                                className="h-24 rounded-xl bg-cover bg-center transition duration-500 group-hover:scale-[1.02]"
                                 style={{ backgroundImage: `linear-gradient(to top, rgba(4,21,16,0.2), rgba(4,21,16,0.05)), url(${service.image})` }}
                                 role="img"
                                 aria-label=""
@@ -302,18 +302,18 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
             </button>
           ) : null}
           {step < 3 ? (
-            <button type="button" onClick={nextStep} className="bg-gold px-6 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-deep">
+            <button type="button" onClick={nextStep} className="liquid-button rounded-full px-7 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.2em]">
               Continue
             </button>
           ) : (
-            <button type="button" disabled={sending} onClick={submit} className="bg-gold px-6 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-deep disabled:opacity-60">
+            <button type="button" disabled={sending} onClick={submit} className="liquid-button rounded-full px-7 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.2em] disabled:opacity-60">
               {sending ? "Sending" : "Send the brief"}
             </button>
           )}
         </div>
       </div>
 
-      <aside className="h-max border border-gold/30 bg-deep/80 p-6 lg:sticky lg:top-28 lg:col-span-4">
+      <aside className="glass-panel h-max rounded-3xl p-6 lg:sticky lg:top-28 lg:col-span-4">
         <p className="font-royal text-[0.62rem] uppercase tracking-[0.24em] text-gold">Starting from</p>
         <p className="mt-2 font-display text-5xl italic text-cream">{inr(priced.total)}</p>
         {priced.hasCustom ? <p className="mt-2 text-sm text-champagne">Plus lines that are quoted to the run.</p> : null}
