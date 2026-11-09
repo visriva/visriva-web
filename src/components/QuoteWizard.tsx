@@ -4,14 +4,19 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GoldBurst } from "@/components/GoldBurst";
 import { inr } from "@/lib/format";
-import { draftEstimate, emptyDraft, quoteMessage, type QuoteDraft } from "@/lib/quote";
-import { categoryMeta, countsFromIds, services, type ServiceCategory } from "@/lib/services";
+import { emptyDraft, quoteMessage, type QuoteDraft } from "@/lib/quote";
+import { categoryMeta, countsFromIds, estimateWithLookup, type Service, type ServiceCategory } from "@/lib/services";
 import { requirements } from "@/lib/site";
 import { whatsAppLink } from "@/lib/whatsapp";
 
 const steps = ["Services", "Event", "Contact", "Review"] as const;
 
-export function QuoteWizard() {
+type QuoteWizardProps = {
+  catalog: Service[];
+  bookable: Service[];
+};
+
+export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   const params = useSearchParams();
   const hydrated = useRef(false);
   const [step, setStep] = useState(0);
@@ -23,7 +28,9 @@ export function QuoteWizard() {
   useEffect(() => {
     if (hydrated.current) return;
     hydrated.current = true;
-    const fromQuery = countsFromIds((params.get("services") || "").split(",").filter(Boolean));
+    const fromQuery = countsFromIds((params.get("services") || "").split(",").filter(Boolean), (id) =>
+      bookable.find((service) => service.id === id),
+    );
     let next = emptyDraft;
     const stored = sessionStorage.getItem("visriva-quote");
     if (stored) {
@@ -35,14 +42,19 @@ export function QuoteWizard() {
     }
     if (Object.keys(fromQuery).length) next = { ...next, selected: fromQuery };
     setDraft(next);
-  }, [params]);
+  }, [params, bookable]);
 
   useEffect(() => {
     if (!hydrated.current || done) return;
     sessionStorage.setItem("visriva-quote", JSON.stringify(draft));
   }, [draft, done]);
 
-  const priced = useMemo(() => draftEstimate(draft), [draft]);
+  const lookup = useMemo(() => {
+    const map = new Map(bookable.map((service) => [service.id, service]));
+    return (id: string) => map.get(id);
+  }, [bookable]);
+
+  const priced = useMemo(() => estimateWithLookup(draft.selected, lookup), [draft.selected, lookup]);
 
   function setField<K extends keyof QuoteDraft>(key: K, value: QuoteDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
@@ -53,8 +65,9 @@ export function QuoteWizard() {
       const selected = { ...current.selected };
       if (selected[id]) delete selected[id];
       else {
-        const service = services.find((item) => item.id === id);
-        selected[id] = service?.unitPrice ? 100 : 1;
+        const service = bookable.find((item) => item.id === id);
+        if (!service || service.bookable === false) return current;
+        selected[id] = service.unitPrice ? 100 : 1;
       }
       return { ...current, selected };
     });
@@ -174,14 +187,20 @@ export function QuoteWizard() {
                     {categoryMeta[category].label}
                   </h2>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    {services
+                    {catalog
                       .filter((service) => service.category === category)
                       .map((service) => {
                         const quantity = draft.selected[service.id];
                         const active = Boolean(quantity);
+                        const canBook = service.bookable !== false;
                         return (
-                          <article key={service.id} className={`border p-3 ${active ? "border-gold bg-gold/10" : "border-gold/25"}`}>
-                            <button type="button" onClick={() => toggle(service.id)} className="grid w-full grid-cols-[88px_1fr] gap-3 text-left">
+                          <article key={service.id} className={`border p-3 ${active ? "border-gold bg-gold/10" : "border-gold/25"} ${!canBook ? "opacity-70" : ""}`}>
+                            <button
+                              type="button"
+                              disabled={!canBook}
+                              onClick={() => toggle(service.id)}
+                              className="grid w-full grid-cols-[88px_1fr] gap-3 text-left disabled:cursor-not-allowed"
+                            >
                               <span
                                 className="h-20 bg-cover bg-center grayscale"
                                 style={{ backgroundImage: `linear-gradient(to top, rgba(4,21,16,0.2), rgba(4,21,16,0.05)), url(${service.image})` }}
@@ -191,6 +210,9 @@ export function QuoteWizard() {
                               <span>
                                 <span className="block text-sm text-cream">{service.name}</span>
                                 <span className="mt-1 block text-xs text-gold-2">{service.priceLabel}</span>
+                                {!canBook ? (
+                                  <span className="mt-1 block text-[0.62rem] uppercase tracking-[0.14em] text-mist">Coming soon</span>
+                                ) : null}
                               </span>
                             </button>
                             {active ? (

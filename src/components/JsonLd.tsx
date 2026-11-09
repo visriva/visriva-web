@@ -1,16 +1,18 @@
-import { services } from "@/lib/services";
+import { getPublishedServices } from "@/lib/services-catalog";
 import { siteUrl } from "@/lib/site";
 
-export function JsonLd() {
+export async function JsonLd() {
+  const services = await getPublishedServices();
   const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+
   const data = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "Visriva",
+    alternateName: "Visriva Live Station",
     description:
-      "Visriva runs photo booths, AI merchandise, and games for corporate events in Bengaluru. Owned inventory. One team, end to end.",
+      "Visriva provides photo booths, AI merchandise, games, VR experiences, and live gifting stations for corporate events and celebrations. Based in Bengaluru, serving events across India.",
     url: siteUrl,
-    image: `${siteUrl}/brand/visriva-green.png`,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Bengaluru",
@@ -20,25 +22,40 @@ export function JsonLd() {
     areaServed: ["Bengaluru", "India"],
     priceRange: "₹₹₹",
     ...(number ? { telephone: `+${number}` } : {}),
+    sameAs: [
+      process.env.NEXT_PUBLIC_INSTAGRAM_URL,
+      process.env.NEXT_PUBLIC_LINKEDIN_URL,
+    ].filter(Boolean),
     knowsAbout: [
-      "corporate event photo booths",
+      "Corporate event photo booths",
       "AI photo experiences",
       "VR stations",
       "DTF t-shirt printing",
-      "live event merchandise",
+      "Live event merchandise",
+      "Wedding photo booths",
+      "Live magnet stations",
+      "On-site keychain favours",
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Visriva stations",
-      itemListElement: services.map((service) => ({
-        "@type": "Offer",
-        name: service.name,
-        description: service.summary,
-        priceCurrency: "INR",
-        ...(service.fromPrice != null ? { price: service.fromPrice } : {}),
-        ...(service.unitPrice ? { price: service.unitPrice } : {}),
-        url: `${siteUrl}${service.category === "photo-booths" ? "/photo-booths" : service.category === "games" ? "/games-vr" : "/ai-merchandise"}`,
-      })),
+      name: "Visriva Experiences",
+      itemListElement: services
+        .filter((service) => service.bookable !== false)
+        .map((service) => ({
+          "@type": "Offer",
+          name: service.name,
+          description: service.summary,
+          priceCurrency: "INR",
+          ...(service.fromPrice != null ? { price: service.fromPrice } : {}),
+          ...(service.unitPrice != null ? { price: service.unitPrice } : {}),
+          url: `${siteUrl}${
+            service.category === "photo-booths"
+              ? "/photo-booths"
+              : service.category === "games"
+                ? "/games-vr"
+                : "/ai-merchandise"
+          }`,
+        })),
     },
   };
 

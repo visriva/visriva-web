@@ -2,7 +2,7 @@ import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { GoldLink, Plate } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
-import { getService } from "@/lib/services";
+import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
   "VR station for corporate events India",
@@ -10,10 +10,11 @@ export const metadata = pageMeta(
   "/games-vr",
 );
 
-export default function GamesPage() {
-  const vr = getService("vr-station");
-  const baton = getService("catch-baton");
-  const wire = getService("buzz-wire");
+export default async function GamesPage() {
+  const catalog = await getPublishedCatalog();
+  const vr = catalog.getService("vr-station");
+  const baton = catalog.getService("catch-baton");
+  const wire = catalog.getService("buzz-wire");
   if (!vr || !baton || !wire) return null;
 
   return (
