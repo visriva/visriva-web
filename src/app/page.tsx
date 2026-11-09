@@ -28,7 +28,7 @@ export default async function HomePage() {
       <Hero />
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar /></div>
 
-      <section id="experiences" className="scroll-mt-28 px-5 py-24 sm:px-8 lg:px-12">
+      <section id="experiences" className="scroll-mt-28 bg-[#030e0a] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
           <Reveal>
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -64,13 +64,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="overflow-hidden bg-[#22251e] py-5 text-white">
-        <div className="marquee-track gap-10">{Array.from({length:2}).map((_,copy)=><p key={copy} className="flex shrink-0 gap-10 text-xs font-semibold uppercase tracking-[.22em] text-[#e9d6a9]">{["AI photo experiences","Live merchandise","Instant keepsakes","VR engagement","Interactive games","Brand activations"].map(item=><span key={item} className="px-5">{item} <span className="ml-8 text-[#c69b4b]">✳</span></span>)}</p>)}</div>
+      <section className="overflow-hidden bg-[#04170f] py-5 text-white">
+        <div className="marquee-track gap-10">{Array.from({length:2}).map((_,copy)=><p key={copy} className="flex shrink-0 gap-10 text-xs font-semibold uppercase tracking-[.22em] text-[#e6d9a9]">{["AI photo experiences","Live merchandise","Instant keepsakes","VR engagement","Interactive games","Brand activations"].map(item=><span key={item} className="px-5">{item} <span className="ml-8 text-[#d0b74f]">✳</span></span>)}</p>)}</div>
       </section>
 
       <EventBuilder />
 
-      <section className="px-5 py-24 sm:px-8 lg:px-12">
+      <section className="bg-[#030e0a] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[.85fr_1.15fr]">
           <div className="relative min-h-[420px] overflow-hidden rounded-[1.5rem] bg-[#173c30]">
             <Image src="/images/party.jpg" alt="Guests enjoying an event experience" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
