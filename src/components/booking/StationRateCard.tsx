@@ -12,18 +12,12 @@ import {
   type LuxuryStation,
 } from "@/lib/luxury-stations";
 
-const FILTERS: { id: LuxuryCategory; label: string; icon: typeof Sparkles; mood: string }[] = [
-  { id: "all", label: "All stations (12)", icon: Sparkles, mood: "mood-nav-beli" },
-  { id: "photo-booths", label: "Photo booths (5)", icon: Camera, mood: "mood-nav-balmonte" },
-  { id: "ai-merch", label: "AI & live merch (5)", icon: Award, mood: "mood-nav-epstonik" },
-  { id: "games-vr", label: "VR & games (2)", icon: Gamepad2, mood: "mood-nav-sansdiego" },
+const FILTERS: { id: LuxuryCategory; label: string; icon: typeof Sparkles }[] = [
+  { id: "all", label: "All stations (12)", icon: Sparkles },
+  { id: "photo-booths", label: "Photo booths (5)", icon: Camera },
+  { id: "ai-merch", label: "AI & live merch (5)", icon: Award },
+  { id: "games-vr", label: "VR & games (2)", icon: Gamepad2 },
 ];
-
-function stationMood(category: LuxuryStation["category"]) {
-  if (category === "photo-booths") return "type-display";
-  if (category === "ai-merch") return "mood-logotype mood-logotype-epstonik text-2xl";
-  return "mood-logotype mood-logotype-sansdiego text-xl";
-}
 
 export function StationRateCard() {
   const {
@@ -49,7 +43,7 @@ export function StationRateCard() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
-            <p className="mood-nav-chimela text-gold">Transparent starting rates · no call required</p>
+            <p className="type-eyebrow">Transparent starting rates · no call required</p>
             <h2 className="type-display mt-3 text-3xl text-cream sm:text-5xl">
               Select your stations.{" "}
               <span className="type-display-italic text-gold-2">Lock your package.</span>
@@ -72,7 +66,7 @@ export function StationRateCard() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveCategory(tab.id)}
-                  className={`${tab.mood} flex items-center gap-2 rounded-xl border px-4 py-2.5 transition-all ${
+                  className={`type-site-nav flex items-center gap-2 rounded-xl border px-4 py-2.5 transition-all ${
                     isActive
                       ? "border-gold-2 bg-gold text-deep shadow-[0_0_20px_rgba(201,162,39,0.3)]"
                       : "border-gold/25 bg-emerald/35 text-cream hover:border-gold/60"
@@ -102,7 +96,7 @@ export function StationRateCard() {
               >
                 <div>
                   <div className="mb-4 flex items-center justify-between gap-2">
-                    <span className="mood-nav-aurelia text-[0.65rem] text-champagne">
+                    <span className="type-eyebrow text-[0.65rem] text-champagne">
                       {station.categoryLabel}
                     </span>
                     <div className="flex items-center gap-1.5">
@@ -117,7 +111,7 @@ export function StationRateCard() {
                     </div>
                   </div>
 
-                  <h3 className={`${stationMood(station.category)} leading-tight text-cream`}>
+                  <h3 className="type-display text-2xl leading-tight text-cream">
                     {station.name}
                   </h3>
 

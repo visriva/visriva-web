@@ -9,19 +9,19 @@ export function BoothPricingTiers() {
           key={tier.id}
           className={`flex flex-col border p-6 transition duration-300 hover:-translate-y-0.5 ${
             tier.highlight
-              ? "border-[#c9a227] bg-[#1a1a1a] text-[#f5f2eb] shadow-[0_12px_40px_rgba(26,26,26,0.12)]"
-              : "border-[#1a1a1a]/12 bg-white text-[#1a1a1a]"
+              ? "border-gold bg-ink text-cream shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+              : "border-gold/20 bg-white/[0.04] text-cream backdrop-blur-sm"
           }`}
         >
-          <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#c9a227]">{tier.name}</p>
-          <p className="mt-3 font-display text-4xl italic leading-none">{tier.price}</p>
-          <p className={`mt-2 text-sm ${tier.highlight ? "text-[#f5f2eb]/80" : "text-[#1a1a1a]/65"}`}>
+          <p className="type-eyebrow text-gold">{tier.name}</p>
+          <p className="type-display mt-3 text-4xl leading-none">{tier.price}</p>
+          <p className={`mt-2 text-sm ${tier.highlight ? "text-cream/80" : "text-mist/85"}`}>
             {tier.subtitle}
           </p>
-          <ul className={`mt-6 flex flex-1 flex-col gap-2 text-sm ${tier.highlight ? "text-[#f5f2eb]/90" : "text-[#1a1a1a]/78"}`}>
+          <ul className={`mt-6 flex flex-1 flex-col gap-2 text-sm ${tier.highlight ? "text-cream/90" : "text-mist/88"}`}>
             {tier.perks.map((perk) => (
               <li key={perk} className="flex gap-2">
-                <span className="text-[#c9a227]" aria-hidden>
+                <span className="text-gold" aria-hidden>
                   ✓
                 </span>
                 <span>{perk}</span>
@@ -30,10 +30,10 @@ export function BoothPricingTiers() {
           </ul>
           <Link
             href={`/quote?services=${tier.id}`}
-            className={`mt-8 inline-flex justify-center border px-4 py-3 text-center font-royal text-[0.62rem] uppercase tracking-[0.22em] transition ${
+            className={`type-site-nav mt-8 inline-flex justify-center border px-4 py-3 text-center transition ${
               tier.highlight
-                ? "border-[#c9a227] bg-[#c9a227] text-[#1a1a1a] hover:bg-[#e8cc6a]"
-                : "border-[#1a1a1a]/25 text-[#1a1a1a] hover:border-[#c9a227] hover:text-[#c9a227]"
+                ? "border-gold bg-gold text-deep hover:bg-gold-2"
+                : "border-gold/30 text-cream hover:border-gold hover:text-gold-2"
             }`}
           >
             Book this

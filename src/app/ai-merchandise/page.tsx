@@ -22,7 +22,6 @@ export default function AiMerchandisePage() {
   return (
     <main>
       <PageHero
-        mood="epstonik"
         kicker="AI and merchandise"
         title="A portrait they can carry home."
         lede="AI stations and live merchandise, run by the same house as the booths. Custom prompts are included."
@@ -33,8 +32,8 @@ export default function AiMerchandisePage() {
         <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 scrollbar-none sm:px-6 lg:px-10">
           {story.map((item) => (
             <article key={item.n} className="w-[85vw] shrink-0 snap-start border border-gold/30 bg-deep p-8 sm:w-[28rem]">
-              <p className="font-royal text-sm text-gold">{item.n}</p>
-              <h2 className="mt-4 font-display text-5xl italic text-cream">{item.title}</h2>
+              <p className="type-eyebrow text-sm text-gold">{item.n}</p>
+              <h2 className="type-display mt-4 text-5xl text-cream">{item.title}</h2>
               <p className="mt-4 text-sm leading-relaxed text-mist/85">{item.body}</p>
             </article>
           ))}

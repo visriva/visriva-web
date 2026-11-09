@@ -45,9 +45,7 @@ export function Footer() {
         </div>
 
         <div className="lg:col-span-3">
-          <p className="font-royal text-[0.64rem] uppercase tracking-[0.28em] text-gold">
-            House
-          </p>
+          <p className="type-eyebrow">House</p>
           <ul className="mt-5 space-y-2 text-sm text-cream/90">
             {links.map((link) => (
               <li key={link.href}>
@@ -65,7 +63,7 @@ export function Footer() {
         </div>
 
         <div className="lg:col-span-4">
-          <p className="font-royal text-[0.64rem] uppercase tracking-[0.28em] text-gold">
+          <p className="type-eyebrow">
             Studio
           </p>
           <ul className="mt-5 space-y-3 text-sm leading-relaxed text-cream/90">

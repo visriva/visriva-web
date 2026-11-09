@@ -106,27 +106,29 @@ body::after {
   }
 }
 
-.type-display {
-  font-family: var(--font-gloock), serif;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  text-wrap: balance;
-}
-
-.type-display-italic {
-  font-family: var(--font-libre-bodoni), serif;
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
-
+/* Unified house voice — SANSDIEGO / Rye for menus, kickers, and headlines */
+.type-site-nav,
 .type-eyebrow {
-  font-family: var(--font-italiana), serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.42em;
+  font-family: var(--font-rye), serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-gold-2);
+}
+
+.type-display,
+.type-display-italic,
+.type-site-headline {
+  font-family: var(--font-rye), serif;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  line-height: 1.08;
+}
+
+.type-site-headline--lg {
+  font-size: clamp(2.25rem, 5.5vw, 3.5rem);
 }
 
 .display-swash {
@@ -286,10 +288,34 @@ body[data-menu="open"] .whatsapp-bubble {
   }
 }
 
-/* SnapStation.in-inspired cream panels (pricing / formats) */
+/* In-page panels — same studio depth as home (no cream breakout) */
 .snap-canvas {
-  background-color: #f3efe6;
-  color: #1a1a1a;
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--color-emerald) 42%, #040d0a),
+    color-mix(in srgb, var(--color-ink) 92%, #040d0a)
+  );
+  color: var(--color-cream);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 18%, transparent);
+}
+
+.mood-canvas.mood-canvas--studio,
+.mood-canvas.mood-canvas--studio[class*="mood-"] {
+  background: linear-gradient(180deg, #0a1612 0%, #040d0a 48%, #1a1a1a 100%);
+  color: var(--color-cream);
+}
+
+.nav-glass-idle {
+  border-bottom-color: transparent;
+  background: linear-gradient(to bottom, rgb(26 26 26 / 0.82), rgb(26 26 26 / 0.35), transparent);
+  backdrop-filter: blur(18px);
+}
+
+.nav-glass-solid {
+  border-bottom-color: color-mix(in srgb, var(--color-gold) 22%, transparent);
+  background: rgb(20 24 22 / 0.72);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 8px 40px rgb(0 0 0 / 0.35);
 }
 
 /* —— Eight reference moods (full type study on Visriva) —— */

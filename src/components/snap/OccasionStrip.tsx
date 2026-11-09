@@ -3,15 +3,15 @@ import { occasions } from "@/lib/booth-reference";
 
 export function OccasionStrip() {
   return (
-    <div className="flex flex-wrap gap-3">
-      {occasions.map((item) => (
+    <div className="flex flex-wrap gap-2">
+      {occasions.map((occasion) => (
         <Link
-          key={item.label}
-          href={item.href}
-          className="snap-canvas inline-flex items-center gap-2 border border-[#1a1a1a]/12 px-4 py-2.5 text-sm text-[#1a1a1a] transition hover:border-[#c9a227] hover:text-[#1a1a1a]"
+          key={occasion.label}
+          href={occasion.href}
+          className="snap-canvas type-site-nav inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm text-cream transition hover:border-gold/50"
         >
-          <span aria-hidden>{item.emoji}</span>
-          {item.label}
+          <span aria-hidden>{occasion.emoji}</span>
+          {occasion.label}
         </Link>
       ))}
     </div>

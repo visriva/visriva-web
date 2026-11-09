@@ -18,7 +18,7 @@ export default function GalleryPage() {
     <MoodSection mood="beli" className="px-4 pb-24 pt-32 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1500px]">
         <p className="type-eyebrow">Gallery</p>
-        <h1 className="mood-logotype mood-logotype-beli mt-6 max-w-3xl text-6xl leading-[0.95] sm:text-7xl">
+        <h1 className="type-display type-site-headline--lg mt-6 max-w-3xl sm:text-7xl">
           Rooms we have already stood in.
         </h1>
         <p className="mt-6 max-w-xl text-base font-light leading-relaxed opacity-88">

@@ -18,7 +18,7 @@ export function BookingTray() {
     >
       <div className="mx-auto flex max-w-7xl flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="mood-nav-chimela text-[0.65rem] text-gold">Booking draft</p>
+          <p className="type-eyebrow text-[0.65rem]">Booking draft</p>
           <p className="type-display-italic mt-1 text-lg text-cream sm:text-xl">
             {selectedStations.length} station{selectedStations.length === 1 ? "" : "s"} · from{" "}
             <span className="text-gold-2">{formatINR(subtotal)}</span>

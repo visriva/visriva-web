@@ -354,7 +354,7 @@ export function LuxuryInteractivePlatform() {
           <p className="mood-nav-chimela mb-2 text-gold">
             One self-sufficient partner · zero sub-vendor excuses
           </p>
-          <h2 className="mood-logotype mood-logotype-epstonik text-3xl text-cream sm:text-5xl">
+          <h2 className="type-display text-3xl text-cream sm:text-5xl">
             Why corporate planners don’t sweat with us
           </h2>
         </div>

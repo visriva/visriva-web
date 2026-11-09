@@ -24,7 +24,6 @@ export default function PhotoBoothsPage() {
   return (
     <main>
       <PageHero
-        mood="balmonte"
         kicker="Bengaluru, India"
         title="Where the room meets the print."
         lede="Premium instant booths for weddings, corporate floors, and private celebrations — attended, branded, and priced clearly from the first quote."
@@ -42,11 +41,11 @@ export default function PhotoBoothsPage() {
 
       <section className="snap-canvas px-4 py-20 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-[1500px]">
-          <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#1a1a1a]/55">The station</p>
-          <h2 className="mt-4 max-w-2xl font-display text-4xl italic leading-tight text-[#1a1a1a] sm:text-5xl">
+          <p className="type-eyebrow">The station</p>
+          <h2 className="type-display mt-4 max-w-2xl text-4xl sm:text-5xl">
             Owned gear. Built for long runs on an Indian floor.
           </h2>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#1a1a1a]/72">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-mist/88">
             DSLR or iPad capture, dye-sublimation printing, and custom welcome screens — the same house that
             runs your merch and games.
           </p>
@@ -59,7 +58,7 @@ export default function PhotoBoothsPage() {
       <MoodSection mood="balmonte" className="px-4 py-20 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-[1500px]">
           <p className="type-eyebrow">What ships every time</p>
-          <h2 className="mood-logotype mood-logotype-beli mt-4 text-4xl sm:text-5xl">Every booking fully loaded</h2>
+          <h2 className="type-display mt-4 text-4xl sm:text-5xl">Every booking fully loaded</h2>
           <p className="mt-4 max-w-xl text-base font-light opacity-88">
             Setup, attendant, branded frame, and sharing — included in every package below.
           </p>
@@ -71,19 +70,19 @@ export default function PhotoBoothsPage() {
 
       <section id="packages" className="snap-canvas scroll-mt-28 px-4 py-24 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-[1500px]">
-          <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#1a1a1a]/55">Rental packages</p>
-          <h2 className="mt-4 font-display text-5xl italic leading-none text-[#1a1a1a] sm:text-6xl">
+          <p className="type-eyebrow">Rental packages</p>
+          <h2 className="type-display mt-4 text-5xl sm:text-6xl">
             Simple, transparent pricing
           </h2>
-          <p className="mt-6 max-w-xl text-base text-[#1a1a1a]/72">
+          <p className="mt-6 max-w-xl text-base text-mist/88">
             Starting figures before GST and Bengaluru transit. Custom frames and welcome screens included.
           </p>
           <div className="mt-12">
             <BoothPricingTiers />
           </div>
-          <p className="mt-10 text-sm text-[#1a1a1a]/60">
+          <p className="mt-10 text-sm text-mist/80">
             Need mobile capture or a roaming line?{" "}
-            <a href="/quote?services=mobile-capture" className="underline decoration-[#c9a227] underline-offset-4">
+            <a href="/quote?services=mobile-capture" className="text-gold-2 underline decoration-gold underline-offset-4">
               Get a custom quote →
             </a>
           </p>
@@ -105,10 +104,8 @@ export default function PhotoBoothsPage() {
 
       <section className="snap-canvas px-4 py-20 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-[1500px]">
-          <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#1a1a1a]/55">
-            Perfect for every occasion
-          </p>
-          <h2 className="mt-4 font-display text-4xl italic text-[#1a1a1a] sm:text-5xl">
+          <p className="type-eyebrow">Perfect for every occasion</p>
+          <h2 className="type-display mt-4 text-4xl sm:text-5xl">
             We show up where you celebrate
           </h2>
           <div className="mt-8">
@@ -127,7 +124,7 @@ export default function PhotoBoothsPage() {
 
       <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
         <p className="type-eyebrow">Full rate card</p>
-        <h2 className="mt-4 font-display text-3xl italic text-cream">Every booth SKU</h2>
+        <h2 className="type-display mt-4 text-3xl text-cream">Every booth SKU</h2>
         <div className="mt-10">
           <RateList services={servicesIn("photo-booths")} />
         </div>

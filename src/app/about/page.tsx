@@ -28,7 +28,6 @@ export default function AboutPage() {
   return (
     <main>
       <PageHero
-        mood="aurelia"
         kicker="The house"
         title="One standard, from the first print to the last headset."
         lede="Visriva Live Station is a Bengaluru house for corporate floors and celebrations. We own the stations and we staff them."
@@ -38,7 +37,7 @@ export default function AboutPage() {
       <section className="mx-auto grid max-w-[1500px] gap-8 px-4 py-20 sm:px-6 lg:grid-cols-3 lg:px-10">
         {pillars.map((pillar) => (
           <article key={pillar.title} className="border-t border-gold/40 pt-6">
-            <h2 className="font-display text-4xl italic text-cream">{pillar.title}</h2>
+            <h2 className="type-display text-4xl text-cream">{pillar.title}</h2>
             <p className="mt-4 text-sm leading-relaxed text-mist/85">{pillar.body}</p>
           </article>
         ))}
@@ -46,7 +45,7 @@ export default function AboutPage() {
       <section className="mx-auto grid max-w-[1500px] gap-6 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:px-10">
         {audiences.map((audience) => (
           <article key={audience.title} className="border border-gold/25 bg-white/[0.03] p-8 backdrop-blur-sm">
-            <h2 className="font-display text-4xl italic text-cream">{audience.title}</h2>
+            <h2 className="type-display text-4xl text-cream">{audience.title}</h2>
             <p className="mt-4 text-sm leading-relaxed text-mist/85">{audience.copy}</p>
           </article>
         ))}
@@ -59,12 +58,12 @@ export default function AboutPage() {
           sizes="(min-width: 1024px) 45vw, 100vw"
         />
         <div>
-          <p className="font-royal text-[0.68rem] uppercase tracking-[0.28em] text-gold">A Visriva date</p>
+          <p className="type-eyebrow">A Visriva date</p>
           <ol className="mt-6 space-y-6">
             {processSteps.map((step) => (
               <li key={step.n}>
-                <p className="font-royal text-[0.62rem] tracking-[0.22em] text-gold">{step.n}</p>
-                <h3 className="mt-1 font-display text-3xl italic text-cream">{step.title}</h3>
+                <p className="type-eyebrow text-gold">{step.n}</p>
+                <h3 className="type-display mt-1 text-3xl text-cream">{step.title}</h3>
                 <p className="mt-2 text-sm text-mist/80">{step.body}</p>
               </li>
             ))}
