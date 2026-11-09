@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useMemo,useRef,useState } from "react";
 import type { Service,ServiceCategory } from "@/lib/services";
 import { SwipeLettersLink } from "@/components/ui";
