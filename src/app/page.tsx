@@ -34,7 +34,7 @@ export default async function HomePage() {
             </div>
           </Reveal>
           <div className="flex flex-col justify-center">
-            <Reveal><p className="section-kicker">More than a station</p><h2 className="display-heading mt-4 text-6xl text-[#F5F0DF] sm:text-7xl">Bring people<br/><em className="gold-gradient">into the moment.</em></h2><p className="mt-6 max-w-xl text-base leading-8 text-[#617768]">The right event experience gives guests a reason to connect. We combine creative concepts, reliable equipment and on-ground hosting to make that happen.</p></Reveal>
+            <Reveal><p className="section-kicker">More than a station</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">Bring people<br/><em className="gold-gradient">into the moment.</em></h2><p className="mt-6 max-w-xl text-base leading-8 text-[#617768]">The right event experience gives guests a reason to connect. We combine creative concepts, reliable equipment and on-ground hosting to make that happen.</p></Reveal>
             <div className="mt-8 divide-y divide-[#d5e0d1] border-y border-[#d5e0d1]">
               {promises.map((item,index)=><Reveal key={item.n} delay={index*80}><article className="grid grid-cols-[48px_1fr] gap-4 py-5"><span className="pt-1 text-xs font-bold text-[#a88f3e]">{item.n}</span><div><h3 className="font-semibold text-[#294937]">{item.title}</h3><p className="mt-2 max-w-lg text-sm leading-7 text-[#617768]">{item.body}</p></div></article></Reveal>)}
             </div>
@@ -52,7 +52,7 @@ export default async function HomePage() {
 
       <section className="bg-[#F5F0DF] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
-          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#F5F0DF] sm:text-7xl">From first idea<br/><em className="gold-gradient">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#617768]">A clear process keeps planning easy and lets you focus on your guests.</p></div>
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">From first idea<br/><em className="gold-gradient">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#617768]">A clear process keeps planning easy and lets you focus on your guests.</p></div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {processSteps.map((step,index)=><Reveal key={step.n} delay={index*90}><article className="h-full rounded-2xl border border-[#D7DCCB] bg-white/90 p-7 transition hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(39,67,48,.08)]"><span className="inline-grid h-10 w-10 place-items-center rounded-full bg-[#e7efe3] text-xs font-semibold text-[#947d34]">{step.n}</span><h3 className="mt-5 font-display text-4xl text-[#294937]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#617768]">{step.body}</p></article></Reveal>)}
           </div>
