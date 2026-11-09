@@ -29,7 +29,7 @@ export function GalleryView({ films }: { films: boolean }) {
             type="button"
             onClick={() => setFilter(item)}
             className={`border px-4 py-2 font-royal text-[0.62rem] uppercase tracking-[0.2em] ${
-              filter === item ? "border-gold bg-gold text-deep" : "border-gold/30 text-champagne"
+              filter === item ? "border-[#24251e] bg-[#24251e] text-white" : "border-[#d5cdbf] bg-white/60 text-[#57564d] hover:border-[#a87824]"
             }`}
           >
             {item}
@@ -44,37 +44,37 @@ export function GalleryView({ films }: { films: boolean }) {
             onClick={() => setOpen(item)}
             className="mb-4 block w-full break-inside-avoid text-left"
           >
-            <figure className="relative overflow-hidden border border-gold/20">
+            <figure className="image-card relative overflow-hidden rounded-2xl border border-[#e6dfd3] bg-white">
               <div className={`relative ${item.tall ? "h-[28rem]" : "h-64"}`}>
-                <Image src={item.src} alt={item.alt} fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover grayscale contrast-110 brightness-90 transition duration-700 hover:scale-105" />
+                <Image src={item.src} alt={item.alt} fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover transition duration-700 hover:scale-105" />
               </div>
-              <figcaption className="flex items-center justify-between bg-deep px-4 py-3 text-sm text-cream">
+              <figcaption className="flex items-center justify-between bg-white px-4 py-3 text-sm text-[#292a23]">
                 <span>{item.caption}</span>
-                <span className="font-royal text-[0.58rem] uppercase tracking-[0.18em] text-gold">{item.tag}</span>
+                <span className="text-[.62rem] font-semibold uppercase tracking-[.15em] text-[#9a702b]">{item.tag}</span>
               </figcaption>
             </figure>
           </button>
         ))}
       </div>
 
-      <div className="mt-16">
-        <h2 className="font-display text-4xl italic text-cream">Film slots</h2>
-        <p className="mt-3 max-w-xl text-sm text-mist/75">
+      <div className="mt-16 border-t border-[#e2dacd] pt-12">
+        <h2 className="font-display text-4xl text-[#25251f]">Film slots</h2>
+        <p className="mt-3 max-w-xl text-sm leading-7 text-[#68665d]">
           Drop mp4 files into public/films using the names below. Until then the frame holds a still.
         </p>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {galleryFilms.map((film) => (
-            <figure key={film.title} className="relative h-56 overflow-hidden border border-gold/25">
+            <figure key={film.title} className="relative h-56 overflow-hidden rounded-2xl border border-[#e6dfd3]">
               {films ? (
                 <video className="h-full w-full object-cover" autoPlay muted loop playsInline poster={film.poster}>
                   <source src={film.src} type="video/mp4" />
                 </video>
               ) : (
-                <Image src={film.poster} alt="" fill className="object-cover grayscale" sizes="33vw" />
+                <Image src={film.poster} alt="" fill className="object-cover" sizes="33vw" />
               )}
-              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink to-transparent p-4 text-sm text-cream">
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-sm text-white">
                 {film.title}
-                <span className="mt-1 block font-royal text-[0.58rem] uppercase tracking-[0.18em] text-gold">
+                <span className="mt-1 block text-[.6rem] font-semibold uppercase tracking-[.15em] text-[#f0d89e]">
                   {film.src.replace("/films/", "")}
                 </span>
               </figcaption>
@@ -85,7 +85,7 @@ export function GalleryView({ films }: { films: boolean }) {
 
       {open ? (
         <div
-          className="fixed inset-0 z-[95] grid place-items-center bg-ink/88 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-[95] grid place-items-center bg-black/90 p-4 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-label={open.caption}
