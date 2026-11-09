@@ -95,6 +95,7 @@ export const navigation: NavItem[] = [
   },
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/rate-card", label: "Rate Card" },
   { href: "/client-requirements", label: "Client Requirements" },
 ];
 
