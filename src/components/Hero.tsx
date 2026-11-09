@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { SwipeLettersLink } from "@/components/ui";
 
 const highlights=[
  {title:"Photo experiences",note:"Instant prints and portraits",image:"/images/reception.jpg",href:"/photo-booths"},
@@ -20,7 +21,7 @@ export function Hero(){
    <div className="max-w-[700px]"><div className="inline-flex items-center gap-2 rounded-full border border-[#BBCFB5] bg-[#F8F7EF]/75 px-4 py-2 text-[10px] font-semibold uppercase tracking-[.19em] text-[#52725B]"><span className="text-[#A88F3E]">✧</span>Bengaluru’s live engagement studio</div>
     <h1 className="hero-display mt-6 text-[clamp(3.9rem,7.3vw,7.4rem)] leading-[.87] tracking-[-.045em] text-[#234A36]">Make every<br/><span className="gold-gradient italic">moment</span><br/>memorable.</h1>
     <p className="mt-7 max-w-[620px] text-base leading-8 text-[#607768] sm:text-lg">Photo experiences, AI transformations, live merchandise and VR games—thoughtfully designed to bring guests into the celebration and give them something to take home.</p>
-    <div className="mt-8 flex flex-wrap gap-3"><Link href="/quote" className="liquid-button inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-semibold">Plan your event <span className="text-lg">→</span></Link><Link href="/#experiences" className="inline-flex items-center gap-3 rounded-full border border-[#A9C1A6] bg-[#F8F7EF]/80 px-6 py-4 text-sm font-medium text-[#355642] transition hover:-translate-y-1 hover:border-[#947D34]">Explore experiences <span className="text-[#947D34]">↗</span></Link></div>
+    <div className="mt-8 flex flex-wrap gap-3"><SwipeLettersLink href="/quote" label="Plan your event" className="text-sm"/><Link href="/#experiences" className="inline-flex items-center gap-3 rounded-full border border-[#A9C1A6] bg-[#F8F7EF]/80 px-6 py-4 text-sm font-medium text-[#355642] transition hover:-translate-y-1 hover:border-[#947D34]">Explore experiences <span className="text-[#947D34]">↗</span></Link></div>
     <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-[#C6D7C2] pt-6 text-[10px] font-semibold uppercase tracking-[.14em] text-[#627967]"><span>Corporate celebrations</span><span>Brand activations</span><span>Weddings & private events</span><span>Employee engagement</span></div>
    </div>
    <div className="relative mx-auto w-full max-w-[600px]"><div className="absolute -inset-5 rounded-[2rem] bg-[#AACBA7]/45 blur-2xl"/><div className="relative rounded-[2rem] border border-[#C8D9C2] bg-[#F8F7EF]/90 p-3 shadow-[0_25px_80px_rgba(39,67,48,.12)] backdrop-blur-2xl sm:p-4">
