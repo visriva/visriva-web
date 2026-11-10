@@ -6,11 +6,10 @@ import { pageMeta } from "@/lib/seo";
 import { getWebsitePage } from "@/lib/website-pages";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 
-export const metadata = pageMeta(
-  "Visriva event station prices and rate card Bengaluru",
-  "Compare starting prices for Visriva photo booths, AI photo booth experiences, live tote and T-shirt merchandise, VR engagement and interactive event games. Request a tailored event quote.",
-  "/rate-card",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getWebsitePage("rate-card");
+  return pageMeta(page?.seo_title || "Visriva event station prices and rate card Bengaluru", page?.seo_description || "Compare starting prices for Visriva photo booths, AI photo booth experiences, live tote and T-shirt merchandise, VR engagement and interactive event games. Request a tailored event quote.", "/rate-card");
+}
 
 export default async function RateCardPage() {
   const catalog = await getPublishedCatalog();
