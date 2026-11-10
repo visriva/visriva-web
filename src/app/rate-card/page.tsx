@@ -5,8 +5,8 @@ import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
-  "Visriva event station rate card",
-  "Explore starting prices for Visriva photo booths, AI experience stations, live merchandise, VR and interactive games.",
+  "Visriva event station prices and rate card Bengaluru",
+  "Compare starting prices for Visriva photo booths, AI photo booth experiences, live tote and T-shirt merchandise, VR engagement and interactive event games. Request a tailored event quote.",
   "/rate-card",
 );
 
