@@ -1,54 +1,40 @@
-import { PageHero } from "@/components/PageHero";
+import { InventoryPage } from "@/components/InventoryPage";
 import { PolicyStrip } from "@/components/PolicyStrip";
-import { RateList } from "@/components/RateList";
-import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
-  "AI photo booth and DTF t-shirt printing Bangalore",
-  "AI experience stations, canvas tote stamps, magnets, corporate PVC ID cards, and live DTF t-shirt printing for corporate events in Bangalore.",
+  "AI Photo Experiences and Live Event Merchandise in Bangalore",
+  "Bring AI photo experiences, custom tote bag printing, live DTF T-shirt printing, magnets, keychains and branded keepsakes to corporate events in Bangalore and across India.",
   "/ai-merchandise",
 );
 
-const story = [
-  { n: "01", title: "Prompt", body: "The AI station includes prompts written for your brand. Guests are not dropped into a generic filter." },
-  { n: "02", title: "Stamp", body: "Canvas totes, stocked at 100 or 200. They leave with something they will carry on Monday." },
-  { n: "03", title: "Keep", body: "Magnets and keychains in a run of 300. PVC cards at ₹120 each. Shirts on a live DTF press, quoted to the run." },
+const highlights = [
+  { number: "01", title: "Create", body: "AI portraits and custom prompts designed around your brand or celebration." },
+  { number: "02", title: "Customise", body: "Live merchandise stations where guests make something personal." },
+  { number: "03", title: "Carry it forward", body: "Useful, memorable keepsakes that keep your event present after the day." },
 ];
 
 export default async function AiMerchandisePage() {
   const catalog = await getPublishedCatalog();
-  const merchServices = catalog.servicesIn("ai-merchandise");
   return (
-    <main>
-      <PageHero
-        kicker="AI and merchandise"
-        title="A portrait they can carry home."
-        lede="AI stations and live merchandise, run by the same house as the booths. Custom prompts are included."
-        image="/images/workshop.jpg"
-        alt="A table set for a working session"
+    <>
+      <InventoryPage
+        eyebrow="AI experiences · Live merchandise"
+        title="Make it"
+        accent="personal."
+        description="Turn guest participation into something they can take home. Visriva brings AI photo experiences, custom merchandise, live DTF T-shirt printing, tote bag stations and personalised keepsakes to corporate events, brand activations and celebrations."
+        heroImage="/images/workshop.jpg"
+        heroAlt="A creative team working together around a table"
+        introTitle="A keepsake is better when guests help make it."
+        intro="Our AI and live merchandise stations combine creative direction with hands-on participation. Guests can create an AI portrait, customise a canvas tote, watch a T-shirt come off the DTF press or take home a personalised event keepsake. Each station is planned around your audience, brand and event format."
+        highlights={highlights}
+        services={catalog.servicesIn("ai-merchandise")}
+        locationLine="Bengaluru based · Events across India"
+        closingTitle="Give guests something made just for them."
+        closingCopy="Share your event theme, brand guidelines and expected guest count. We'll help you build a live merchandise and AI experience that feels connected to your celebration."
       />
-      <section className="overflow-hidden py-16" aria-label="How a merchandise hour moves">
-        <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 scrollbar-none sm:px-6 lg:px-10">
-          {story.map((item) => (
-            <article key={item.n} className="w-[85vw] shrink-0 snap-start border border-gold/30 bg-deep p-8 sm:w-[28rem]">
-              <p className="font-royal text-sm text-gold">{item.n}</p>
-              <h2 className="mt-4 font-display text-5xl italic text-cream">{item.title}</h2>
-              <p className="mt-4 text-sm leading-relaxed text-mist/85">{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-      <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
-        <RateList services={merchServices} />
-      </section>
-      <section className="px-4 pb-16 sm:px-6 lg:px-10">
-        <PolicyStrip />
-        <div className="mx-auto mt-10 max-w-[1500px]">
-          <GoldLink href="/quote?services=ai-station">Add an AI station</GoldLink>
-        </div>
-      </section>
-    </main>
+      <section className="bg-[#DCE9D8] px-5 pb-16 sm:px-8 lg:px-12"><PolicyStrip /></section>
+    </>
   );
 }
