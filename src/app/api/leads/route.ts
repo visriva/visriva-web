@@ -7,6 +7,7 @@ import { isValidIndianMobile } from "@/lib/validation";
 
 type Incoming = {
   selected?: Record<string, unknown>;
+  eventType?: unknown;
   venue?: unknown;
   city?: unknown;
   eventDate?: unknown;
@@ -41,12 +42,16 @@ export async function POST(request: Request) {
     );
   }
 
+  const eventType = cleanText(body.eventType, 40);
   const venue = cleanText(body.venue, 200);
   const city = cleanText(body.city, 120);
   const contactName = cleanText(body.name, 160);
   const email = cleanText(body.email, 200);
   const phone = cleanText(body.phone, 30);
 
+  if (!eventType) {
+    return NextResponse.json({ error: "Choose the event format so we can recommend the right stations." }, { status: 400 });
+  }
   if (!venue) {
     return NextResponse.json({ error: "Add the venue name and full event address." }, { status: 400 });
   }
@@ -114,6 +119,7 @@ export async function POST(request: Request) {
     source: "website",
     details: {
       hasCustom: priced.hasCustom,
+      eventType,
       selected,
     },
   };
