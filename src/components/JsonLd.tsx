@@ -29,7 +29,9 @@ export async function JsonLd() {
     knowsAbout: [
       "Corporate event photo booths",
       "AI photo experiences",
+      "AI photo booths",
       "VR stations",
+      "VR engagement experiences",
       "DTF t-shirt printing",
       "Live event merchandise",
       "Wedding photo booths",
