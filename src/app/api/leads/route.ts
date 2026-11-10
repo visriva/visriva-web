@@ -3,6 +3,7 @@ import { cleanBlock, cleanText } from "@/lib/format";
 import { estimateWithLookup } from "@/lib/services";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { createPublicClient } from "@/lib/supabase-public";
+import { isValidIndianMobile } from "@/lib/validation";
 
 type Incoming = {
   selected?: Record<string, unknown>;
@@ -40,18 +41,30 @@ export async function POST(request: Request) {
     );
   }
 
+  const venue = cleanText(body.venue, 200);
+  const city = cleanText(body.city, 120);
+  const contactName = cleanText(body.name, 160);
   const email = cleanText(body.email, 200);
   const phone = cleanText(body.phone, 30);
-  if (!email && !phone) {
-    return NextResponse.json({ error: "Add a phone or an email so the studio can reply." }, { status: 400 });
+
+  if (!venue) {
+    return NextResponse.json({ error: "Add the venue name and full event address." }, { status: 400 });
   }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!city) {
+    return NextResponse.json({ error: "Add the event city." }, { status: 400 });
+  }
+  if (!contactName) {
+    return NextResponse.json({ error: "Add your name so the studio knows who to contact." }, { status: 400 });
+  }
+  if (!email && !phone) {
+    return NextResponse.json({ error: "Add a phone number or an email so the studio can reply." }, { status: 400 });
+  }
+  if (phone && !isValidIndianMobile(phone)) {
+    return NextResponse.json({ error: "Enter a valid Indian mobile number: 10 digits starting with 6–9, optionally with +91." }, { status: 400 });
+  }
+  if (email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
     return NextResponse.json({ error: "That email does not look complete." }, { status: 400 });
   }
-  if (phone && phone.replace(/\D/g, "").length < 8) {
-    return NextResponse.json({ error: "That phone number looks short." }, { status: 400 });
-  }
-
   const eventDate = cleanText(body.eventDate, 10);
   const startTime = cleanText(body.startTime, 5);
   const endTime = cleanText(body.endTime, 5);
@@ -85,13 +98,13 @@ export async function POST(request: Request) {
   const record = {
     status: "new",
     services: priced.lines,
-    venue: cleanText(body.venue, 200),
-    city: cleanText(body.city, 120),
+    venue,
+    city,
     event_date: eventDate,
     start_time: startTime,
     end_time: endTime,
     headcount,
-    contact_name: cleanText(body.name, 160),
+    contact_name: contactName,
     company: cleanText(body.company, 160),
     phone,
     email,
