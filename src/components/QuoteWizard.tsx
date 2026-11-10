@@ -63,7 +63,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
     return (id: string) => map.get(id);
   }, [bookable]);
   const priced = useMemo(() => estimateWithLookup(draft.selected, lookup), [draft.selected, lookup]);
-  const selectedCount = Object.keys(draft.selected).length;
+  const selectedCount = Object.values(draft.selected).reduce((sum, quantity) => sum + quantity, 0);
   const filteredServices = catalog.filter((service) => {
     const categoryMatch = filter === "all" || service.category === filter;
     const textMatch = `${service.name} ${service.summary}`.toLowerCase().includes(search.toLowerCase());
@@ -242,7 +242,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                         </div>
                         {active?
                           <div className="flex shrink-0 items-center gap-2 rounded-full border border-[#C9D9C4] bg-[#EFF4EB] p-1">
-                            <button type="button" aria-label={"Remove one " + service.name} onClick={()=>setQuantity(service.id,quantity-1)} className="grid h-8 w-8 place-items-center rounded-full bg-white text-base text-[#355642] shadow-sm transition hover:bg-[#E3ECDF]">−</button>
+                            <button type="button" aria-label={"Remove one " + service.name} onClick={()=>quantity<=1?toggle(service.id):setQuantity(service.id,quantity-1)} className="grid h-8 w-8 place-items-center rounded-full bg-white text-base text-[#355642] shadow-sm transition hover:bg-[#E3ECDF]">−</button>
                             <span className="min-w-5 text-center text-sm font-semibold tabular-nums text-[#294937]">{quantity}</span>
                             <button type="button" aria-label={"Add one " + service.name} onClick={()=>setQuantity(service.id,quantity+1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#294937] text-base text-white shadow-sm transition hover:bg-[#42654A]">+</button>
                           </div>
