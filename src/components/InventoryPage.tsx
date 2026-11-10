@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Service } from "@/lib/services";
 
-type Highlight = { number: string; title: string; body: string };\ntype EditablePage = { eyebrow?: string; hero_title?: string; hero_accent?: string; hero_description?: string; hero_image?: string; hero_alt?: string; intro_title?: string; intro_copy?: string; closing_title?: string; closing_copy?: string };
+type Highlight = { number: string; title: string; body: string };
+type EditablePage = { eyebrow?: string; hero_title?: string; hero_accent?: string; hero_description?: string; hero_image?: string; hero_alt?: string; intro_title?: string; intro_copy?: string; closing_title?: string; closing_copy?: string };
 
 type InventoryPageProps = {
   eyebrow: string;
