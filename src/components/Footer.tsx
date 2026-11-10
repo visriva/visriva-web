@@ -62,7 +62,7 @@ export function Footer() {
         </div>
       </div>
       <div className="relative flex flex-col justify-between gap-2 border-t border-[#806B2D]/35 px-5 py-5 text-xs text-[#8F9B89] sm:flex-row sm:px-8 lg:px-12">
-        <span>© {new Date().getFullYear()} Visriva. All rights reserved.</span>
+        <span>© 2026 Visriva. All rights reserved.</span>
         <span>Experiences designed to bring people together.</span>
       </div>
     </footer>
