@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
       { source: "/services/keychain-station", destination: "/ai-merchandise", permanent: true },
       { source: "/ai-photo-booth-experiences", destination: "/photo-booths", permanent: true },
       { source: "/vr-engagement", destination: "/games-vr", permanent: true },
+      { source: "/wedding-photo-booth-bangalore", destination: "/photo-booths", permanent: true },
 
       { source: "/classic", destination: "/", permanent: true },
       { source: "/classic/:path*", destination: "/", permanent: true },
