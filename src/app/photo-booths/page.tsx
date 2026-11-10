@@ -1,13 +1,14 @@
+import type { Metadata } from "next";
 import { InventoryPage } from "@/components/InventoryPage";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
+import { getWebsitePage } from "@/lib/website-pages";
 
-export const metadata = pageMeta(
-  "Photo Booth Rental and AI Photo Booth in Bangalore",
-  "Explore corporate event photo booth rentals in Bangalore, including instant iPad, DSLR, roaming, mobile capture and AI photo booth experiences for conferences, weddings and brand activations.",
-  "/photo-booths",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getWebsitePage("photo-booths");
+  return pageMeta(page?.seo_title || "Photo Booth Rental and AI Photo Booth in Bangalore", page?.seo_description || "Explore corporate event photo booth rentals in Bangalore, including instant iPad, DSLR, roaming, mobile capture and AI photo booth experiences for conferences, weddings and brand activations.", "/photo-booths");
+}
 
 const highlights = [
   { number: "01", title: "Capture", body: "A polished photo moment, from classic instant prints to AI-powered transformations." },
@@ -16,10 +17,11 @@ const highlights = [
 ];
 
 export default async function PhotoBoothsPage() {
-  const catalog = await getPublishedCatalog();
+  const [catalog, pageContent] = await Promise.all([getPublishedCatalog(), getWebsitePage("photo-booths")]);
   return (
     <>
       <InventoryPage
+        pageContent={pageContent}
         eyebrow="Photo booths · AI photo experiences"
         title="Keep the"
         accent="good moments."
