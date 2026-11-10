@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cleanBlock, cleanText } from "@/lib/format";
 import { estimateWithLookup } from "@/lib/services";
 import { getPublishedCatalog } from "@/lib/services-catalog";
-import { createAdminClient } from "@/lib/supabase-admin";
+import { createPublicClient } from "@/lib/supabase-public";
 
 type Incoming = {
   selected?: Record<string, unknown>;
@@ -105,16 +105,16 @@ export async function POST(request: Request) {
     },
   };
 
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   if (!supabase) {
-    console.error("Supabase is not configured. Lead was not stored.");
-    return NextResponse.json({ ok: true, saved: false });
+    console.error("Public Supabase connection is not configured.");
+    return NextResponse.json({ error: "The enquiry service is temporarily unavailable. Please contact Visriva on WhatsApp." }, { status: 503 });
   }
 
   const { error } = await supabase.from("leads").insert(record);
   if (error) {
     console.error("Lead insert failed", error.message);
-    return NextResponse.json({ ok: true, saved: false });
+    return NextResponse.json({ error: "We could not save your enquiry. Please try again or contact Visriva on WhatsApp." }, { status: 503 });
   }
 
   return NextResponse.json({ ok: true, saved: true });
