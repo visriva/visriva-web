@@ -62,7 +62,7 @@ export async function POST(request: Request) {
   if (phone && !isValidIndianMobile(phone)) {
     return NextResponse.json({ error: "Enter a valid Indian mobile number: 10 digits starting with 6–9, optionally with +91." }, { status: 400 });
   }
-  if (email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: "That email does not look complete." }, { status: 400 });
   }
   const eventDate = cleanText(body.eventDate, 10);
