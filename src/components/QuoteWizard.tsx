@@ -151,13 +151,6 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
     );
   }
 
-  const categories: { id: Filter; label: string }[] = [
-    { id: "all", label: "All experiences" },
-    { id: "photo-booths", label: "Photo booths" },
-    { id: "ai-merchandise", label: "AI & merchandise" },
-    { id: "games", label: "Games & VR" },
-  ];
-
   return (
     <main id="content" className="min-h-screen bg-[#e6efe3] px-4 pb-24 pt-[112px] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1420px]">
@@ -182,24 +175,87 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
           <section className="min-w-0 rounded-[1.75rem] border border-[#D4E0D0] bg-[#F8F7EF] p-5 shadow-[0_20px_60px_rgba(39,67,48,.07)] sm:p-8">
-            {step===0 ? <div>
-              <div className="wizard-screen flex flex-wrap items-end justify-between gap-4"><div><p className="section-kicker">Step 01 · Experiences</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">What would you like at your event?</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">Select one or more stations. You can adjust quantities and review the estimate on the side.</p></div><span className="rounded-full bg-[#e6efe3] px-3 py-2 text-xs text-[#58725d]">{selectedCount} selected</span></div>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row"><input className="field" value={search} onChange={(event)=>setSearch(event.target.value)} placeholder="Search experiences..." aria-label="Search experiences"/><div className="flex flex-wrap gap-2">{categories.map((item)=><button key={item.id} type="button" onClick={()=>setFilter(item.id)} className={`rounded-full px-4 py-2.5 text-[10px] font-semibold transition ${filter===item.id?"bg-[#355b42] text-white shadow-md":"border border-[#d4e0d0] bg-white text-[#627768] hover:border-[#a88f3e]"}`}>{item.label}</button>)}</div></div>
-              <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {filteredServices.map((service)=>{
+            {step===0 ? <div className="wizard-screen">
+              <div className="relative overflow-hidden rounded-[1.65rem] bg-[#203F30] px-6 py-7 text-[#F8F7EF] shadow-[0_22px_60px_rgba(32,63,48,.16)] sm:px-8 sm:py-9">
+                <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#B8A04D]/20 blur-3xl"/>
+                <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+                  <div className="max-w-2xl">
+                    <p className="text-[10px] font-bold uppercase tracking-[.22em] text-[#D8C47B]">01 / Design your guest experience</p>
+                    <h2 className="mt-3 font-display text-4xl leading-[.95] sm:text-5xl">What should guests<br/><em className="text-[#D8C47B]">remember?</em></h2>
+                    <p className="mt-4 max-w-xl text-sm leading-7 text-[#E1E9DD]/80">Build a thoughtful mix for your celebration. Start with the kind of moment you want to create, then add the stations that fit.</p>
+                  </div>
+                  <div className="flex w-fit items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#D8C47B] text-lg text-[#203F30]">✦</span>
+                    <span><span className="block text-2xl font-semibold tabular-nums">{selectedCount}</span><span className="block text-[9px] font-semibold uppercase tracking-[.16em] text-white/65">Stations selected</span></span>
+                  </div>
+                </div>
+                <div className="relative mt-7 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                  {categories.map((item,index)=>{
+                    const active=filter===item.id;
+                    return <button key={item.id} type="button" onClick={()=>setFilter(item.id)} aria-pressed={active} className={"rounded-xl border px-4 py-3 text-left transition-all duration-200 " + (active ? "border-[#D8C47B] bg-[#F8F7EF] text-[#203F30] shadow-[0_8px_22px_rgba(0,0,0,.12)]" : "border-white/15 bg-white/[.06] text-white/85 hover:border-white/40 hover:bg-white/10")}>
+                      <span className="flex items-center justify-between"><span className="text-[9px] font-bold uppercase tracking-[.18em]">{item.label}</span><span className="text-sm text-[#D8C47B]">{["✧","◎","✳","↗"][index]}</span></span>
+                      <span className={"mt-1 block text-[10px] leading-4 " + (active ? "text-[#657768]" : "text-white/55")}>{item.description}</span>
+                    </button>;
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#947D34]">The station collection</p><p className="mt-1 text-sm text-[#627768]">Choose any combination. You can adjust quantities before you send your brief.</p></div>
+                <label className="relative block w-full md:max-w-[300px]">
+                  <span className="sr-only">Search experiences</span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8C9B8C]">⌕</span>
+                  <input className="field !rounded-full !bg-white !py-3 !pl-10 text-sm" value={search} onChange={(event)=>setSearch(event.target.value)} placeholder="Search booths, AI, VR…"/>
+                </label>
+              </div>
+
+              <div className="mt-5 grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
+                {filteredServices.map((service,index)=>{
                   const quantity=draft.selected[service.id]??0;
                   const active=quantity>0;
                   const canBook=service.bookable!==false;
-                  return <article key={service.id} className={`group overflow-hidden rounded-2xl border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_38px_rgba(39,67,48,.09)] ${active?"border-[#a88f3e] ring-1 ring-[#a88f3e]/25":"border-[#d8e3d4] hover:border-[#b8cdb4]"} ${!canBook?"opacity-65":""}`}>
-                    <button type="button" disabled={!canBook} onClick={()=>toggle(service.id)} className="block w-full text-left disabled:cursor-not-allowed">
-                      <div className="relative h-36 overflow-hidden bg-[#dce9d8]"><Image src={service.image} alt="" fill sizes="(min-width:1280px) 25vw,(min-width:640px) 50vw,100vw" className="object-cover transition duration-500 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-[#173d2b]/55 to-transparent"/><span className={`absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full border text-xs ${active?"border-[#b8a04d] bg-[#b8a04d] text-[#203f30]":"border-white/80 bg-white/65 text-transparent"}`}>✓</span>{!canBook?<span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[9px] font-semibold uppercase tracking-wider text-[#607768]">Coming soon</span>:null}</div>
-                      <div className="p-4"><span className="text-[9px] font-bold uppercase tracking-[.16em] text-[#9a843a]">{categoryMeta[service.category].label}</span><h3 className="mt-1 font-display text-2xl leading-none text-[#244936]">{service.name}</h3><p className="mt-2 line-clamp-2 min-h-10 text-xs leading-5 text-[#778879]">{service.summary}</p><div className="mt-4 flex items-center justify-between gap-2 border-t border-[#e4ebe0] pt-3"><span className="text-xs font-semibold text-[#405b48]">{service.priceLabel}</span><span className="text-[10px] font-semibold uppercase tracking-wider text-[#9a843a]">{active?"Selected":"Add +"}</span></div></div>
-                    </button>
-                    {active ? <div className="flex items-center justify-between border-t border-[#e2eadd] bg-[#eef4eb] px-4 py-3"><span className="text-[10px] font-semibold uppercase tracking-wider text-[#617768]">{service.unitLabel??"Stations"}</span><div className="flex items-center gap-3"><button type="button" onClick={()=>setQuantity(service.id,quantity-1)} className="grid h-7 w-7 place-items-center rounded-full border border-[#c2d4be] bg-white text-[#355b42]">−</button><span className="min-w-5 text-center text-sm font-semibold text-[#244936]">{quantity}</span><button type="button" onClick={()=>setQuantity(service.id,quantity+1)} className="grid h-7 w-7 place-items-center rounded-full border border-[#c2d4be] bg-white text-[#355b42]">+</button></div></div>:null}
+                  return <article key={service.id} className={"group relative overflow-hidden rounded-[1.4rem] border bg-[#FFFEF8] transition-all duration-300 " + (active ? "border-[#A88F3E] shadow-[0_15px_42px_rgba(39,67,48,.13)] ring-1 ring-[#A88F3E]/30" : "border-[#D7E2D3] shadow-[0_10px_30px_rgba(39,67,48,.045)] hover:-translate-y-1 hover:border-[#B8CBB4] hover:shadow-[0_18px_44px_rgba(39,67,48,.1)]") + (!canBook ? " opacity-60" : "")}>
+                    <div className="relative h-48 overflow-hidden bg-[#DCE9D8]">
+                      <Image src={service.image} alt={service.name} fill sizes="(min-width:1536px) 30vw,(min-width:768px) 45vw,100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.045]"/>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#142F23]/75 via-[#142F23]/10 to-transparent"/>
+                      <span className="absolute left-4 top-4 rounded-full border border-white/60 bg-[#F8F7EF]/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.16em] text-[#355642]">{categoryMeta[service.category].label}</span>
+                      {active?<span className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full border border-[#F5E7B4] bg-[#D8C47B] text-sm font-bold text-[#203F30]">✓</span>:null}
+                      <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3 text-white">
+                        <div><p className="text-[9px] font-semibold uppercase tracking-[.18em] text-[#E7D899]">Visriva experience {String(index+1).padStart(2,"0")}</p><h3 className="mt-1 font-display text-3xl leading-none sm:text-[2rem]">{service.name}</h3></div>
+                        {service.comingSoon||!canBook?<span className="rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-[#526B58]">Coming soon</span>:null}
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <p className="min-h-[3.25rem] text-sm leading-6 text-[#667B6B]">{service.summary}</p>
+                      <div className="mt-4 rounded-xl bg-[#F0F4EC] px-4 py-3">
+                        <p className="text-[9px] font-bold uppercase tracking-[.16em] text-[#947D34]">The guest moment</p>
+                        <p className="mt-1 text-xs leading-5 text-[#425F4B]">“{service.guestMoment}”</p>
+                      </div>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {service.includes.slice(0,2).map((item)=><span key={item} className="rounded-full border border-[#E0E8DC] bg-white px-3 py-1.5 text-[9px] font-medium text-[#6C806F]">{item}</span>)}
+                      </div>
+                      <div className="mt-5 flex items-end justify-between gap-3 border-t border-[#E3EAE0] pt-4">
+                        <div className="min-w-0">
+                          <p className="text-[9px] font-semibold uppercase tracking-[.15em] text-[#8B9B8C]">Starting investment</p>
+                          <p className="mt-1 font-display text-2xl leading-none text-[#294937]">{service.priceLabel}</p>
+                          <p className="mt-2 text-[9px] text-[#8A9A8A]">{service.footprint}</p>
+                        </div>
+                        {active?
+                          <div className="flex shrink-0 items-center gap-2 rounded-full border border-[#C9D9C4] bg-[#EFF4EB] p-1">
+                            <button type="button" aria-label={"Remove one " + service.name} onClick={()=>setQuantity(service.id,quantity-1)} className="grid h-8 w-8 place-items-center rounded-full bg-white text-base text-[#355642] shadow-sm transition hover:bg-[#E3ECDF]">−</button>
+                            <span className="min-w-5 text-center text-sm font-semibold tabular-nums text-[#294937]">{quantity}</span>
+                            <button type="button" aria-label={"Add one " + service.name} onClick={()=>setQuantity(service.id,quantity+1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#294937] text-base text-white shadow-sm transition hover:bg-[#42654A]">+</button>
+                          </div>
+                        :
+                          <button type="button" disabled={!canBook} onClick={()=>toggle(service.id)} className="liquid-button shrink-0 rounded-full px-5 py-3 text-[9px] font-bold uppercase tracking-[.13em] disabled:cursor-not-allowed disabled:opacity-50">Add station +</button>
+                        }
+                      </div>
+                    </div>
                   </article>;
                 })}
               </div>
-              {filteredServices.length===0?<p className="mt-8 rounded-xl bg-[#edf3e9] p-6 text-sm text-[#667B6B]">No experiences match that search. Try a different word or category.</p>:null}
+              {filteredServices.length===0?<p className="mt-8 rounded-xl bg-[#edf3e9] p-6 text-sm text-[#667B6B]">No experiences match that search. Try another term or category.</p>:null}
+              <p className="mt-5 text-center text-[10px] leading-5 text-[#89978A]">Prices are starting estimates before GST and applicable transit. Custom experiences are confirmed after we review your event brief.</p>
             </div>:null}
 
             {step===1 ? <div className="wizard-screen">
