@@ -1,7 +1,9 @@
 import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { RateList } from "@/components/RateList";
+import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
+import { getWebsitePage } from "@/lib/website-pages";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
