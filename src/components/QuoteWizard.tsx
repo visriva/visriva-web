@@ -10,6 +10,7 @@ import { emptyDraft, quoteMessage, type QuoteDraft } from "@/lib/quote";
 import { categoryMeta, countsFromIds, estimateWithLookup, type Service, type ServiceCategory } from "@/lib/services";
 import { requirements } from "@/lib/site";
 import { whatsAppLink } from "@/lib/whatsapp";
+import { isValidIndianMobile } from "@/lib/validation";
 
 const steps = [
   { label: "Experiences", helper: "Choose the stations you want" },
@@ -20,6 +21,13 @@ const steps = [
 
 type QuoteWizardProps = { catalog: Service[]; bookable: Service[] };
 type Filter = "all" | ServiceCategory;
+
+const categories: { id: Filter; label: string; description: string }[] = [
+  { id: "all", label: "All experiences", description: "Explore the complete collection" },
+  { id: "photo-booths", label: "Capture", description: "Portraits, prints and photo moments" },
+  { id: "ai-merchandise", label: "Create", description: "Personalised merchandise and keepsakes" },
+  { id: "games", label: "Play", description: "VR and interactive guest engagement" },
+];
 
 export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   const params = useSearchParams();
@@ -85,11 +93,17 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
   function nextStep() {
     setError("");
+    if (step === 1) {
+      if (!draft.venue.trim()) { setError("Please enter the venue name and full event address."); return; }
+      if (!draft.city.trim()) { setError("Please enter the event city."); return; }
+    }
     if (step === 2) {
       const phone = draft.phone.trim();
       const email = draft.email.trim();
+      if (!draft.name.trim()) { setError("Please enter your name so our team knows who to contact."); return; }
       if (!phone && !email) { setError("Please add a phone number or email address so our team can reply."); return; }
-      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please check the email address and try again."); return; }
+      if (phone && !isValidIndianMobile(phone)) { setError("Enter a valid Indian mobile number: 10 digits starting with 6–9, or include +91. Letters and extensions are not accepted."); return; }
+      if (email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) { setError("Please check the email address and try again."); return; }
     }
     setStep((value) => Math.min(3, value + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
