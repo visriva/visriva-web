@@ -9,13 +9,12 @@ const paths = [
   "/about",
   "/gallery",
   "/client-requirements",
+  "/rate-card",
   "/quote",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return paths.map((path) => ({
     url: `${siteUrl}${path || "/"}`,
-    changeFrequency: "weekly",
-    priority: path === "" ? 1 : 0.8,
   }));
 }
