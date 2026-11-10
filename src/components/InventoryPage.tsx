@@ -34,7 +34,18 @@ export function InventoryPage({
   locationLine,
   closingTitle,
   closingCopy,
-}: InventoryPageProps) {
+  pageContent,
+}: InventoryPageProps & { pageContent?: EditablePage | null }) {
+  const pageEyebrow = pageContent?.eyebrow || eyebrow;
+  const pageTitle = pageContent?.hero_title || title;
+  const pageAccent = pageContent?.hero_accent || accent;
+  const pageDescription = pageContent?.hero_description || description;
+  const pageHeroImage = pageContent?.hero_image || heroImage;
+  const pageHeroAlt = pageContent?.hero_alt || heroAlt;
+  const pageIntroTitle = pageContent?.intro_title || introTitle;
+  const pageIntroCopy = pageContent?.intro_copy || intro;
+  const pageClosingTitle = pageContent?.closing_title || closingTitle;
+  const pageClosingCopy = pageContent?.closing_copy || closingCopy;
   return (
     <main className="overflow-hidden bg-[#E7EFE3] text-[#203F30]">
       <section className="relative isolate min-h-[680px] overflow-hidden bg-[#163D2C] pt-28 text-[#F8F7EF]">
