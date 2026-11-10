@@ -1,13 +1,14 @@
+import type { Metadata } from "next";
 import { InventoryPage } from "@/components/InventoryPage";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
+import { getWebsitePage } from "@/lib/website-pages";
 
-export const metadata = pageMeta(
-  "VR Engagement and Gaming for Corporate Events in Bangalore",
-  "Book hosted VR engagement stations, virtual reality gaming and interactive event games in Bangalore and across India. Immersive experiences for conferences, brand activations and company celebrations.",
-  "/games-vr",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getWebsitePage("games-vr");
+  return pageMeta(page?.seo_title || "VR Engagement and Gaming for Corporate Events in Bangalore", page?.seo_description || "Book hosted VR engagement stations, virtual reality gaming and interactive event games in Bangalore and across India. Immersive experiences for conferences, brand activations and company celebrations.", "/games-vr");
+}
 
 const highlights = [
   { number: "01", title: "Step inside", body: "Immersive headset experiences that give guests a genuine change of scene." },
@@ -16,10 +17,11 @@ const highlights = [
 ];
 
 export default async function GamesPage() {
-  const catalog = await getPublishedCatalog();
+  const [catalog, pageContent] = await Promise.all([getPublishedCatalog(), getWebsitePage("games-vr")]);
   return (
     <>
       <InventoryPage
+        pageContent={pageContent}
         eyebrow="VR engagement · Interactive games"
         title="Make room"
         accent="for play."
