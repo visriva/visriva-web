@@ -1,5 +1,5 @@
 import "server-only";
-import { unstable_noStore as noStore } from "next/cache";
+import { connection } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
 export type WebsitePage = {
@@ -23,7 +23,7 @@ export type WebsitePage = {
 };
 
 export async function getWebsitePage(slug: string): Promise<WebsitePage | null> {
-  noStore();
+  await connection();
   const supabase = createAdminClient();
   if (!supabase) return null;
   const { data, error } = await supabase.from("website_pages").select("*").eq("slug", slug).eq("status", "published").maybeSingle();
