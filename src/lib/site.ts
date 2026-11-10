@@ -196,3 +196,19 @@ export const galleryFilms = [
     src: "/films/floor.mp4",
   },
 ] as const;
+
+
+export const audiences = [
+  {
+    title: "Corporate teams",
+    copy: "Hosted photo, AI, merchandise, and game stations for conferences, offsites, employee days, and company celebrations.",
+  },
+  {
+    title: "Brand activations",
+    copy: "Branded guest interactions and personalised keepsakes that help people take part in a launch or activation.",
+  },
+  {
+    title: "Weddings and private celebrations",
+    copy: "Photo experiences, live customisation, and interactive stations designed around the guests and the celebration.",
+  },
+] as const;
