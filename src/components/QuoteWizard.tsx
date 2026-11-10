@@ -111,6 +111,11 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
   async function submit() {
     setError("");
+    if (!draft.venue.trim() || !draft.city.trim()) { setError("Add the venue address and city before sending your event request."); setStep(1); return; }
+    if (!draft.name.trim()) { setError("Add your name before sending your event request."); setStep(2); return; }
+    if (!draft.phone.trim() && !draft.email.trim()) { setError("Add a phone number or email address so our team can reply."); setStep(2); return; }
+    if (draft.phone.trim() && !isValidIndianMobile(draft.phone)) { setError("The phone number is not valid. Use a 10-digit Indian mobile number beginning 6–9, optionally with +91."); setStep(2); return; }
+    if (draft.email.trim() && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(draft.email.trim())) { setError("Please check the email address and try again."); setStep(2); return; }
     if (!draft.acceptedTerms) { setError("Please confirm the booking terms before sending your request."); return; }
     setSending(true);
     const summary = quoteMessage(draft, priced.lines, priced.total, priced.hasCustom);
