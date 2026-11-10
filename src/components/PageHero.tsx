@@ -1,5 +1,6 @@
 import Image from "next/image";
-type PageHeroContent = { eyebrow?: string; hero_title?: string; hero_accent?: string; hero_description?: string; hero_image?: string; hero_alt?: string };\nexport function PageHero({kicker,title,lede,image,alt,pageContent}:{kicker:string;title:string;lede:string;image:string;alt:string;pageContent?:PageHeroContent|null}){
+type PageHeroContent = { eyebrow?: string; hero_title?: string; hero_accent?: string; hero_description?: string; hero_image?: string; hero_alt?: string };
+export function PageHero({kicker,title,lede,image,alt,pageContent}:{kicker:string;title:string;lede:string;image:string;alt:string;pageContent?:PageHeroContent|null}){
  const displayKicker=pageContent?.eyebrow||kicker;
  const displayTitle=[pageContent?.hero_title,pageContent?.hero_accent].filter(Boolean).join(" ")||title;
  const displayLede=pageContent?.hero_description||lede;
