@@ -269,7 +269,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                 <Field label="End time" type="time" value={draft.endTime} onChange={(value)=>setField("endTime",value)}/>
                 <label className="sm:col-span-2 text-xs font-semibold uppercase tracking-[.12em] text-[#597260]">Anything else we should know?<textarea className="field mt-2 min-h-32 resize-y normal-case tracking-normal" value={draft.notes} onChange={(event)=>setField("notes",event.target.value)} placeholder="Theme, audience, event format, branding or special requests..."/></label>
               </div>
-              <p className="mt-5 rounded-xl bg-[#edf3e9] p-4 text-xs leading-6 text-[#6b7f6e]">Not sure about every detail? That's absolutely fine. Send the basics and we can help you shape the plan.</p>
+              <p className="mt-5 rounded-xl bg-[#edf3e9] p-4 text-xs leading-6 text-[#6b7f6e]">Venue address and city are required so we can plan crew travel, power and station setup. You can leave the date or timings blank if they are not confirmed yet.</p>
             </div>:null}
 
             {step===2 ? <div className="wizard-screen">
@@ -281,7 +281,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                 <Field label="Email address" type="email" value={draft.email} onChange={(value)=>setField("email",value)} placeholder="you@company.com"/>
                 <label className="hidden">Website<input value={draft.website} onChange={(event)=>setField("website",event.target.value)} tabIndex={-1} autoComplete="off"/></label>
               </div>
-              <p className="mt-5 rounded-xl bg-[#edf3e9] p-4 text-xs leading-6 text-[#6b7f6e]">Please provide at least one way for us to reach you—phone or email.</p>
+              <p className="mt-5 rounded-xl bg-[#edf3e9] p-4 text-xs leading-6 text-[#6b7f6e]">Enter your name and at least one contact method. Mobile numbers must be a valid 10-digit Indian mobile number starting with 6–9, optionally with +91. A number containing letters or an incomplete number will be rejected, even when an email is also provided.</p>
             </div>:null}
 
             {step===3 ? <div className="wizard-screen">
