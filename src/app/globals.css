@@ -90,3 +90,6 @@ body[data-menu="open"] .whatsapp-bubble { display:none; }
 @keyframes island-in { from{opacity:0;transform:translateY(-8px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
 .glass-footer-panel { background:linear-gradient(135deg,rgba(248,247,239,.98),rgba(225,237,220,.96)); border:1px solid rgba(168,143,62,.25); box-shadow:0 18px 55px rgba(39,67,48,.08); backdrop-filter:blur(14px); }
 @media (prefers-reduced-motion:reduce) { .dynamic-island{animation:none} .wave-button-fill{transition:none} }
+
+.social-glass { display:grid; width:42px; height:42px; place-items:center; border-radius:999px; border:1px solid #C9D7C4; color:#45654D; background:rgba(255,255,255,.72); transition:transform .25s ease,border-color .25s ease,color .25s ease,background .25s ease; }
+.social-glass:hover { transform:translateY(-3px); border-color:#A88F3E; color:#F8F7EF; background:#355642; }
