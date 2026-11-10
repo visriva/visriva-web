@@ -320,9 +320,9 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   );
 }
 
-function Field({label,value,onChange,type="text",placeholder}:{label:string;value:string;onChange:(value:string)=>void;type?:string;placeholder?:string}) {
+function Field({label,value,onChange,type="text",placeholder,required=false,inputMode}:{label:string;value:string;onChange:(value:string)=>void;type?:string;placeholder?:string;required?:boolean;inputMode?:"text"|"tel"|"email"|"numeric"}) {
   const id=label.toLowerCase().replace(/[^a-z0-9]+/g,"-");
-  return <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-[.12em] text-[#597260]">{label}<input id={id} className="field mt-2 normal-case tracking-normal" type={type} value={value} placeholder={placeholder} onChange={(event)=>onChange(event.target.value)}/></label>;
+  return <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-[.12em] text-[#597260]">{label}{required?<span className="ml-1 text-[#A66B43]">*</span>:null}<input id={id} className="field mt-2 normal-case tracking-normal" type={type} inputMode={inputMode} required={required} value={value} placeholder={placeholder} onChange={(event)=>onChange(event.target.value)}/></label>;
 }
 
 function ReviewCard({title,rows,onEdit}:{title:string;rows:[string,string][];onEdit:()=>void}) {
