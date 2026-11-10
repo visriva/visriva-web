@@ -2,6 +2,7 @@ import { estimate, type EstimateLine } from "@/lib/services";
 
 export type QuoteDraft = {
   selected: Record<string, number>;
+  eventType: string;
   venue: string;
   city: string;
   eventDate: string;
@@ -19,6 +20,7 @@ export type QuoteDraft = {
 
 export const emptyDraft: QuoteDraft = {
   selected: {},
+  eventType: "",
   venue: "",
   city: "",
   eventDate: "",
@@ -62,6 +64,7 @@ export function quoteMessage(draft: QuoteDraft, lines: EstimateLine[], total: nu
     "Before tax. 18% GST on B2B invoices. Bengaluru transit ₹2,000–₹4,000. 50% non-refundable advance to hold the date.",
     "",
     "Event",
+    row("Format", draft.eventType),
     row("Venue", draft.venue),
     row("City", draft.city),
     row("Date", draft.eventDate),
