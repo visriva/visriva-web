@@ -261,8 +261,8 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
             {step===1 ? <div className="wizard-screen">
               <p className="section-kicker">Step 02 · Event details</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">Tell us about the event.</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">Share whatever you know right now. Our team can confirm the remaining details with you.</p>
               <div className="mt-8 grid gap-5 sm:grid-cols-2">
-                <Field label="Venue / location" value={draft.venue} onChange={(value)=>setField("venue",value)} placeholder="Venue name or area"/>
-                <Field label="City" value={draft.city} onChange={(value)=>setField("city",value)} placeholder="Bengaluru"/>
+                <Field label="Venue / full event address" value={draft.venue} onChange={(value)=>setField("venue",value)} placeholder="Venue name, street, area and landmark" required/>
+                <Field label="Event city" value={draft.city} onChange={(value)=>setField("city",value)} placeholder="Bengaluru" required/>
                 <Field label="Event date" type="date" value={draft.eventDate} onChange={(value)=>setField("eventDate",value)}/>
                 <Field label="Expected guests" type="number" value={draft.headcount} onChange={(value)=>setField("headcount",value)} placeholder="e.g. 250"/>
                 <Field label="Start time" type="time" value={draft.startTime} onChange={(value)=>setField("startTime",value)}/>
@@ -275,9 +275,9 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
             {step===2 ? <div className="wizard-screen">
               <p className="section-kicker">Step 03 · Your details</p><h2 className="mt-2 font-display text-4xl text-[#244936] sm:text-5xl">Who should we get in touch with?</h2><p className="mt-3 text-sm leading-6 text-[#667B6B]">We will use these details only to follow up on your event request.</p>
               <div className="mt-8 grid gap-5 sm:grid-cols-2">
-                <Field label="Your name" value={draft.name} onChange={(value)=>setField("name",value)} placeholder="Full name"/>
+                <Field label="Your name" value={draft.name} onChange={(value)=>setField("name",value)} placeholder="Full name" required/>
                 <Field label="Company / organisation" value={draft.company} onChange={(value)=>setField("company",value)} placeholder="Company name"/>
-                <Field label="Phone number" value={draft.phone} onChange={(value)=>setField("phone",value)} placeholder="+91"/>
+                <Field label="Mobile number" value={draft.phone} onChange={(value)=>setField("phone",value)} type="tel" inputMode="tel" placeholder="+91 98765 43210"/>
                 <Field label="Email address" type="email" value={draft.email} onChange={(value)=>setField("email",value)} placeholder="you@company.com"/>
                 <label className="hidden">Website<input value={draft.website} onChange={(event)=>setField("website",event.target.value)} tabIndex={-1} autoComplete="off"/></label>
               </div>
