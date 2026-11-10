@@ -2,13 +2,14 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import { rowToService, type ServiceRow } from "@/lib/service-row";
 import { createAdminClient } from "@/lib/supabase-admin";
+import { createPublicClient } from "@/lib/supabase-public";
 import { fallbackServices, fallbackServicesIn, getFallbackService } from "@/lib/services-fallback";
 import type { Service, ServiceCategory } from "@/lib/services-types";
 
 export const SERVICE_CATALOG_TAG = "services-catalog";
 
 async function loadPublishedFromDb(): Promise<Service[] | null> {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   if (!supabase) return null;
 
   const { data, error } = await supabase
