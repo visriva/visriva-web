@@ -1,8 +1,8 @@
 export function isValidIndianMobile(value: string): boolean {
   const input = value.trim();
-  if (!input || !/^\\+?[0-9()\\s.-]+$/.test(input)) return false;
+  if (!input || !/^\+?[0-9()\s.-]+$/.test(input)) return false;
 
-  const digits = input.replace(/\\D/g, "");
+  const digits = input.replace(/\D/g, "");
   const mobile =
     digits.length === 10
       ? digits
@@ -10,5 +10,5 @@ export function isValidIndianMobile(value: string): boolean {
         ? digits.slice(2)
         : "";
 
-  return /^[6-9]\\d{9}$/.test(mobile);
+  return /^[6-9]\d{9}$/.test(mobile);
 }
