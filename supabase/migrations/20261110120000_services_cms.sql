@@ -71,3 +71,38 @@ create policy "public read service images"
   for select
   to public
   using (bucket_id = 'service-images');
+
+
+-- Public enquiry submissions use the publishable key and a narrow insert-only policy.
+grant insert on table public.leads to anon, authenticated;
+drop policy if exists "public submit event leads" on public.leads;
+create policy "public submit event leads"
+  on public.leads
+  for insert
+  to anon, authenticated
+  with check (
+    accepted_terms is true
+    and status = 'new'
+    and source = 'website'
+    and (
+      nullif(trim(coalesce(email, '')), '') is not null
+      or nullif(trim(coalesce(phone, '')), '') is not null
+    )
+  );
+
+-- Make the two requested new experiences public without inventing prices.
+insert into public.services (id, name, category, price_label, from_price, unit_price, summary, sort_order, active, publish_status, coming_soon)
+values
+  ('ai-photo-booth', 'AI Photo Booth', 'photo-booths', 'Price on request', null, null, 'An AI-led photo experience for event guests, with creative direction and outputs tailored to the event brief.', 30, true, 'published', false),
+  ('vr-engagement', 'VR Engagement', 'games', 'Price on request', null, null, 'A hosted virtual-reality experience for event guests, scoped to the event format and venue.', 31, true, 'published', false)
+on conflict (id) do update set
+  name = excluded.name,
+  category = excluded.category,
+  price_label = excluded.price_label,
+  from_price = excluded.from_price,
+  unit_price = excluded.unit_price,
+  summary = excluded.summary,
+  sort_order = excluded.sort_order,
+  active = true,
+  publish_status = 'published',
+  coming_soon = false;
