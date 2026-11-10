@@ -208,6 +208,18 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                     <span><span className="block text-2xl font-semibold tabular-nums">{selectedCount}</span><span className="block text-[9px] font-semibold uppercase tracking-[.16em] text-white/65">Stations selected</span></span>
                   </div>
                 </div>
+                <div className="relative mt-7">
+                  <p className="mb-3 text-[9px] font-bold uppercase tracking-[.18em] text-[#E1D39B]">First, tell us about your occasion</p>
+                  <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                    {occasionOptions.map((item,index)=>{
+                      const active=draft.eventType===item.id;
+                      return <button key={item.id} type="button" onClick={()=>setField("eventType",item.id)} aria-pressed={active} className={"rounded-xl border p-3 text-left transition-all duration-200 " + (active ? "border-[#D8C47B] bg-[#F8F7EF] text-[#203F30] shadow-[0_8px_22px_rgba(0,0,0,.12)]" : "border-white/15 bg-white/[.06] text-white/85 hover:border-white/40 hover:bg-white/10")}>
+                        <span className="flex items-center justify-between gap-2"><span className="text-[11px] font-semibold">{item.label}</span><span className="text-[#D8C47B]">{["◈","✧","✳","❋"][index]}</span></span>
+                        <span className={"mt-1 block text-[9px] leading-4 " + (active ? "text-[#657768]" : "text-white/55")}>{item.description}</span>
+                      </button>;
+                    })}
+                  </div>
+                </div>
                 <div className="relative mt-7 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
                   {categories.map((item,index)=>{
                     const active=filter===item.id;
@@ -238,7 +250,8 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                       <Image src={service.image} alt={service.name} fill sizes="(min-width:1536px) 30vw,(min-width:768px) 45vw,100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.045]"/>
                       <div className="absolute inset-0 bg-gradient-to-t from-[#142F23]/75 via-[#142F23]/10 to-transparent"/>
                       <span className="absolute left-4 top-4 rounded-full border border-white/60 bg-[#F8F7EF]/90 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.16em] text-[#355642]">{categoryMeta[service.category].label}</span>
-                      {active?<span className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full border border-[#F5E7B4] bg-[#D8C47B] text-sm font-bold text-[#203F30]">✓</span>:null}
+                      {recommendedIds.includes(service.id)&&draft.eventType?<span className="absolute right-4 top-4 rounded-full border border-[#F5E7B4]/80 bg-[#D8C47B] px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.14em] text-[#203F30]">Suggested</span>:null}
+                      {active?<span className="absolute right-4 top-14 grid h-8 w-8 place-items-center rounded-full border border-[#F5E7B4] bg-[#D8C47B] text-sm font-bold text-[#203F30]">✓</span>:null}
                       <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3 text-white">
                         <div><p className="text-[9px] font-semibold uppercase tracking-[.18em] text-[#E7D899]">Visriva experience {String(index+1).padStart(2,"0")}</p><h3 className="mt-1 font-display text-3xl leading-none sm:text-[2rem]">{service.name}</h3></div>
                         {service.comingSoon||!canBook?<span className="rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-[#526B58]">Coming soon</span>:null}
@@ -310,7 +323,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                 {priced.lines.length ? <ul className="mt-4 divide-y divide-[#e8eee4]">{priced.lines.map((line)=><li key={line.id} className="flex justify-between gap-4 py-3 text-sm"><span className="text-[#536c59]">{line.name} <span className="text-[#849386]">× {line.quantity}</span></span><strong className="text-[#244936]">{line.amount==null?"Custom":inr(line.amount)}</strong></li>)}</ul>:<p className="mt-4 text-sm text-[#718574]">No stations selected yet. You can still send a custom event enquiry.</p>}
               </div>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <ReviewCard title="Event details" rows={[["Venue",draft.venue],["City",draft.city],["Date",draft.eventDate],["Time",[draft.startTime,draft.endTime].filter(Boolean).join(" – ")],["Guests",draft.headcount]]} onEdit={()=>setStep(1)}/>
+                <ReviewCard title="Event details" rows={[["Format",occasionOptions.find((item)=>item.id===draft.eventType)?.label ?? ""],["Venue",draft.venue],["City",draft.city],["Date",draft.eventDate],["Time",[draft.startTime,draft.endTime].filter(Boolean).join(" – ")],["Guests",draft.headcount]]} onEdit={()=>setStep(1)}/>
                 <ReviewCard title="Contact details" rows={[["Name",draft.name],["Company",draft.company],["Phone",draft.phone],["Email",draft.email]]} onEdit={()=>setStep(2)}/>
               </div>
               {draft.notes.trim()?<div className="mt-4 rounded-xl bg-[#edf3e9] p-4"><p className="text-[10px] font-semibold uppercase tracking-wider text-[#8c7838]">Additional notes</p><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-[#526a58]">{draft.notes}</p></div>:null}
