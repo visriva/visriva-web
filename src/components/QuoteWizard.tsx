@@ -103,7 +103,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
       if (!draft.name.trim()) { setError("Please enter your name so our team knows who to contact."); return; }
       if (!phone && !email) { setError("Please add a phone number or email address so our team can reply."); return; }
       if (phone && !isValidIndianMobile(phone)) { setError("Enter a valid Indian mobile number: 10 digits starting with 6–9, or include +91. Letters and extensions are not accepted."); return; }
-      if (email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) { setError("Please check the email address and try again."); return; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please check the email address and try again."); return; }
     }
     setStep((value) => Math.min(3, value + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -115,7 +115,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
     if (!draft.name.trim()) { setError("Add your name before sending your event request."); setStep(2); return; }
     if (!draft.phone.trim() && !draft.email.trim()) { setError("Add a phone number or email address so our team can reply."); setStep(2); return; }
     if (draft.phone.trim() && !isValidIndianMobile(draft.phone)) { setError("The phone number is not valid. Use a 10-digit Indian mobile number beginning 6–9, optionally with +91."); setStep(2); return; }
-    if (draft.email.trim() && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(draft.email.trim())) { setError("Please check the email address and try again."); setStep(2); return; }
+    if (draft.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.email.trim())) { setError("Please check the email address and try again."); setStep(2); return; }
     if (!draft.acceptedTerms) { setError("Please confirm the booking terms before sending your request."); return; }
     setSending(true);
     const summary = quoteMessage(draft, priced.lines, priced.total, priced.hasCustom);
