@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Service } from "@/lib/services";
 
-type Highlight = { number: string; title: string; body: string };
+type Highlight = { number: string; title: string; body: string };\ntype EditablePage = { eyebrow?: string; hero_title?: string; hero_accent?: string; hero_description?: string; hero_image?: string; hero_alt?: string; intro_title?: string; intro_copy?: string; closing_title?: string; closing_copy?: string };
 
 type InventoryPageProps = {
   eyebrow: string;
@@ -38,7 +38,7 @@ export function InventoryPage({
   return (
     <main className="overflow-hidden bg-[#E7EFE3] text-[#203F30]">
       <section className="relative isolate min-h-[680px] overflow-hidden bg-[#163D2C] pt-28 text-[#F8F7EF]">
-        <Image src={heroImage} alt={heroAlt} fill priority sizes="100vw" className="absolute inset-0 -z-20 object-cover" />
+        <Image src={pageHeroImage} alt={pageHeroAlt} fill priority sizes="100vw" className="absolute inset-0 -z-20 object-cover" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(13,42,29,.94)_0%,rgba(13,42,29,.76)_42%,rgba(13,42,29,.18)_100%)]" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#102F22]/75 via-transparent to-[#102F22]/10" />
         <div className="relative mx-auto flex min-h-[550px] max-w-[1500px] flex-col justify-center px-5 pb-20 pt-16 sm:px-8 lg:px-12">
@@ -47,9 +47,9 @@ export function InventoryPage({
               <span className="h-px w-9 bg-[#C8AE5C]" /> {eyebrow}
             </p>
             <h1 className="mt-7 max-w-4xl font-display text-[clamp(3.8rem,8vw,8rem)] leading-[.83] tracking-[-.045em] text-white">
-              {title}<br /><em className="font-normal text-[#DCC77D]">{accent}</em>
+              {pageTitle}<br /><em className="font-normal text-[#DCC77D]">{pageAccent}</em>
             </h1>
-            <p className="mt-8 max-w-2xl text-base leading-8 text-white/80 sm:text-lg">{description}</p>
+            <p className="mt-8 max-w-2xl text-base leading-8 text-white/80 sm:text-lg">{pageDescription}</p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link href="/quote" className="liquid-button inline-flex items-center rounded-full px-7 py-4 text-[10px] font-bold uppercase tracking-[.16em]">Plan your experience ↗</Link>
               <Link href="/rate-card" className="inline-flex items-center rounded-full border border-white/40 bg-white/10 px-7 py-4 text-[10px] font-bold uppercase tracking-[.16em] text-white backdrop-blur transition hover:bg-white/20">Explore starting prices</Link>
@@ -71,10 +71,10 @@ export function InventoryPage({
         <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
           <div>
             <p className="section-kicker">The Visriva approach</p>
-            <h2 className="mt-5 max-w-xl font-display text-5xl leading-[.92] tracking-tight text-[#244936] sm:text-7xl">{introTitle}</h2>
+            <h2 className="mt-5 max-w-xl font-display text-5xl leading-[.92] tracking-tight text-[#244936] sm:text-7xl">{pageIntroTitle}</h2>
           </div>
           <div className="flex flex-col justify-between">
-            <p className="max-w-3xl text-base leading-8 text-[#617768] sm:text-lg">{intro}</p>
+            <p className="max-w-3xl text-base leading-8 text-[#617768] sm:text-lg">{pageIntroCopy}</p>
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {highlights.map((item) => (
                 <article key={item.number} className="border-t border-[#B9CDB5] pt-4">
@@ -136,8 +136,8 @@ export function InventoryPage({
         <div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-8 rounded-[2rem] border border-[#C9D9C4] bg-[#F8F7EF] p-8 shadow-[0_24px_70px_rgba(39,67,48,.08)] sm:p-12 lg:flex-row lg:items-end">
           <div className="max-w-3xl">
             <p className="section-kicker">Make the room remember</p>
-            <h2 className="mt-4 font-display text-5xl leading-[.9] text-[#244936] sm:text-7xl">{closingTitle}</h2>
-            <p className="mt-6 max-w-2xl text-sm leading-7 text-[#718574] sm:text-base">{closingCopy}</p>
+            <h2 className="mt-4 font-display text-5xl leading-[.9] text-[#244936] sm:text-7xl">{pageClosingTitle}</h2>
+            <p className="mt-6 max-w-2xl text-sm leading-7 text-[#718574] sm:text-base">{pageClosingCopy}</p>
           </div>
           <Link href="/quote" className="liquid-button inline-flex shrink-0 items-center justify-center rounded-full px-8 py-4 text-[10px] font-bold uppercase tracking-[.16em]">Build your event brief ↗</Link>
         </div>
