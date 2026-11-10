@@ -212,3 +212,9 @@ export const audiences = [
     copy: "Photo experiences, live customisation, and interactive stations designed around the guests and the celebration.",
   },
 ] as const;
+
+
+/** Shared brand/contact constants used by the site shell and station catalogue. */
+export const brandLogoSrc = "/brand/visriva-mark.png";
+export const businessName = process.env.NEXT_PUBLIC_BUSINESS_NAME || "Visriva";
+export const phoneDisplay = process.env.NEXT_PUBLIC_PHONE_DISPLAY || "+91 88844 84828";
