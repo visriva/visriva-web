@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GoldBurst } from "@/components/GoldBurst";
-import { BackTrigger,MotionSubmitButton } from "@/components/FramerSuite";
 import { inr } from "@/lib/format";
 import { emptyDraft, quoteMessage, type QuoteDraft } from "@/lib/quote";
 import { categoryMeta, countsFromIds, estimateWithLookup, type Service, type ServiceCategory } from "@/lib/services";
@@ -143,7 +142,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   return (
     <main id="content" className="min-h-screen bg-[#e6efe3] px-4 pb-24 pt-[112px] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1420px]">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4"><div className="flex w-full justify-between"><BackTrigger/><span className="section-kicker">Interactive event planner</span></div>
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div><p className="section-kicker">Visriva booking studio</p><h1 className="display-heading mt-2 text-5xl text-[#294937] sm:text-6xl">Let's plan something<br className="hidden sm:block"/><em className="gold-gradient">worth remembering.</em></h1><p className="mt-4 max-w-2xl text-sm leading-7 text-[#667B6B]">Build your event request in a few simple steps. You can review everything before sending, and there is no payment at this stage.</p></div>
           <Link href="/client-requirements" className="rounded-full border border-[#c2d4be] bg-[#f8f7ef]/80 px-5 py-3 text-xs font-semibold text-[#526f5a] transition hover:border-[#a88f3e]">Venue checklist ↗</Link>
         </div>
@@ -228,7 +227,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
             {error?<p role="alert" className="mt-6 rounded-xl border border-[#d7b5a5] bg-[#fbefeb] px-4 py-3 text-sm text-[#9a4d37]">{error}</p>:null}
             <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[#dce6d8] pt-6">
               {step>0?<button type="button" onClick={()=>{setStep((value)=>value-1);setError("");}} className="rounded-full border border-[#c6d7c1] px-6 py-3.5 text-xs font-semibold text-[#48634f] transition hover:bg-[#edf3e9]">← Back</button>:<span className="text-xs text-[#8a9a8a]">Your progress is saved in this browser.</span>}
-              {step<3?<button type="button" onClick={nextStep} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em]">Continue to {steps[step+1].label} →</button>:<MotionSubmitButton onClick={submit} pending={sending}>{sending?"Sending your request…":"Send event request"}</MotionSubmitButton>}
+              {step<3?<button type="button" onClick={nextStep} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em]">Continue to {steps[step+1].label} →</button>:<button type="button" disabled={sending} onClick={submit} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em] disabled:cursor-not-allowed disabled:opacity-60">{sending?"Sending your request…":"Send event request ↗"}</button>}
             </div>
           </section>
 
