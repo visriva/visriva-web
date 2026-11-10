@@ -1,6 +1,8 @@
 import { PageHero } from "@/components/PageHero";
 import { GoldLink, Plate } from "@/components/ui";
+import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
+import { getWebsitePage } from "@/lib/website-pages";
 import { audiences, processSteps } from "@/lib/site";
 
 export const metadata = pageMeta(
@@ -15,7 +17,7 @@ const pillars = [
   { title: "The record", body: "The work has sat inside technology launches, finance offsites, and consumer-brand nights across Bengaluru. The names stay with the clients. The standard does not." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {\n  const pageContent = await getWebsitePage("about");
   return (
     <main>
       <PageHero
