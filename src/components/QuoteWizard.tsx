@@ -29,6 +29,19 @@ const categories: { id: Filter; label: string; description: string }[] = [
   { id: "games", label: "Play", description: "VR and interactive guest engagement" },
 ];
 
+const occasionOptions = [
+  { id: "corporate", label: "Corporate & conferences", description: "Offsites, town halls, conferences and employee days" },
+  { id: "celebration", label: "Weddings & celebrations", description: "Weddings, birthdays and private gatherings" },
+  { id: "brand", label: "Brand activations", description: "Launches, expos and customer engagement" },
+  { id: "family", label: "Family & kids days", description: "Family days, school events and children celebrations" },
+] as const;
+
+const occasionRecommendations: Record<string, string[]> = {
+  corporate: ["unlimited-dslr", "ai-station", "vr-station", "ai-photo-booth", "vr-engagement", "tote-100"],
+  celebration: ["unlimited-dslr", "roaming-booth", "ai-photo-booth", "fridge-magnets", "tote-100"],
+  brand: ["ai-photo-booth", "vr-engagement", "ai-station", "dtf-tees", "tote-100", "pvc-cards"],
+  family: ["unlimited-ipad", "ai-photo-booth", "vr-engagement", "catch-baton", "buzz-wire"],
+};
 export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   const params = useSearchParams();
   const hydrated = useRef(false);
