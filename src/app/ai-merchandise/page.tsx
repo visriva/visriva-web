@@ -1,10 +1,9 @@
 import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
-import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { RateList } from "@/components/RateList";
 import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
-import { servicesIn } from "@/lib/services";
+import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
   "AI photo booth and DTF t-shirt printing Bangalore",
@@ -18,7 +17,9 @@ const story = [
   { n: "03", title: "Keep", body: "Magnets and keychains in a run of 300. PVC cards at ₹120 each. Shirts on a live DTF press, quoted to the run." },
 ];
 
-export default function AiMerchandisePage() {
+export default async function AiMerchandisePage() {
+  const catalog = await getPublishedCatalog();
+  const merchServices = catalog.servicesIn("ai-merchandise");
   return (
     <main>
       <PageHero
@@ -32,18 +33,16 @@ export default function AiMerchandisePage() {
         <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 scrollbar-none sm:px-6 lg:px-10">
           {story.map((item) => (
             <article key={item.n} className="w-[85vw] shrink-0 snap-start border border-gold/30 bg-deep p-8 sm:w-[28rem]">
-              <p className="type-eyebrow text-sm text-gold">{item.n}</p>
-              <h2 className="type-display mt-4 text-5xl text-cream">{item.title}</h2>
+              <p className="font-royal text-sm text-gold">{item.n}</p>
+              <h2 className="mt-4 font-display text-5xl italic text-cream">{item.title}</h2>
               <p className="mt-4 text-sm leading-relaxed text-mist/85">{item.body}</p>
             </article>
           ))}
         </div>
       </section>
       <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
-        <RateList services={servicesIn("ai-merchandise")} />
+        <RateList services={merchServices} />
       </section>
-      <StudioPageBridge />
-
       <section className="px-4 pb-16 sm:px-6 lg:px-10">
         <PolicyStrip />
         <div className="mx-auto mt-10 max-w-[1500px]">

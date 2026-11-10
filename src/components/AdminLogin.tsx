@@ -30,7 +30,7 @@ export function AdminLogin() {
   return (
     <form onSubmit={submit} className="mx-auto max-w-md px-4 pb-24 pt-36">
       <p className="font-royal text-[0.68rem] uppercase tracking-[0.28em] text-gold">Studio</p>
-      <h1 className="mt-3 font-display text-5xl italic text-cream">Leads</h1>
+      <h1 className="mt-3 font-display text-5xl italic text-cream">Studio admin</h1>
       <label className="mt-8 block text-sm text-mist" htmlFor="admin-password">
         Password
         <input

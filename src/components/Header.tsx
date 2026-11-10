@@ -1,202 +1,44 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { isImmersiveRoute } from "@/lib/chrome";
-import { VisrivaMark } from "@/components/VisrivaMark";
+import { useEffect, useMemo, useState } from "react";
 import { navigation } from "@/lib/site";
-
-function isCurrent(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
-  const path = href.split("#")[0];
-  if (!path) return false;
-  return pathname === path || pathname.startsWith(`${path}/`);
-}
+import { SwipeLettersLink } from "@/components/ui";
 
 export function Header() {
   const pathname = usePathname();
-  const [solid, setSolid] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [experiencesOpen, setExperiencesOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 18);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    setOpen(false);
-    setExperiencesOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    document.body.dataset.menu = open ? "open" : "closed";
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.dataset.menu = "closed";
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  if (isImmersiveRoute(pathname)) return null;
-
-  return (
-    <header
-      className={`fixed inset-x-0 top-0 z-[80] transition duration-700 ${
-        solid || open
-          ? "border-b border-gold/25 bg-deep/85 shadow-[0_8px_40px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
-          : "border-b border-transparent bg-gradient-to-b from-ink/90 via-ink/40 to-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-[4.75rem] max-w-[1500px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
-        <Link
-          href="/"
-          className="group relative z-[81] flex shrink-0 items-center gap-3"
-          aria-label="Visriva home"
-        >
-          <span className="absolute -inset-2 rounded-full bg-gold/0 transition duration-500 group-hover:bg-gold/10" />
-          <VisrivaMark
-            priority
-            className="relative h-[3.25rem] w-auto max-w-[8.75rem] object-contain drop-shadow-[0_0_20px_rgba(201,162,39,0.2)] transition duration-500 group-hover:drop-shadow-[0_0_28px_rgba(201,162,39,0.35)] sm:h-[3.75rem] sm:max-w-[9.5rem]"
-          />
-        </Link>
-
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {navigation.map((item) =>
-            item.children ? (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => setExperiencesOpen(true)}
-                onMouseLeave={() => setExperiencesOpen(false)}
-              >
-                <button
-                  type="button"
-                  className={`link-gold font-royal text-[0.72rem] uppercase tracking-[0.28em] ${
-                    item.children.some((child) => isCurrent(pathname, child.href))
-                      ? "text-gold-2"
-                      : "text-cream/88"
-                  }`}
-                  aria-expanded={experiencesOpen}
-                  onFocus={() => setExperiencesOpen(true)}
-                >
-                  {item.label}
-                </button>
-                <div
-                  className={`absolute left-1/2 top-full w-72 -translate-x-1/2 pt-4 transition duration-200 ${
-                    experiencesOpen ? "visible opacity-100" : "invisible opacity-0"
-                  }`}
-                >
-                  <div className="glass-royal p-2">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="flex items-baseline justify-between gap-4 px-3 py-3 transition hover:bg-gold/10"
-                      >
-                        <span className="text-sm text-cream">{child.label}</span>
-                        <span className="font-royal text-[0.58rem] uppercase tracking-[0.18em] text-gold">
-                          {child.note}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
-                className={`link-gold font-royal text-[0.72rem] uppercase tracking-[0.28em] ${
-                  isCurrent(pathname, item.href) ? "text-gold-2" : "text-cream/88"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ),
-          )}
+  const [open,setOpen]=useState(false);
+  const [scrolled,setScrolled]=useState(false);
+  const [searchOpen,setSearchOpen]=useState(false);
+  const [query,setQuery]=useState("");
+  useEffect(()=>{const update=()=>setScrolled(window.scrollY>8);update();window.addEventListener("scroll",update,{passive:true});return()=>window.removeEventListener("scroll",update);},[]);
+  useEffect(()=>{setOpen(false);document.body.style.overflow=open?"hidden":"";return()=>{document.body.style.overflow="";};},[open,pathname]);
+  const links=useMemo(()=>navigation.flatMap(item=>item.children?item.children.map(child=>({href:child.href,label:child.label,note:child.note})): [{href:item.href,label:item.label,note:""}]),[]);
+  const results=links.filter(item=>(item.label+" "+item.note).toLowerCase().includes(query.toLowerCase()));
+  return <header className={`fixed inset-x-0 top-0 z-[80] px-3 pt-3 sm:px-6 `}>
+    <div className={`glass-nav mx-auto max-w-[1500px] rounded-2xl transition-all duration-300 ${scrolled?"shadow-[0_18px_55px_rgba(32,63,48,.14)]":"shadow-[0_10px_35px_rgba(32,63,48,.07)]"}`}>
+      <div className="mx-auto flex h-[72px] items-center justify-between px-4 sm:px-7 lg:px-10">
+        <Link href="/" aria-label="Visriva home" className="flex items-center gap-3"><Image src="/brand/visriva-logo.png" alt="Visriva emblem" width={800} height={800} priority className="h-11 w-11 object-contain"/><span className="font-display text-[2rem] leading-none tracking-tight text-[#203F30]">visriva</span></Link>
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
+          {navigation.map(item=>item.children?<div key={item.label} className="group relative py-6">
+            <Link href={item.href} className="inline-flex items-center gap-2 text-[.67rem] font-semibold uppercase tracking-[.14em] text-[#355642] transition hover:text-[#947D34]">{item.label}<span className="text-[#A88F3E] transition-transform group-hover:rotate-180">⌄</span></Link>
+            <div className="invisible absolute left-1/2 top-[66px] w-[min(720px,82vw)] -translate-x-1/2 translate-y-3 rounded-[1.5rem] border border-[#D2DFCE] bg-[#F8F7EF]/98 p-5 opacity-0 shadow-[0_28px_90px_rgba(24,59,39,.18)] backdrop-blur-2xl transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <div className="mb-4 flex items-center justify-between px-2"><span className="section-kicker">Explore the collection</span><Link href="/rate-card" className="text-xs font-semibold text-[#947D34]">View rate card ↗</Link></div>
+              <div className="grid grid-cols-3 gap-3">{item.children.map((child,index)=><Link key={child.href} href={child.href} className="group/menu rounded-2xl border border-[#D7E2D3] bg-[#EFF4EB] p-4 transition duration-300 hover:-translate-y-1 hover:border-[#B8A04D] hover:bg-white"><span className="text-[9px] font-bold tracking-[.2em] text-[#A88F3E]">0{index+1}</span><span className="mt-5 block font-display text-2xl text-[#294937]">{child.label}</span><span className="mt-2 block text-xs text-[#718574]">{child.note}</span><span className="mt-5 block text-xs font-semibold text-[#947D34] transition group-hover/menu:translate-x-1">Discover experience →</span></Link>)}</div>
+              <div className="mt-4 flex items-center justify-between rounded-xl bg-[#E6EFE3] px-4 py-3"><span className="text-xs text-[#607768]">Not sure what fits your event?</span><Link href="/quote" className="text-xs font-semibold text-[#355642] underline underline-offset-4">Build a custom brief ↗</Link></div>
+            </div>
+          </div>:<Link key={item.href} href={item.href} className={`text-[.67rem] font-semibold uppercase tracking-[.14em] transition hover:text-[#947D34] ${pathname===item.href?"text-[#947D34]":"text-[#355642]"}`}>{item.label}</Link>)}
         </nav>
-
-        <div className="relative z-[81] flex items-center gap-3">
-          <Link
-            href="/quote"
-            className="group relative hidden overflow-hidden border border-gold/70 bg-gradient-to-b from-gold-2 to-gold px-5 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-deep shadow-[0_8px_28px_rgba(201,162,39,0.2)] transition duration-500 hover:border-gold-3 sm:inline-flex"
-          >
-            <span
-              aria-hidden
-              className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition duration-700 group-hover:translate-x-full"
-            />
-            <span className="relative">Request Quote</span>
-          </Link>
-          <button
-            type="button"
-            className="inline-flex h-11 w-11 items-center justify-center border border-gold/40 text-gold lg:hidden"
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((value) => !value)}
-          >
-            <span className="relative block h-3 w-5">
-              <span
-                className={`absolute left-0 h-px w-5 bg-gold transition ${open ? "top-1.5 rotate-45" : "top-0"}`}
-              />
-              <span
-                className={`absolute left-0 top-1.5 h-px w-5 bg-gold transition ${open ? "opacity-0" : ""}`}
-              />
-              <span
-                className={`absolute left-0 h-px w-5 bg-gold transition ${open ? "top-1.5 -rotate-45" : "top-3"}`}
-              />
-            </span>
-          </button>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={()=>{setSearchOpen(!searchOpen);setQuery("");}} aria-label="Search services" aria-expanded={searchOpen} className="grid h-10 w-10 place-items-center rounded-full border border-[#C9D7C4] bg-white/65 text-[#355642] transition hover:border-[#B8A04D] hover:bg-[#E8EFE4]"><svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button>
+          <SwipeLettersLink href="/quote" label="Plan your event" className="hidden px-6 py-3 text-[.67rem] sm:inline-flex"/>
+          <button type="button" onClick={()=>setOpen(!open)} aria-label={open?"Close navigation":"Open navigation"} aria-expanded={open} className="grid h-10 w-10 place-items-center rounded-full border border-[#C9D7C4] text-[#355642] lg:hidden"><span className="text-xl leading-none">{open?"×":"☰"}</span></button>
         </div>
       </div>
-
-      <div
-        className={`fixed inset-0 z-[75] bg-deep/96 backdrop-blur-xl transition duration-500 lg:hidden ${
-          open ? "visible opacity-100" : "invisible opacity-0"
-        }`}
-      >
-        <nav className="flex h-full flex-col justify-end gap-1 px-6 pb-16 pt-28" aria-label="Mobile">
-          {navigation.map((item) => (
-            <div key={item.label}>
-              {item.children ? (
-                <div className="border-t border-gold/20 py-3">
-                  <p className="font-royal text-[0.64rem] uppercase tracking-[0.28em] text-gold">
-                    {item.label}
-                  </p>
-                  <div className="mt-3 flex flex-col gap-2">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="type-display-italic text-4xl text-cream"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  href={item.href}
-                  className="type-display-italic border-t border-gold/20 py-3 text-4xl text-cream"
-                >
-                  {item.label}
-                </Link>
-              )}
-            </div>
-          ))}
-          <Link
-            href="/quote"
-            className="mt-6 bg-gold px-5 py-4 text-center text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-deep"
-          >
-            Request Quote
-          </Link>
-        </nav>
-      </div>
-    </header>
-  );
+      {searchOpen?<div className="border-t border-[#D8E3D4] px-5 py-5 sm:px-8"><div className="mx-auto max-w-3xl"><label htmlFor="site-search" className="section-kicker">Find your experience</label><input id="site-search" autoFocus value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search photo booths, AI, VR, merchandise..." className="field mt-3"/><div className="mt-3 flex flex-wrap gap-2">{results.length?results.map(item=><Link key={item.href} href={item.href} onClick={()=>setSearchOpen(false)} className="pill-link text-sm">{item.label}{item.note?<span className="ml-1 text-[#8D7737]">{item.note}</span>:null}</Link>):<p className="py-3 text-sm text-[#687D6C]">No matching service found. Try “photo”, “AI” or “VR”.</p>}</div></div></div>:null}
+    </div>
+    <div className={`fixed inset-0 z-[79] bg-[#E6EFE3] px-6 pb-12 pt-24 transition duration-300 lg:hidden ${open?"visible opacity-100":"invisible opacity-0"}`}><nav className="flex h-full flex-col justify-between" aria-label="Mobile navigation"><div>{links.map((link,index)=><Link key={link.href} href={link.href} onClick={()=>setOpen(false)} className="block border-b border-[#C5D6C0] py-4 font-display text-3xl text-[#203F30]">{String(index+1).padStart(2,"0")} <span className="ml-4">{link.label}</span></Link>)}</div><Link href="/quote" onClick={()=>setOpen(false)} className="liquid-button rounded-full px-6 py-4 text-center text-sm font-semibold uppercase tracking-widest">Plan your event ↗</Link></nav></div>
+  </header>;
 }

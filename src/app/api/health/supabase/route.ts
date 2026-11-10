@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase-admin";
+import { createPublicClient } from "@/lib/supabase-public";
 
 export async function GET() {
-  const url = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const service = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
-  if (!url || !service) {
-    return NextResponse.json({ ok: false, configured: false, reason: "missing_env" });
+  const supabase = createPublicClient();
+  if (!supabase) {
+    return NextResponse.json({ ok: false, configured: false }, { status: 503 });
   }
-  const supabase = createAdminClient();
-  if (!supabase) return NextResponse.json({ ok: false, configured: false, reason: "client" });
 
   const { error } = await supabase.from("services").select("id").limit(1);
-  return NextResponse.json({
-    ok: !error,
-    configured: true,
-    db: error ? "error" : "reachable",
-  });
+  if (error) {
+    console.error("Supabase health check failed", error.message);
+    return NextResponse.json({ ok: false, configured: true, db: "error" }, { status: 503 });
+  }
+
+  return NextResponse.json(
+    { ok: true, configured: true, db: "reachable" },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }

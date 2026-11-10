@@ -30,5 +30,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "oldfolder", "visriva_live_station_luxury_interactive_platform.tsx"]
+"exclude": [
+    "node_modules",
+    "oldfolder",
+    "visriva_live_station_luxury_interactive_platform.tsx",
+    "ECC"
+  ]
 }

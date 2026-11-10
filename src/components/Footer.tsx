@@ -1,111 +1,16 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { VisrivaMark } from "@/components/VisrivaMark";
-import { isImmersiveRoute } from "@/lib/chrome";
-import {
-  brandName,
-  businessName,
-  contactEmail,
-  gstin,
-  instagramUrl,
-  linkedinUrl,
-  navigation,
-  phoneDisplay,
-  phoneTel,
-} from "@/lib/site";
-import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
-
-export function Footer() {
-  const pathname = usePathname();
-  if (isImmersiveRoute(pathname)) return null;
-
-  const whatsapp = whatsAppLink(WHATSAPP_GREETING);
-  const links = navigation.flatMap((item) =>
-    item.children
-      ? item.children.map((child) => ({ href: child.href, label: child.label }))
-      : [{ href: item.href, label: item.label }],
-  );
-
-  return (
-    <footer className="relative border-t border-gold/25 bg-gradient-to-b from-deep to-ink">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
-      />
-      <div className="mx-auto grid max-w-[1500px] gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
-        <div className="lg:col-span-5">
-          <VisrivaMark className="h-28 w-auto max-w-[10.5rem] object-contain" />
-          <p className="mt-6 max-w-sm text-sm leading-relaxed text-mist/80">
-            {businessName} · {brandName}. Photo booths, AI merchandise, games, and live gifting.
-            Based in Bengaluru, travelling across India. Owned inventory. One crew from load-in to
-            last print.
-          </p>
-        </div>
-
-        <div className="lg:col-span-3">
-          <p className="type-eyebrow">House</p>
-          <ul className="mt-5 space-y-2 text-sm text-cream/90">
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="link-gold">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href="/quote" className="link-gold">
-                Quote / Book
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div className="lg:col-span-4">
-          <p className="type-eyebrow">
-            Studio
-          </p>
-          <ul className="mt-5 space-y-3 text-sm leading-relaxed text-cream/90">
-            <li>Bengaluru, Karnataka, India</li>
-            <li>
-              <a href={`tel:${phoneTel}`} className="link-gold">
-                {phoneDisplay}
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${contactEmail}`} className="link-gold">
-                {contactEmail}
-              </a>
-            </li>
-            <li>
-              {whatsapp ? (
-                <a href={whatsapp} className="link-gold" target="_blank" rel="noreferrer">
-                  WhatsApp the studio
-                </a>
-              ) : (
-                <Link href="/quote" className="link-gold">
-                  Request a quote
-                </Link>
-              )}
-            </li>
-            <li>{gstin ? `GSTIN ${gstin}` : "GSTIN printed on the tax invoice"}</li>
-            <li>18% GST on B2B invoices. 50% non-refundable advance to hold a date.</li>
-            <li>Bengaluru transit ₹2,000 – ₹4,000.</li>
-          </ul>
-          <div className="mt-6 flex gap-5 text-sm">
-            <a href={instagramUrl} className="link-gold text-champagne" target="_blank" rel="noreferrer">
-              Instagram
-            </a>
-            <a href={linkedinUrl} className="link-gold text-champagne" target="_blank" rel="noreferrer">
-              LinkedIn
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-gold/15 px-4 py-5 text-center text-[0.7rem] tracking-wide text-mist/60 sm:px-6">
-        © 2026 Visriva. All rights reserved. Preview photography stands in until the house archive is placed.
-      </div>
-    </footer>
-  );
+import { gstin,instagramUrl,linkedinUrl,navigation } from "@/lib/site";
+import { WHATSAPP_GREETING,whatsAppLink } from "@/lib/whatsapp";
+export function Footer(){
+ const whatsapp=whatsAppLink(WHATSAPP_GREETING);
+ const links=navigation.flatMap(item=>item.children?item.children.map(child=>({href:child.href,label:child.label})):[{href:item.href,label:item.label}]);
+ return <footer className="relative overflow-hidden border-t border-[#CAD9C5] bg-[#F8F7EF] text-[#203F30]">
+  <div className="pointer-events-none absolute -right-24 -top-36 h-96 w-96 rounded-full bg-[#BAD0B5]/35 blur-3xl"/>
+  <div className="relative mx-auto grid max-w-[1500px] gap-12 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:px-12">
+   <div className="lg:col-span-5"><div className="flex items-center gap-3"><Image src="/brand/visriva-logo.png" alt="Visriva emblem" width={800} height={800} className="h-14 w-14 object-contain"/><span className="font-display text-4xl text-[#203F30]">visriva</span></div><p className="mt-6 max-w-sm text-sm leading-7 text-[#687D6C]">Experiential stations that bring people together—and give them something memorable to take home. One team from setup to the final keepsake.</p><p className="mt-7 text-[.62rem] font-semibold uppercase tracking-[.2em] text-[#947D34]">Make the moment stay.</p></div>
+   <div className="lg:col-span-3"><p className="section-kicker">Explore</p><ul className="mt-5 space-y-3 text-sm text-[#355642]">{links.map(link=><li key={link.href}><Link href={link.href} className="transition hover:text-[#947D34]">{link.label} ↗</Link></li>)}<li><Link href="/quote" className="font-semibold text-[#947D34]">Plan your event ↗</Link></li></ul></div>
+   <div className="lg:col-span-4"><p className="section-kicker">Studio</p><ul className="mt-5 space-y-3 text-sm leading-6 text-[#355642]"><li>Bengaluru, Karnataka, India</li><li>{whatsapp?<a href={whatsapp} target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-[#947D34]">WhatsApp the studio ↗</a>:<Link href="/quote">Request a quote</Link>}</li><li>{gstin?`GSTIN ${gstin}`:"GSTIN printed on the tax invoice"}</li><li>18% GST on B2B invoices. 50% non-refundable advance to hold a date.</li></ul><div className="mt-6 flex items-center gap-3">{instagramUrl?<a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="social-glass"><svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1" fill="currentColor" stroke="none"/></svg></a>:null}{linkedinUrl?<a href={linkedinUrl} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="social-glass"><svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M5.2 8.6H2V22h3.2zM3.6 2A1.9 1.9 0 1 0 3.6 5.8 1.9 1.9 0 0 0 3.6 2ZM22 13.4c0-4-2.1-5.8-4.9-5.8a4.2 4.2 0 0 0-3.8 2.1V8.6h-3.2V22h3.2v-7.1c0-1.9.4-3.7 2.7-3.7s2.3 2.1 2.3 3.8V22h3.2z"/></svg></a>:null}</div></div>
+  </div><div className="relative border-t border-[#D9E3D5] px-5 py-5 text-center text-xs text-[#8A9A8A]">© 2026 Visriva. All rights reserved.</div>
+ </footer>;
 }

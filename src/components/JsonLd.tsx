@@ -1,17 +1,18 @@
-import { services } from "@/lib/services";
-import { brandLogoSrc, businessName, contactEmail, phoneTel, siteUrl } from "@/lib/site";
+import { getPublishedServices } from "@/lib/services-catalog";
+import { siteUrl } from "@/lib/site";
 
-export function JsonLd() {
+export async function JsonLd() {
+  const services = await getPublishedServices();
+  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+
   const data = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: businessName,
-    alternateName: "Visriva",
+    name: "Visriva",
+    alternateName: "Visriva Live Station",
     description:
-      "Visriva Live Station runs photo booths, AI merchandise, games, and live gifting for corporate events and celebrations. Based in Bengaluru, travelling across India. Owned inventory. One team, end to end.",
+      "Visriva provides photo booths, AI merchandise, games, VR experiences, and live gifting stations for corporate events and celebrations. Based in Bengaluru, serving events across India.",
     url: siteUrl,
-    image: `${siteUrl}${brandLogoSrc}`,
-    email: contactEmail,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Bengaluru",
@@ -20,29 +21,43 @@ export function JsonLd() {
     },
     areaServed: ["Bengaluru", "India"],
     priceRange: "₹₹₹",
-    telephone: phoneTel,
+    ...(number ? { telephone: `+${number}` } : {}),
+    sameAs: [
+      process.env.NEXT_PUBLIC_INSTAGRAM_URL,
+      process.env.NEXT_PUBLIC_LINKEDIN_URL,
+    ].filter(Boolean),
     knowsAbout: [
-      "corporate event photo booths",
+      "Corporate event photo booths",
       "AI photo experiences",
+      "AI photo booths",
       "VR stations",
+      "VR engagement experiences",
       "DTF t-shirt printing",
-      "live event merchandise",
-      "wedding photo booth Bengaluru",
-      "live magnet station",
-      "on-site keychain favours",
+      "Live event merchandise",
+      "Wedding photo booths",
+      "Live magnet stations",
+      "On-site keychain favours",
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Visriva stations",
-      itemListElement: services.map((service) => ({
-        "@type": "Offer",
-        name: service.name,
-        description: service.summary,
-        priceCurrency: "INR",
-        ...(service.fromPrice != null ? { price: service.fromPrice } : {}),
-        ...(service.unitPrice ? { price: service.unitPrice } : {}),
-        url: `${siteUrl}${service.category === "photo-booths" ? "/photo-booths" : service.category === "games" ? "/games-vr" : "/ai-merchandise"}`,
-      })),
+      name: "Visriva Experiences",
+      itemListElement: services
+        .filter((service) => service.bookable !== false)
+        .map((service) => ({
+          "@type": "Offer",
+          name: service.name,
+          description: service.summary,
+          priceCurrency: "INR",
+          ...(service.fromPrice != null ? { price: service.fromPrice } : {}),
+          ...(service.unitPrice != null ? { price: service.unitPrice } : {}),
+          url: `${siteUrl}${
+            service.category === "photo-booths"
+              ? "/photo-booths"
+              : service.category === "games"
+                ? "/games-vr"
+                : "/ai-merchandise"
+          }`,
+        })),
     },
   };
 
