@@ -5,6 +5,15 @@ export function pageMeta(title: string, description: string, path: string): Meta
   return {
     title,
     description,
+    keywords: [
+      "AI photo booth Bengaluru",
+      "AI photobooth Bangalore",
+      "VR engagement events",
+      "Corporate event photo booth",
+      "Interactive event games",
+      "Live event merchandise",
+      "DTF T-shirt printing Bangalore",
+    ],
     alternates: { canonical: path },
     openGraph: {
       title: `${title} · Visriva`,
