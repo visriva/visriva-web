@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Preserve legacy URLs that already have Google Search Console visibility.
+      { source: "/services/photo-booth", destination: "/photo-booths", permanent: true },
+      { source: "/services/tote-tshirt-station", destination: "/ai-merchandise", permanent: true },
+      { source: "/services/magnet-station", destination: "/ai-merchandise", permanent: true },
+      { source: "/services/keychain-station", destination: "/ai-merchandise", permanent: true },
+      { source: "/ai-photo-booth-experiences", destination: "/photo-booths", permanent: true },
+      { source: "/vr-engagement", destination: "/games-vr", permanent: true },
+
       { source: "/classic", destination: "/", permanent: true },
       { source: "/classic/:path*", destination: "/", permanent: true },
       { source: "/live", destination: "/", permanent: true },
