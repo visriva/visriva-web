@@ -1,61 +1,40 @@
-import { PageHero } from "@/components/PageHero";
+import { InventoryPage } from "@/components/InventoryPage";
 import { PolicyStrip } from "@/components/PolicyStrip";
-import { GoldLink, Plate } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
-  "VR station for corporate events India",
-  "Hosted VR stations, Catch the Baton, and Buzz the Wire for corporate events in India. Bengaluru crews, owned inventory, starting from ₹6,000.",
+  "VR Engagement and Gaming for Corporate Events in Bangalore",
+  "Book hosted VR engagement stations, virtual reality gaming and interactive event games in Bangalore and across India. Immersive experiences for conferences, brand activations and company celebrations.",
   "/games-vr",
 );
 
+const highlights = [
+  { number: "01", title: "Step inside", body: "Immersive headset experiences that give guests a genuine change of scene." },
+  { number: "02", title: "Bring a crowd", body: "Quick-play challenges and hosted games that invite people to gather and take part." },
+  { number: "03", title: "Crew included", body: "A managed station with guest guidance, resets and event-floor support." },
+];
+
 export default async function GamesPage() {
   const catalog = await getPublishedCatalog();
-  const vr = catalog.getService("vr-station");
-  const baton = catalog.getService("catch-baton");
-  const wire = catalog.getService("buzz-wire");
-  if (!vr || !baton || !wire) return null;
-
   return (
-    <main>
-      <PageHero
-        kicker="Games and VR"
-        title="A queue, a headset, a reset."
-        lede="Play stations for a corporate floor. Hosted, compact, and run by the same crew as the booth."
-        image="/images/stage.jpg"
-        alt="A lit stage during a corporate programme"
+    <>
+      <InventoryPage
+        eyebrow="VR engagement · Interactive games"
+        title="Make room"
+        accent="for play."
+        description="Bring virtual reality and live interactive games to your corporate event. Visriva creates hosted VR engagement stations and quick-play challenges for conferences, exhibitions, brand activations and celebrations in Bangalore and across India."
+        heroImage="/images/concert.jpg"
+        heroAlt="A live event floor with lights and an engaged audience"
+        introTitle="A little friendly competition changes the energy of a room."
+        intro="From virtual reality headsets to hands-on challenges, our games and VR stations give guests a reason to pause, participate and connect. We plan the setup around your venue and event flow, then host the station so your team can stay focused on the programme."
+        highlights={highlights}
+        services={catalog.servicesIn("games")}
+        locationLine="Bengaluru based · Events across India"
+        closingTitle="Give your guests a reason to jump in."
+        closingCopy="Tell us about your event, the available space and the guest experience you want to create. We'll help you choose the right VR station or interactive game mix."
       />
-      <section className="mx-auto grid max-w-[1500px] gap-6 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
-        <article className="relative min-h-[32rem] overflow-hidden border border-gold/30 lg:col-span-7">
-          <Plate src={vr.image} alt="" className="absolute inset-0" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#173d2b]/85 via-[#173d2b]/25 to-transparent" />
-          <div className="relative z-10 flex h-full min-h-[32rem] flex-col justify-end p-8">
-            <p className="font-royal text-[0.62rem] uppercase tracking-[0.24em] text-gold">{vr.footprint}</p>
-            <h2 className="mt-2 font-display text-6xl italic text-white">{vr.name}</h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/90">{vr.summary}</p>
-            <p className="mt-6 text-xl text-[#f0dfaa]">{vr.priceLabel}</p>
-          </div>
-        </article>
-        <div className="grid gap-6 lg:col-span-5">
-          {[baton, wire].map((game) => (
-            <article key={game.id} className="flex flex-1 flex-col justify-between border border-gold/30 bg-deep p-7">
-              <div>
-                <p className="font-royal text-[0.62rem] uppercase tracking-[0.24em] text-gold">{game.footprint}</p>
-                <h2 className="mt-3 font-display text-4xl italic text-cream">{game.name}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-mist/85">{game.summary}</p>
-              </div>
-              <p className="mt-6 text-lg text-gold-2">{game.priceLabel}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-      <section className="px-4 pb-16 sm:px-6 lg:px-10">
-        <PolicyStrip />
-        <div className="mx-auto mt-10 max-w-[1500px]">
-          <GoldLink href="/quote?services=vr-station,buzz-wire">Add games to the brief</GoldLink>
-        </div>
-      </section>
-    </main>
+      <section className="bg-[#DCE9D8] px-5 pb-16 sm:px-8 lg:px-12"><PolicyStrip /></section>
+    </>
   );
 }
