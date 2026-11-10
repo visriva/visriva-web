@@ -77,11 +77,12 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   }, [bookable]);
   const priced = useMemo(() => estimateWithLookup(draft.selected, lookup), [draft.selected, lookup]);
   const selectedCount = Object.values(draft.selected).reduce((sum, quantity) => sum + quantity, 0);
+  const recommendedIds = occasionRecommendations[draft.eventType] ?? [];
   const filteredServices = catalog.filter((service) => {
     const categoryMatch = filter === "all" || service.category === filter;
-    const textMatch = `${service.name} ${service.summary}`.toLowerCase().includes(search.toLowerCase());
+    const textMatch = (service.name + " " + service.summary).toLowerCase().includes(search.toLowerCase());
     return categoryMatch && textMatch;
-  });
+  }).sort((a, b) => Number(recommendedIds.includes(b.id)) - Number(recommendedIds.includes(a.id)));
 
   function setField<K extends keyof QuoteDraft>(key: K, value: QuoteDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
@@ -106,6 +107,10 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
   function nextStep() {
     setError("");
+    if (step === 0 && !draft.eventType) {
+      setError("Choose the type of celebration first so we can guide your station selection.");
+      return;
+    }
     if (step === 1) {
       if (!draft.venue.trim()) { setError("Please enter the venue name and full event address."); return; }
       if (!draft.city.trim()) { setError("Please enter the event city."); return; }
@@ -124,6 +129,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
   async function submit() {
     setError("");
+    if (!draft.eventType) { setError("Choose your event format before sending your request."); setStep(0); return; }
     if (!draft.venue.trim() || !draft.city.trim()) { setError("Add the venue address and city before sending your event request."); setStep(1); return; }
     if (!draft.name.trim()) { setError("Add your name before sending your event request."); setStep(2); return; }
     if (!draft.phone.trim() && !draft.email.trim()) { setError("Add a phone number or email address so our team can reply."); setStep(2); return; }
