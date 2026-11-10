@@ -1,67 +1,40 @@
-import { PageHero } from "@/components/PageHero";
+import { InventoryPage } from "@/components/InventoryPage";
 import { PolicyStrip } from "@/components/PolicyStrip";
-import { RateList } from "@/components/RateList";
-import { GoldLink } from "@/components/ui";
 import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 
 export const metadata = pageMeta(
-  "Corporate event photo booth Bangalore",
-  "Instant iPad, DSLR, roaming, and mobile photo booths for corporate events in Bangalore. Starting from ₹15,000. Owned inventory, attended, end to end.",
+  "Photo Booth Rental and AI Photo Booth in Bangalore",
+  "Explore corporate event photo booth rentals in Bangalore, including instant iPad, DSLR, roaming, mobile capture and AI photo booth experiences for conferences, weddings and brand activations.",
   "/photo-booths",
 );
 
+const highlights = [
+  { number: "01", title: "Capture", body: "A polished photo moment, from classic instant prints to AI-powered transformations." },
+  { number: "02", title: "Personalise", body: "Frames, creative direction and event-led details that make each output feel considered." },
+  { number: "03", title: "Take it home", body: "A tangible keepsake guests can carry away long after the event ends." },
+];
+
 export default async function PhotoBoothsPage() {
   const catalog = await getPublishedCatalog();
-  const boothServices = catalog.servicesIn("photo-booths");
-
   return (
-    <main>
-      <PageHero
-        kicker="Photo booths"
-        title="Prints while the room is still warm."
-        lede="Five ways to capture a corporate floor. Every booth is ours, attended, and priced as a starting figure."
-        image="/images/reception.jpg"
-        alt="Guests gathered at a corporate reception"
+    <>
+      <InventoryPage
+        eyebrow="Photo booths · AI photo experiences"
+        title="Keep the"
+        accent="good moments."
+        description="Photo booth rentals in Bangalore for corporate events, weddings and celebrations. Choose instant iPad and DSLR prints, roaming photography, mobile capture or an AI Photo Booth that turns guest portraits into personalised keepsakes."
+        heroImage="/images/party.jpg"
+        heroAlt="Guests celebrating together at a lively event"
+        introTitle="A photo experience should feel like part of the celebration."
+        intro="Visriva's photo booth stations are designed to bring guests together, not pull them away from the event. From classic instant photo booth rentals to AI photo transformations, our team helps shape the capture style, guest flow and keepsake around your occasion."
+        highlights={highlights}
+        services={catalog.servicesIn("photo-booths")}
+        locationLine="Bengaluru based · Events across India"
+        closingTitle="Make a moment worth keeping."
+        closingCopy="Tell us your event date, venue and guest count. We'll recommend a photo booth experience that fits the room and the kind of memory you want guests to take home."
       />
-
-      <section className="mx-auto grid max-w-[1500px] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:px-10">
-        <div className="lg:col-span-5">
-          <h2 className="font-display text-5xl italic leading-none text-cream">
-            Fixed, roaming, or phone.
-          </h2>
-        </div>
-
-        <div className="space-y-5 text-base leading-relaxed text-mist/85 lg:col-span-6 lg:col-start-7">
-          <p>
-            A starter iPad booth covers a shorter gathering: three hours and
-            150 prints. The unlimited iPad and DSLR booths run four hours
-            with the quota lifted.
-          </p>
-          <p>
-            Roaming comes to the guest when the room is large. Mobile capture
-            is the lighter build. Both are quoted inside a band, because the
-            room changes the labour.
-          </p>
-          <p>
-            Standard booth footprint is 8 × 8 ft, with a flat table and a
-            power point within reach.
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
-        <RateList services={boothServices} />
-      </section>
-
-      <section className="px-4 pb-10 sm:px-6 lg:px-10">
-        <PolicyStrip />
-        <div className="mx-auto mt-10 flex max-w-[1500px] justify-end">
-          <GoldLink href="/quote?services=unlimited-dslr">
-            Book a booth
-          </GoldLink>
-        </div>
-      </section>
-    </main>
+      <section className="bg-[#DCE9D8] px-5 pb-16 sm:px-8 lg:px-12"><PolicyStrip /></section>
+    </>
   );
 }
