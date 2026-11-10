@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { brandLogoSrc } from "@/lib/site";
+const brandLogoSrc = "/brand/visriva-mark.png";
 
 export function pageMeta(title: string, description: string, path: string): Metadata {
   return {
