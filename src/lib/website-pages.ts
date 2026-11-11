@@ -1,4 +1,5 @@
 import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
 import { connection } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
 
@@ -23,10 +24,20 @@ export type WebsitePage = {
 };
 
 export async function getWebsitePage(slug: string): Promise<WebsitePage | null> {
-  await connection();
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("website-pages", `website-page-${slug}`);
+
   const supabase = createAdminClient();
   if (!supabase) return null;
-  const { data, error } = await supabase.from("website_pages").select("*").eq("slug", slug).eq("status", "published").maybeSingle();
+
+  const { data, error } = await supabase
+    .from("website_pages")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .maybeSingle();
+
   if (error || !data) return null;
   return data as WebsitePage;
 }
