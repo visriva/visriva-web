@@ -359,7 +359,7 @@ async function start() {
         upstream.on('end', () => {
           let html = Buffer.concat(chunks).toString('utf8');
           const injection = '<script src="/__visriva-live/client.js" defer></script>';
-          html = /<\\/body>/i.test(html) ? html.replace(/<\\/body>/i, injection + '</body>') : html + injection;
+          html = /<\/body>/i.test(html) ? html.replace(/<\/body>/i, injection + '</body>') : html + injection;
           const responseHeaders = {...upstream.headers};
           delete responseHeaders['content-length'];
           delete responseHeaders['content-encoding'];
@@ -381,7 +381,7 @@ async function start() {
   server.on('upgrade', (req, socket, head) => {
     const upstream = net.connect(Number(target.port || 80), target.hostname, () => {
       const lines = Object.entries(req.headers).map(([key,value]) => key + ': ' + (key === 'host' ? target.host : value));
-      upstream.write(req.method + ' ' + req.url + ' HTTP/1.1\\r\\n' + lines.join('\\r\\n') + '\\r\\n\\r\\n');
+      upstream.write(req.method + ' ' + req.url + ' HTTP/1.1\r\n' + lines.join('\r\n') + '\r\n\r\n');
       if (head && head.length) upstream.write(head);
       socket.pipe(upstream).pipe(socket);
     });
@@ -391,11 +391,11 @@ async function start() {
 
   server.listen(port, '127.0.0.1', () => {
     fs.mkdirSync(LIVE_DIR, {recursive:true});
-    console.log('\\nVisriva Live Edit is ready');
+    console.log('\nVisriva Live Edit is ready');
     console.log('Open: http://127.0.0.1:' + port);
     console.log('Proxy target: ' + target.origin);
     console.log('Draft queue: ' + path.relative(ROOT, QUEUE_FILE));
-    console.log('Local-only: bound to 127.0.0.1; no application source files are written.\\n');
+    console.log('Local-only: bound to 127.0.0.1; no application source files are written.\n');
   });
 }
 
