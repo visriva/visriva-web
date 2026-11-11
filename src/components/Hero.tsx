@@ -15,7 +15,7 @@ export function Hero({pageContent}:{pageContent?:HeroPageContent|null}){
  const [active,setActive]=useState(0);
  const item=highlights[active];
  const title=pageContent?.hero_title || "Make every";
- const accent=pageContent?.hero_accent || "moment";
+ const accent=pageContent?.hero_accent || "moment memorable.";
  const description=pageContent?.hero_description || "Photo experiences, AI transformations, live merchandise and VR games—thoughtfully designed to bring guests into the celebration and give them something to take home.";
  const image=pageContent?.hero_image || item.image;
  const imageAlt=pageContent?.hero_alt || item.title;
@@ -26,7 +26,7 @@ export function Hero({pageContent}:{pageContent?:HeroPageContent|null}){
   <div className="relative z-10 border-y border-[#CBDAC6] bg-[#F8F7EF]/85 px-5 py-2.5 sm:px-8 lg:px-12"><div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-2 text-[10px]"><div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-[#9DBD9D] bg-[#E2EEE0] px-3 py-1 font-semibold uppercase tracking-[.16em] text-[#355642]"><i className="h-2 w-2 rounded-full bg-[#76A77D]"/>Visriva event studio</span><span className="text-[#627967]">Owned stations · Live photo, AI, merchandise and VR experiences</span></div><Link href="/client-requirements" className="font-semibold text-[#8E7835] underline decoration-[#B8A04D]/50 underline-offset-4">Venue planning guide ↗</Link></div></div>
   <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 lg:min-h-[650px] lg:grid-cols-[1.05fr_.95fr] lg:gap-16 lg:px-12 lg:py-20">
    <div className="max-w-[700px]"><div className="inline-flex items-center gap-2 rounded-full border border-[#BBCFB5] bg-[#F8F7EF]/75 px-4 py-2 text-[10px] font-semibold uppercase tracking-[.19em] text-[#52725B]"><span className="text-[#A88F3E]">✧</span>{eyebrow}</div>
-    <h1 className="hero-display mt-6 text-[clamp(3.9rem,7.3vw,7.4rem)] leading-[.87] tracking-[-.045em] text-[#234A36]">{title}<br/><span className="gold-gradient italic">{accent}</span><br/>memorable.</h1>
+    <h1 className="hero-display mt-6 text-[clamp(3.9rem,7.3vw,7.4rem)] leading-[.87] tracking-[-.045em] text-[#234A36]">{title}<br/><span className="gold-gradient italic">{accent}</span></h1>
     <p className="mt-7 max-w-[620px] text-base leading-8 text-[#607768] sm:text-lg">{description}</p>
     <div className="mt-8 flex flex-wrap gap-3"><SwipeLettersLink href="/quote" label="Plan your event" className="text-sm"/><Link href="/#experiences" className="inline-flex items-center gap-3 rounded-full border border-[#A9C1A6] bg-[#F8F7EF]/80 px-6 py-4 text-sm font-medium text-[#355642] transition hover:-translate-y-1 hover:border-[#947D34]">Explore experiences <span className="text-[#947D34]">↗</span></Link></div>
     <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-[#C6D7C2] pt-6 text-[10px] font-semibold uppercase tracking-[.14em] text-[#627967]"><span>Corporate celebrations</span><span>Brand activations</span><span>Weddings & private events</span><span>Employee engagement</span></div>
