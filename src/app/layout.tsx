@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Cinzel, Cormorant_Garamond, Outfit } from "next/font/google";
-import { Suspense } from "react";
 import "./globals.css";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
-import { WhatsAppBubble } from "@/components/WhatsAppBubble";
+import { SiteChrome } from "@/components/site-chrome";
 import { siteUrl } from "@/lib/site";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-outfit", display: "swap" });
@@ -34,10 +31,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full bg-ink text-cream">
         <a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
         <JsonLd />
-        <Suspense fallback={<div className="h-20" />}><Header /></Suspense>
+        <SiteChrome />
         {children}
-        <Footer />
-        <WhatsAppBubble />
       </body>
     </html>
   );
