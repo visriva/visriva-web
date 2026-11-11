@@ -1,13 +1,14 @@
+import type { Metadata } from "next";
 import { InventoryPage } from "@/components/InventoryPage";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { pageMeta } from "@/lib/seo";
 import { getPublishedCatalog } from "@/lib/services-catalog";
+import { getWebsitePage } from "@/lib/website-pages";
 
-export const metadata = pageMeta(
-  "AI Photo Experiences and Live Event Merchandise in Bangalore",
-  "Bring AI photo experiences, custom tote bag printing, live DTF T-shirt printing, magnets, keychains and branded keepsakes to corporate events in Bangalore and across India.",
-  "/ai-merchandise",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getWebsitePage("ai-merchandise");
+  return pageMeta(page?.seo_title || "AI Photo Experiences and Live Event Merchandise in Bangalore", page?.seo_description || "Bring AI photo experiences, custom tote bag printing, live DTF T-shirt printing, magnets, keychains and branded keepsakes to corporate events in Bangalore and across India.", "/ai-merchandise");
+}
 
 const highlights = [
   { number: "01", title: "Create", body: "AI portraits and custom prompts designed around your brand or celebration." },
@@ -16,10 +17,11 @@ const highlights = [
 ];
 
 export default async function AiMerchandisePage() {
-  const catalog = await getPublishedCatalog();
+  const [catalog, pageContent] = await Promise.all([getPublishedCatalog(), getWebsitePage("ai-merchandise")]);
   return (
     <>
       <InventoryPage
+        pageContent={pageContent}
         eyebrow="AI experiences · Live merchandise"
         title="Make it"
         accent="personal."

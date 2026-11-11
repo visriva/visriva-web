@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Cinzel, Cormorant_Garamond, Outfit } from "next/font/google";
-import { Suspense } from "react";
 import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
+import { SiteChrome } from "@/components/site-chrome";
+import { SiteFooter } from "@/components/site-footer";
 import { siteUrl } from "@/lib/site";
-import { SiteChrome } from "@/components/SiteChrome";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-outfit", display: "swap" });
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], variable: "--font-cormorant", display: "swap" });
@@ -34,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd />
         <SiteChrome />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

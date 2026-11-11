@@ -1,13 +1,14 @@
 import { PageHero } from "@/components/PageHero";
 import { GoldLink, Plate } from "@/components/ui";
+import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
+import { getWebsitePage } from "@/lib/website-pages";
 import { audiences, processSteps } from "@/lib/site";
 
-export const metadata = pageMeta(
-  "About Visriva, Bengaluru event experience team",
-  "Meet Visriva, a Bengaluru event experience team delivering hosted photo booths, AI photo experiences, live merchandise and VR stations for corporate events and celebrations.",
-  "/about",
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getWebsitePage("about");
+  return pageMeta(page?.seo_title || "About Visriva, Bengaluru event experience team", page?.seo_description || "Meet Visriva, a Bengaluru event experience team delivering hosted photo booths, AI photo experiences, live merchandise and VR stations for corporate events and celebrations.", "/about");
+}
 
 const pillars = [
   { title: "End to end", body: "We do not assemble a night from rented fragments. The brief, the plan, the load-in, and the wrap sit with one team." },
@@ -15,7 +16,8 @@ const pillars = [
   { title: "The record", body: "The work has sat inside technology launches, finance offsites, and consumer-brand nights across Bengaluru. The names stay with the clients. The standard does not." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const pageContent = await getWebsitePage("about");
   return (
     <main>
       <PageHero

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ExperienceDeck } from "@/components/ExperienceDeck";
@@ -7,6 +8,8 @@ import { StatsBar } from "@/components/StatsBar";
 import { RateList } from "@/components/RateList";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { processSteps } from "@/lib/site";
+import { getWebsitePage } from "@/lib/website-pages";
+import { siteUrl } from "@/lib/site";
 import { DynamicIslandNav, QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
 
 const promises = [
@@ -15,12 +18,19 @@ const promises = [
   { n: "03", title: "Keepsakes worth keeping", body: "Personalised prints and merchandise turn a brilliant event into a memory guests can take home." },
 ];
 
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getWebsitePage("home");
+  const title = page?.seo_title || "Visriva | Experiential stations for events in Bengaluru";
+  const description = page?.seo_description || "Create unforgettable event moments with photo experiences, AI-powered keepsakes, live merchandise, VR and interactive games. One team, end to end.";
+  return { title, description, alternates: { canonical: siteUrl }, openGraph: { title, description, url: siteUrl, siteName: "Visriva", images: page?.og_image ? [page.og_image] : ["/brand/visriva-logo.png"] }, twitter: { card: "summary_large_image", title, description, images: page?.og_image ? [page.og_image] : ["/brand/visriva-logo.png"] } };
+}
+
 export default async function HomePage() {
-  const catalog = await getPublishedCatalog();
+  const [catalog, pageContent] = await Promise.all([getPublishedCatalog(), getWebsitePage("home")]);
   const featured = catalog.list.filter((service) => ["unlimited-dslr", "ai-station", "vr-station"].includes(service.id) && service.bookable !== false);
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
-      <Hero />
+      <Hero pageContent={pageContent} />
       <div className="relative z-30 mx-auto -mt-3 mb-6 w-fit"><DynamicIslandNav active="Explore Visriva"/></div>
       <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar /></div>
 
