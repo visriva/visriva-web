@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "live": "node scripts/visriva-live.mjs start",
+    "live:pending": "node scripts/visriva-live.mjs pending",
+    "live:done": "node scripts/visriva-live.mjs done"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
