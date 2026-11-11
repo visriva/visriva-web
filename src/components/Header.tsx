@@ -21,11 +21,35 @@ export function Header() {
     return () => window.removeEventListener("scroll", update);
   }, []);
 
+  // Close transient navigation UI only when the route changes.
   useEffect(() => {
     setOpen(false);
+    setSearchOpen(false);
+  }, [pathname]);
+
+  // Lock background scrolling while the mobile navigation is visible.
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [open, pathname]);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
+  // Escape should dismiss both the mobile menu and the search panel.
+  useEffect(() => {
+    if (!open && !searchOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        setSearchOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, searchOpen]);
 
   const links = useMemo(
     () => navigation.flatMap((item) =>
@@ -83,11 +107,11 @@ export function Header() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <button type="button" onClick={() => { setSearchOpen(!searchOpen); setQuery(""); }} aria-label="Search services" aria-expanded={searchOpen} className="grid h-10 w-10 place-items-center rounded-full border border-[#B69A47]/70 bg-[#D8D6C9] text-[#D8C16B] transition hover:border-[#E1C65E] hover:bg-[#F1EBD8] sm:h-12 sm:w-12">
+            <button type="button" onClick={() => { setSearchOpen((value) => !value); setQuery(""); }} aria-label="Search services" aria-expanded={searchOpen} className="grid h-10 w-10 place-items-center rounded-full border border-[#B69A47]/70 bg-[#D8D6C9] text-[#D8C16B] transition hover:border-[#E1C65E] hover:bg-[#F1EBD8] sm:h-12 sm:w-12">
               <svg viewBox="0 0 24 24" fill="none" className="h-[17px] w-[17px]" stroke="currentColor" strokeWidth="1.8"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></svg>
             </button>
             <SwipeLettersLink href="/quote" label="Plan your event" className="hidden min-h-[54px] px-7 text-[.68rem] tracking-[.16em] sm:inline-flex lg:px-8" />
-            <button type="button" onClick={() => setOpen(!open)} aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} className="grid h-10 w-10 place-items-center rounded-full border border-[#B69A47]/60 text-[#E9D68D] xl:hidden">
+            <button type="button" onClick={() => setOpen((value) => !value)} aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} aria-controls="mobile-navigation" className="grid h-10 w-10 place-items-center rounded-full border border-[#B69A47]/60 text-[#E9D68D] xl:hidden">
               <span className="text-xl leading-none">{open ? "×" : "☰"}</span>
             </button>
           </div>
@@ -108,7 +132,7 @@ export function Header() {
         ) : null}
       </div>
 
-      <div className={`fixed inset-0 z-[79] bg-[#06140F] px-6 pb-12 pt-28 transition duration-300 xl:hidden ${open ? "visible opacity-100" : "invisible opacity-0"}`}>
+      <div id="mobile-navigation" className={`fixed inset-0 z-[79] bg-[#06140F] px-6 pb-12 pt-28 transition duration-300 xl:hidden ${open ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"}`}>
         <nav className="flex h-full flex-col justify-between" aria-label="Mobile navigation">
           <div>{links.map((link, index) => (
             <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="block border-b border-[#806B2D]/40 py-4 font-display text-3xl text-[#F4F0DF]">
