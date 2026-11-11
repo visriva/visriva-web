@@ -71,7 +71,7 @@ function buildClient(token) {
   host.style.cssText = 'all:initial;position:fixed;inset:0;z-index:2147483647;pointer-events:none';
   document.documentElement.appendChild(host);
   const root = host.attachShadow({mode:'open'});
-  root.innerHTML = `
+  root.innerHTML = \`
     <style>
       *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
       .panel{position:fixed;top:14px;right:14px;display:flex;align-items:center;gap:6px;padding:8px;background:#102b20;color:#f8f2e5;border:1px solid #b99a58;border-radius:12px;box-shadow:0 8px 30px #0005;pointer-events:auto;font-size:12px}
@@ -97,7 +97,7 @@ function buildClient(token) {
     </div>
     <div id="status"></div>
     <div id="help">Click an element on the page to select it. Use <b>Edit text</b> to preview a text change, or Duplicate/Delete to queue a structural proposal. <b>Save draft</b> stores proposals locally; it does not change source code or the live website.</div>
-  `;
+  \`;
   const $ = id => root.getElementById(id);
   const toggle = $('toggle'), edit = $('edit'), duplicate = $('duplicate'), remove = $('delete');
   const count = $('count'), status = $('status'), help = $('help');
