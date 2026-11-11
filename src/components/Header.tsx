@@ -110,11 +110,11 @@ export function Header() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <button type="button" onClick={() => { setSearchOpen((value) => !value); setQuery(""); }} aria-label="Search services" aria-expanded={searchOpen} className="grid h-10 w-10 place-items-center rounded-full border border-[#B69A47]/70 bg-[#D8D6C9] text-[#D8C16B] transition hover:border-[#E1C65E] hover:bg-[#F1EBD8] sm:h-12 sm:w-12">
+            <button type="button" onClick={() => { setSearchOpen((value) => !value); setQuery(""); }} aria-label="Search services" aria-expanded={searchOpen} className="utility-button">
               <svg viewBox="0 0 24 24" fill="none" className="h-[17px] w-[17px]" stroke="currentColor" strokeWidth="1.8"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></svg>
             </button>
-            <SwipeLettersLink href="/quote" label="Plan your event" className="hidden min-h-[54px] px-7 text-[.68rem] tracking-[.16em] sm:inline-flex lg:px-8" />
-            <button type="button" onClick={() => setOpen((value) => !value)} aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} aria-controls="mobile-navigation" className="grid h-10 w-10 place-items-center rounded-full border border-[#B69A47]/60 text-[#E9D68D] xl:hidden">
+            {pathname === "/quote" ? <span className="hidden items-center rounded-full border border-[#806B2D]/60 px-5 py-3 text-xs font-semibold text-[#E4D7A6] sm:inline-flex">Booking studio</span> : <SwipeLettersLink href="/quote" label="Plan your event" className="hidden min-h-[54px] px-7 text-[.68rem] tracking-[.16em] sm:inline-flex lg:px-8" />}
+            <button type="button" onClick={() => setOpen((value) => !value)} aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} aria-controls="mobile-navigation" className="utility-button xl:hidden">
               <span className="text-xl leading-none">{open ? "×" : "☰"}</span>
             </button>
           </div>
@@ -142,7 +142,7 @@ export function Header() {
               <span className="text-sm text-[#C6A94C]">{String(index + 1).padStart(2, "0")}</span><span className="ml-4">{link.label}</span>
             </Link>
           ))}</div>
-          <Link href="/quote" onClick={() => setOpen(false)} className="rounded-full border border-[#D2B85C] bg-[#C6A21F] px-6 py-4 text-center text-sm font-semibold uppercase tracking-widest text-[#08150F]">Plan your event ↗</Link>
+          {pathname === "/quote" ? <p className="rounded-full border border-[#806B2D]/60 px-6 py-4 text-center text-xs font-semibold text-[#E4D7A6]">You’re in the Booking Studio</p> : <Link href="/quote" onClick={() => setOpen(false)} className="liquid-button px-6 py-4 text-center text-sm font-semibold">Plan your event</Link>}
         </nav>
       </div>
     </header>
