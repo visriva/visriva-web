@@ -56,7 +56,7 @@ export function InventoryPage({
         <div className="relative mx-auto flex min-h-[550px] max-w-[1500px] flex-col justify-center px-5 pb-20 pt-16 sm:px-8 lg:px-12">
           <div className="max-w-4xl">
             <p className="inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[.28em] text-[#E6D69C]">
-              <span className="h-px w-9 bg-[#C8AE5C]" /> {eyebrow}
+              <span className="h-px w-9 bg-[#C8AE5C]" /> {pageEyebrow}
             </p>
             <h1 className="mt-7 max-w-4xl font-display text-[clamp(3.8rem,8vw,8rem)] leading-[.83] tracking-[-.045em] text-white">
               {pageTitle}<br /><em className="font-normal text-[#DCC77D]">{pageAccent}</em>
