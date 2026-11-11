@@ -7,10 +7,10 @@ export function GoldLink({href,children,className=""}:{href:string;children:Reac
   return <Link href={href} className={"liquid-button inline-flex items-center justify-center rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.14em] "+className}>{children}</Link>;
 }
 
-export function SwipeLettersLink({href,label,className=""}:{href:string;label:string;className?:string}) {
+export function SwipeLettersLink({href,label,className="",icon="arrow"}:{href:string;label:string;className?:string;icon?:"arrow"|"plus"}) {
   return <Link href={href} aria-label={label} className={"liquid-button swipe-cta inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.14em] "+className}>
     <span className="swipe-letters" aria-hidden="true">{Array.from(label).map((letter,index)=><span className="swipe-letter" style={{transitionDelay:(index*13)+"ms"}} key={index}><span>{letter===" "?"\u00a0":letter}</span><span>{letter===" "?"\u00a0":letter}</span></span>)}</span>
-    <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">↗</span>
+    <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">{icon==="plus"?"＋":"↗"}</span>
   </Link>;
 }
 
