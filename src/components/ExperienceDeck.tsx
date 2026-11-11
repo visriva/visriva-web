@@ -45,18 +45,15 @@ export function ExperienceDeck({services}:{services:Service[]}){
   <div className="pointer-events-none absolute -left-36 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[#F8F7EF]/80 blur-[110px]"/>
   <div className="relative mx-auto max-w-[1500px]">
    <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
-    <div><p className="section-kicker">The Visriva collection</p><h2 className="mt-4 max-w-3xl font-display text-6xl leading-[.9] sm:text-7xl">Find the experience.<br/><em className="gold-gradient">Make it unforgettable.</em></h2></div>
+    <div><p className="section-kicker section-kicker--sentence">The Visriva collection</p><h2 className="mt-4 max-w-3xl font-display text-6xl leading-[.9] sm:text-7xl">Find the experience.<br/><em className="gold-gradient">Make it unforgettable.</em></h2></div>
     <p className="max-w-md text-sm leading-7 text-[#667B6B]">Explore the live station inventory. Swipe through the collection, turn a card to see what is included, or compare up to three experiences side by side.</p>
    </div>
 
-   <div className="mt-10 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+   <div className="mt-8 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
     <div className="bouncy-tabs flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/80 bg-[#F8F7EF]/85 p-1.5 scrollbar-none" role="tablist" aria-label="Filter experiences">
      {tabs.map(tab=><button key={tab.id} type="button" role="tab" aria-selected={active===tab.id} onClick={()=>changeTab(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-4 py-3 text-[10px] font-bold uppercase tracking-[.12em] sm:px-5 ${active===tab.id?"is-active bg-[#294937] text-white shadow-[0_7px_18px_rgba(41,73,55,.2)]":"text-[#607768] hover:bg-[#EAF1E6] hover:text-[#294937]"}`}>{tab.label}</button>)}
     </div>
-    <div className="flex items-center justify-between gap-3">
-     <span className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#829182]">{filtered.length} experiences</span>
-     <div className="flex gap-2"><button type="button" aria-label="Previous experiences" onClick={()=>move(-1)} className="deck-arrow">←</button><button type="button" aria-label="Next experiences" onClick={()=>move(1)} className="deck-arrow">→</button></div>
-    </div>
+    <div className="flex items-center gap-3"><span className="text-xs font-semibold text-[#607768]">{filtered.length} experiences</span></div>
    </div>
 
    <div ref={rail} className="mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-5 scrollbar-none" aria-label="Experience carousel">
@@ -75,8 +72,8 @@ export function ExperienceDeck({services}:{services:Service[]}){
           <div className="absolute inset-x-0 bottom-0 p-6">
            <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-[#E9DDAE]">{service.footprint}</p>
            <h3 className="mt-2 font-display text-[2.4rem] leading-[.96] text-white">{service.name}</h3>
-           <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/30 pt-4"><span className="text-sm font-semibold text-white">{service.priceLabel}</span><span className="grid h-10 w-10 place-items-center rounded-full border border-white/60 bg-white/15 text-lg text-white backdrop-blur">↗</span></div>
-           <p className="mt-3 text-[9px] font-semibold uppercase tracking-[.16em] text-white/80">Tap card to turn</p>
+           <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/30 pt-4"><span className="text-sm font-semibold text-white">{service.priceLabel}</span><span className="grid h-10 w-10 place-items-center rounded-full border border-white/60 bg-white/15 text-white backdrop-blur" aria-hidden="true"><svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0 1.2 4"/></svg></span></div>
+           <p className="mt-3 text-xs font-semibold text-white/90">Tap to view details</p>
           </div>
          </div>
         </div>
@@ -85,18 +82,19 @@ export function ExperienceDeck({services}:{services:Service[]}){
          <h3 className="mt-5 font-display text-4xl leading-none text-[#294937]">{service.name}</h3>
          <p className="mt-5 text-sm leading-7 text-[#617768]">{service.summary}</p>
          <div className="mt-6 border-t border-[#C5D8C0] pt-5"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#947D34]">What is included</p><ul className="mt-3 space-y-2 text-xs leading-5 text-[#405B48]">{service.includes.slice(0,5).map(item=><li key={item}>✳ {item}</li>)}</ul></div>
-         <div className="mt-auto pt-6"><p className="font-display text-3xl text-[#947D34]">{service.priceLabel}</p><p className="mt-2 text-[9px] font-semibold uppercase tracking-[.15em] text-[#718574]">Tap to return ↻</p></div>
+         <div className="mt-auto pt-6"><p className="font-display text-3xl text-[#947D34]">{service.priceLabel}</p><p className="mt-2 text-xs font-semibold text-[#526B58]">Tap to return to the image</p></div>
         </div>
        </div>
       </button>
       <div className="mt-3 flex items-center justify-between gap-3 px-1">
-       <Link href={categoryMeta[service.category].href} className="text-[10px] font-bold uppercase tracking-[.15em] text-[#947D34] transition hover:translate-x-1">Explore category ↗</Link>
-       <button type="button" onClick={()=>toggleCompare(service.id)} disabled={!isCompared&&compareIds.length>=3} aria-pressed={isCompared} className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-[.12em] transition ${isCompared?"border-[#294937] bg-[#294937] text-white":"border-[#B8CBB4] bg-[#F8F7EF]/75 text-[#607768] hover:border-[#A88F3E]"} disabled:opacity-40`}>{isCompared?"✓ Added":"Compare +"}</button>
+       <Link href={categoryMeta[service.category].href} className="text-xs font-semibold text-[#947D34] transition hover:underline hover:underline-offset-4">Explore category</Link>
+       <button type="button" onClick={()=>toggleCompare(service.id)} disabled={!isCompared&&compareIds.length>=3} aria-pressed={isCompared} className={`rounded-full border-2 px-4 py-2.5 text-xs font-semibold transition ${isCompared?"border-[#294937] bg-[#294937] text-white":"border-[#B8CBB4] bg-[#F8F7EF]/75 text-[#607768] hover:border-[#A88F3E]"} disabled:opacity-40`}>{isCompared?"✓ Added":"Compare +"}</button>
       </div>
      </article>;
     })}
     {filtered.length===0?<p className="w-full rounded-2xl border border-dashed border-[#B8CBB4] bg-[#F8F7EF]/70 p-10 text-center text-sm text-[#667B6B]">No experiences in this category yet. Contact the team for a tailored setup.</p>:null}
    </div>
+   <div className="mt-2 flex justify-end gap-2 pr-1"><button type="button" aria-label="Previous experiences" onClick={()=>move(-1)} className="deck-arrow">←</button><button type="button" aria-label="Next experiences" onClick={()=>move(1)} className="deck-arrow">→</button></div>
    <div className="mt-7 flex flex-col items-center justify-between gap-5 rounded-2xl border border-white/80 bg-[#F8F7EF]/85 p-6 shadow-[0_12px_35px_rgba(39,67,48,.06)] sm:flex-row sm:p-8">
     <div><p className="section-kicker">Designed around your event</p><p className="mt-2 font-display text-3xl text-[#294937]">Mix, match and make it yours.</p></div>
     <div className="flex flex-wrap gap-3"><Link href="/rate-card" className="rounded-full border border-[#B8CBB4] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#355642] transition hover:bg-[#E8EFE4]">View rate card</Link><Link href="/quote" className="liquid-button rounded-full px-7 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">Build your event brief ↗</Link></div>

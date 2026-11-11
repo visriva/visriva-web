@@ -11,7 +11,7 @@ export function SiteFooter() {
   return (
     <>
       <Footer />
-      <WhatsAppBubble />
+      {pathname !== "/quote" ? <WhatsAppBubble /> : null}
     </>
   );
 }

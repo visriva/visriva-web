@@ -12,7 +12,7 @@ export function DotButton({label,onClick}:{label:string;onClick:()=>void}){
 }
 
 export function WaveRevealButton({href,label}:{href:string;label:string}){
- return <Link href={href} className="wave-button group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-[#D4AF37]/60 bg-[#0B3D2E] px-7 py-4 text-xs font-bold uppercase tracking-[.14em] text-[#F5F0E5] shadow-[0_12px_32px_rgba(0,0,0,.32)] transition hover:-translate-y-1"><span className="wave-button-fill absolute inset-x-0 bottom-0 h-0 bg-[#D4AF37] transition-[height] duration-500 group-hover:h-full"/><span className="relative z-10 transition-colors group-hover:text-[#07110D]">{label}</span><span className="relative z-10 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">↗</span></Link>;
+ return <Link href={href} className="liquid-button inline-flex items-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.14em]"><span>{label}</span><span aria-hidden="true">↗</span></Link>;
 }
 
 export function LightBulbButton({children="Need a hand?"}:{children?:React.ReactNode}){
