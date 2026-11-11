@@ -32,7 +32,7 @@ export async function getWebsitePage(slug: string): Promise<WebsitePage | null> 
 }
 
 export async function getWebsitePagesAdmin(): Promise<WebsitePage[]> {
-  noStore();
+  await connection();
   const supabase = createAdminClient();
   if (!supabase) return [];
   const { data } = await supabase.from("website_pages").select("*").order("name");
