@@ -77,8 +77,8 @@ export function Header() {
 
           <nav className="hidden items-center gap-7 xl:flex 2xl:gap-9" aria-label="Primary navigation">
             {navigation.map((item) => item.children ? (
-              <div key={item.label} className="group relative py-6" onMouseEnter={() => setOpenDropdown(item.label)} onMouseLeave={() => setOpenDropdown(null)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpenDropdown(null); }}>
-                <button type="button" aria-haspopup="true" aria-expanded={openDropdown === item.label} aria-controls="experiences-menu" onClick={() => setOpenDropdown((current) => current === item.label ? null : item.label)} className="inline-flex items-center gap-2 whitespace-nowrap text-[.68rem] font-semibold uppercase tracking-[.16em] text-[#E9E1C4] transition hover:text-[#D2B85C]">
+              <div key={item.label} className="group relative py-6" onMouseEnter={() => setOpenDropdown(item.label)} onMouseLeave={() => setOpenDropdown(null)} onFocus={() => setOpenDropdown(item.label)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpenDropdown(null); }}>
+                <button type="button" aria-haspopup="true" aria-expanded={openDropdown === item.label} aria-controls="experiences-menu" onClick={() => setOpenDropdown(item.label)} className="inline-flex items-center gap-2 whitespace-nowrap text-[.68rem] font-semibold uppercase tracking-[.16em] text-[#E9E1C4] transition hover:text-[#D2B85C]">
                   {item.label}<span className={`text-[#C6A94C] transition-transform ${openDropdown === item.label ? "rotate-180" : ""}`}>⌄</span>
                 </button>
                 <div id="experiences-menu" className={`absolute left-1/2 top-[70px] w-[min(720px,82vw)] -translate-x-1/2 rounded-[1.5rem] border border-[#806B2D]/70 bg-[#091A13]/98 p-5 shadow-[0_28px_90px_rgba(0,0,0,.42)] backdrop-blur-2xl transition-all duration-200 ${openDropdown === item.label ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-3 opacity-0"}`}>
