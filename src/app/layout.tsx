@@ -3,6 +3,7 @@ import { Cinzel, Cormorant_Garamond, Outfit } from "next/font/google";
 import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteChrome } from "@/components/site-chrome";
+import { SiteFooter } from "@/components/site-footer";
 import { siteUrl } from "@/lib/site";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-outfit", display: "swap" });
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd />
         <SiteChrome />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );
