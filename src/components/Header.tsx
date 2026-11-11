@@ -40,7 +40,7 @@ export function Header() {
 
   // Escape should dismiss both the mobile menu and the search panel.
   useEffect(() => {
-    if (!open && !searchOpen) return;
+    if (!open && !openDropdown && !searchOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -52,7 +52,7 @@ export function Header() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, searchOpen]);
+  }, [open, openDropdown, searchOpen]);
 
   const links = useMemo(
     () => navigation.flatMap((item) =>
