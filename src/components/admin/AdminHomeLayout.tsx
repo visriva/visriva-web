@@ -2,6 +2,7 @@
 
 import type { SiteGlobals } from "@/lib/site-globals-types";
 import { HOME_SECTION_LABELS, type HomeSectionId } from "@/lib/site-globals-types";
+import { AdminHomeSectionEditor } from "@/components/admin/AdminHomeSectionEditor";
 import { AdminRestoreSectionsDrawer } from "@/components/admin/AdminRestoreSectionsDrawer";
 import { AdminSectionShell } from "@/components/admin/AdminSectionShell";
 import { deleteSection, moveSection, restoreSection, sortSections, toggleSectionVisibility } from "@/lib/page-section-layout";
@@ -41,7 +42,11 @@ export function AdminHomeLayout({
             onMoveDown={() => setLayout(moveSection(globals.home_layout, id, "down"))}
             onDelete={() => setLayout(deleteSection(globals.home_layout, id))}
           >
-            <p className="text-xs text-mist">Content for this block is edited in Website pages (home) or Services where applicable.</p>
+            <AdminHomeSectionEditor
+              sectionId={id}
+              content={globals.home_content}
+              onChange={(home_content) => onChange({ ...globals, home_content })}
+            />
           </AdminSectionShell>
         );
       })}

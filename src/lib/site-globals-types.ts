@@ -1,3 +1,4 @@
+import { DEFAULT_HOME_CONTENT, mergeHomeContent, type HomeContent } from "@/lib/home-content-types";
 import { ensureLayout, type PageLayoutState } from "@/lib/page-section-layout";
 
 export const HOME_SECTION_IDS = ["hero", "stats", "experience", "quote", "brand_story", "featured", "process", "closing"] as const;
@@ -34,6 +35,7 @@ export type SiteGlobals = {
   email: string;
   stats: SiteStat[];
   home_layout: PageLayoutState;
+  home_content: HomeContent;
 };
 
 export const DEFAULT_SITE_GLOBALS: SiteGlobals = {
@@ -59,6 +61,7 @@ export const DEFAULT_SITE_GLOBALS: SiteGlobals = {
     { label: "Stations in inventory", value: 18, suffix: "" },
   ],
   home_layout: ensureLayout(HOME_SECTION_IDS),
+  home_content: structuredClone(DEFAULT_HOME_CONTENT),
 };
 
 export function mergeSiteGlobals(partial: unknown): SiteGlobals {
@@ -69,5 +72,6 @@ export function mergeSiteGlobals(partial: unknown): SiteGlobals {
     ...p,
     stats: Array.isArray(p.stats) && p.stats.length ? p.stats : DEFAULT_SITE_GLOBALS.stats,
     home_layout: ensureLayout(HOME_SECTION_IDS, p.home_layout),
+    home_content: mergeHomeContent(p.home_content),
   };
 }
