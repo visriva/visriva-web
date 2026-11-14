@@ -1,3 +1,19 @@
+import { ensureLayout, type PageLayoutState } from "@/lib/page-section-layout";
+
+export const HOME_SECTION_IDS = ["hero", "stats", "experience", "quote", "brand_story", "featured", "process", "closing"] as const;
+export type HomeSectionId = (typeof HOME_SECTION_IDS)[number];
+
+export const HOME_SECTION_LABELS: Record<HomeSectionId, string> = {
+  hero: "Hero",
+  stats: "Stats bar",
+  experience: "Experience deck",
+  quote: "Quote deck",
+  brand_story: "Brand story",
+  featured: "Featured services",
+  process: "Process steps",
+  closing: "Closing CTA",
+};
+
 export type SiteStat = { label: string; value: number; suffix: string };
 
 export type SiteGlobals = {
@@ -17,6 +33,7 @@ export type SiteGlobals = {
   phone_display: string;
   email: string;
   stats: SiteStat[];
+  home_layout: PageLayoutState;
 };
 
 export const DEFAULT_SITE_GLOBALS: SiteGlobals = {
@@ -41,6 +58,7 @@ export const DEFAULT_SITE_GLOBALS: SiteGlobals = {
     { label: "Companies served", value: 40, suffix: "+" },
     { label: "Stations in inventory", value: 18, suffix: "" },
   ],
+  home_layout: ensureLayout(HOME_SECTION_IDS),
 };
 
 export function mergeSiteGlobals(partial: unknown): SiteGlobals {
@@ -50,5 +68,6 @@ export function mergeSiteGlobals(partial: unknown): SiteGlobals {
     ...DEFAULT_SITE_GLOBALS,
     ...p,
     stats: Array.isArray(p.stats) && p.stats.length ? p.stats : DEFAULT_SITE_GLOBALS.stats,
+    home_layout: ensureLayout(HOME_SECTION_IDS, p.home_layout),
   };
 }

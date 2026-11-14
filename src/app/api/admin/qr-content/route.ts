@@ -43,6 +43,7 @@ export async function PATCH(request: Request) {
 
   revalidateTag("qr-page-content", "max");
   revalidatePath("/qr");
+  revalidatePath("/");
 
   return NextResponse.json({ content: mergeQrPageContent(data.content), ok: true });
 }

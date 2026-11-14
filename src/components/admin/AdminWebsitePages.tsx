@@ -1,19 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { AdminFloatingSaveBar } from "@/components/admin/AdminFloatingSaveBar";
 import { UniversalImageUploader } from "@/components/admin/UniversalImageUploader";
+import { clearAdminDraft, stashAdminDraft } from "@/lib/admin-draft-storage";
 import type { WebsitePage } from "@/lib/website-pages";
 
 export function AdminWebsitePages({pages}:{pages:WebsitePage[]}) {
   const [selected,setSelected]=useState(pages[0]?.slug??"");
   const [form,setForm]=useState<WebsitePage|null>(pages[0]??null);
+  const baseline=useRef(JSON.stringify(pages[0]??null));
+  const dirty=useMemo(()=>JSON.stringify(form)!==baseline.current,[form]);
   const [pending,setPending]=useState(false);
   const [notice,setNotice]=useState("");
   const [error,setError]=useState("");
   function choose(slug:string){
     const page=pages.find(item=>item.slug===slug);
-    if(page){setSelected(slug);setForm({...page});setNotice("");setError("");}
+    if(page){setSelected(slug);const next={...page};setForm(next);baseline.current=JSON.stringify(next);setNotice("");setError("");}
   }
   function field<K extends keyof WebsitePage>(key:K,value:WebsitePage[K]){
     setForm(current=>current?({...current,[key]:value}):current);
@@ -25,8 +29,8 @@ export function AdminWebsitePages({pages}:{pages:WebsitePage[]}) {
     const response=await fetch("/api/admin/website-pages",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});
     const body=await response.json();
     setPending(false);
-    if(!response.ok){setError(body.error??"Could not save page.");return;}
-    setForm(body.page);setNotice("Page saved. Published changes are now live.");
+    if(!response.ok){stashAdminDraft(`website_page_${form.slug}`,form);setError((body.error??"Could not save page.")+" Draft kept locally.");return;}
+    setForm(body.page);baseline.current=JSON.stringify(body.page);clearAdminDraft(`website_page_${form.slug}`);setNotice("Page saved. Published changes are now live.");
   }
   if(!form)return <p className="text-mist">No page records found. Apply the website pages migration first.</p>;
   const input="field mt-2";
@@ -54,5 +58,6 @@ export function AdminWebsitePages({pages}:{pages:WebsitePage[]}) {
       {error?<p role="alert" className="text-sm text-red-300">{error}</p>:null}{notice?<p role="status" className="text-sm text-emerald-300">{notice}</p>:null}
       <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-mist">Drafts stay out of public page rendering. Publish when ready.</p><button disabled={pending} className="liquid-button rounded-full px-7 py-3 text-xs font-bold uppercase tracking-wider disabled:opacity-50">{pending?"Saving…":"Save page changes ↗"}</button></div>
     </form>
+    <AdminFloatingSaveBar dirty={dirty} pending={pending} notice={notice} error={error} previewHref="/" onSave={()=>form&&save({preventDefault:()=>{}} as React.FormEvent)} />
   </div>;
 }

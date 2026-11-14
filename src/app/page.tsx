@@ -9,6 +9,7 @@ import { RateList } from "@/components/RateList";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { processSteps } from "@/lib/site";
 import { getSiteGlobals } from "@/lib/site-globals";
+import { visibleSectionIds } from "@/lib/page-section-layout";
 import { getWebsitePage } from "@/lib/website-pages";
 import { siteUrl } from "@/lib/site";
 import { DynamicIslandNav, QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
@@ -29,15 +30,33 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const [catalog, pageContent, globals] = await Promise.all([getPublishedCatalog(), getWebsitePage("home"), getSiteGlobals()]);
   const featured = catalog.list.filter((service) => ["unlimited-dslr", "ai-station", "vr-station"].includes(service.id) && service.bookable !== false);
+  const show = new Set(visibleSectionIds(globals.home_layout));
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
-      <Hero pageContent={pageContent} />
-      <div className="relative z-30 mx-auto -mt-3 mb-6 w-fit"><DynamicIslandNav active="Explore Visriva"/></div>
-      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar stats={globals.stats} /></div>
+      {show.has("hero") ? (
+        <>
+          <Hero pageContent={pageContent} />
+          <div className="relative z-30 mx-auto -mt-3 mb-6 w-fit">
+            <DynamicIslandNav active="Explore Visriva" />
+          </div>
+        </>
+      ) : null}
+      {show.has("stats") ? (
+        <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <StatsBar stats={globals.stats} />
+        </div>
+      ) : null}
 
-      <ExperienceDeck services={catalog.list} />
-      <section className="bg-[#F8F7EF] px-5 pb-8 sm:px-8 lg:px-12"><div className="mx-auto max-w-[1500px]"><QuoteDeck/></div></section>
+      {show.has("experience") ? <ExperienceDeck services={catalog.list} /> : null}
+      {show.has("quote") ? (
+        <section className="bg-[#F8F7EF] px-5 pb-8 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1500px]">
+            <QuoteDeck />
+          </div>
+        </section>
+      ) : null}
 
+      {show.has("brand_story") ? (
       <section className="bg-[#F5F0DF] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-[.95fr_1.05fr]">
           <Reveal className="relative">
@@ -55,7 +74,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      ) : null}
 
+      {show.has("featured") ? (
       <section className="bg-[#DCE9D8] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="section-kicker">Popular starting points</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">Start with a<br/><em className="gold-gradient">guest favourite.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#617768]">A few popular stations to help you start your brief. We can tailor the final mix to your event.</p></div>
@@ -63,7 +84,9 @@ export default async function HomePage() {
           <div className="mt-8 flex justify-end"><Link href="/quote" className="liquid-button inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.15em]">Build your event brief ↗</Link></div>
         </div>
       </section>
+      ) : null}
 
+      {show.has("process") ? (
       <section className="bg-[#F5F0DF] px-5 py-24 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1500px]">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="section-kicker">Simple from day one</p><h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">From first idea<br/><em className="gold-gradient">to final encore.</em></h2></div><p className="max-w-sm text-sm leading-7 text-[#617768]">A clear process keeps planning easy and lets you focus on your guests.</p></div>
@@ -72,13 +95,16 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      ) : null}
 
+      {show.has("closing") ? (
       <section className="bg-[#DCE9D8] px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 rounded-[2rem] border border-[#CBDCC7] bg-[#F8F7EF] px-7 py-14 shadow-[0_25px_70px_rgba(39,67,48,.08)] sm:px-12 lg:flex-row lg:items-end">
           <div><p className="section-kicker">Let's make it memorable</p><h2 className="display-heading mt-4 max-w-3xl text-6xl text-[#244936] sm:text-7xl">Your event deserves<br/><em className="gold-gradient">a little more wonder.</em></h2><p className="mt-5 max-w-lg text-sm leading-7 text-[#617768]">Tell us what you are planning. We will help you find the right experiences for your guests.</p></div>
           <WaveRevealButton href="/quote" label="Start your event brief"/>
         </div>
       </section>
+      ) : null}
     </main>
   );
 }

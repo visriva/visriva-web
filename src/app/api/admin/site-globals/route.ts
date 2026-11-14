@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { requireAdmin } from "@/lib/require-admin";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { mergeSiteGlobals, type SiteGlobals } from "@/lib/site-globals-types";
@@ -35,6 +35,7 @@ export async function PATCH(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
   revalidateTag("site-globals", "max");
+  revalidatePath("/");
 
   return NextResponse.json({ globals });
 }

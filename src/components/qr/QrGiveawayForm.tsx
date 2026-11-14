@@ -3,10 +3,9 @@
 import { Loader2, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import { prepareImageForUpload, readImageMeta, type ImageMeta } from "@/lib/image-process";
-import { QR_GIVEAWAY_STATIONS } from "@/lib/qr-constants";
 import type { QrFormCopy } from "@/lib/qr-content-types";
 
-export function QrGiveawayForm({ copy }: { copy: QrFormCopy }) {
+export function QrGiveawayForm({ copy, stations }: { copy: QrFormCopy; stations: string[] }) {
   const [fullName, setFullName] = useState("");
   const [instagram, setInstagram] = useState("");
   const [phone, setPhone] = useState("");
@@ -138,7 +137,7 @@ export function QrGiveawayForm({ copy }: { copy: QrFormCopy }) {
           {copy.station_legend} <span className="text-gold-2">*</span>
         </legend>
         <div className="mt-3 flex flex-wrap gap-2">
-          {QR_GIVEAWAY_STATIONS.map((item) => (
+          {stations.map((item) => (
             <button
               key={item}
               type="button"

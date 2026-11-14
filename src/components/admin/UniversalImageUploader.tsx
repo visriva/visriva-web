@@ -11,7 +11,7 @@ const PRESETS: Record<ImagePreset, string> = {
   service: "Recommended: 1200 × 900 px (4:3) • Any format",
   square: "Recommended: 1000 × 1000 px (1:1) • Any format",
   story: "Recommended: 1080 × 1920 px (9:16 vertical) • Any format",
-  logo: "Recommended: 800 × 800 px (square emblem) • PNG or SVG",
+  logo: "Recommended: 500 × 500 px (1:1 emblem) • Any format",
 };
 
 type Meta = { width: number; height: number; sizeLabel: string; format: string } | null;
@@ -133,7 +133,7 @@ export function UniversalImageUploader({
           className="inline-flex min-h-11 items-center gap-2 rounded-full border border-gold/25 px-4 py-2 text-[10px] uppercase tracking-wider text-mist"
         >
           <RotateCcw className="h-3.5 w-3.5" aria-hidden />
-          Reset
+          Remove image
         </button>
         <button
           type="button"

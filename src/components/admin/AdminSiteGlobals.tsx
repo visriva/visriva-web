@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { AdminFloatingSaveBar } from "@/components/admin/AdminFloatingSaveBar";
+import { AdminHomeLayout } from "@/components/admin/AdminHomeLayout";
+import { clearAdminDraft, stashAdminDraft } from "@/lib/admin-draft-storage";
 import type { SiteGlobals, SiteStat } from "@/lib/site-globals-types";
 
 const input = "field mt-2";
 
 export function AdminSiteGlobals({ initial }: { initial: SiteGlobals }) {
   const [globals, setGlobals] = useState(initial);
+  const baseline = useRef(JSON.stringify(initial));
+  const dirty = useMemo(() => JSON.stringify(globals) !== baseline.current, [globals]);
   const [pending, setPending] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
@@ -23,8 +28,7 @@ export function AdminSiteGlobals({ initial }: { initial: SiteGlobals }) {
     });
   }
 
-  async function save(event: React.FormEvent) {
-    event.preventDefault();
+  async function save() {
     setPending(true);
     setError("");
     setNotice("");
@@ -36,15 +40,29 @@ export function AdminSiteGlobals({ initial }: { initial: SiteGlobals }) {
     const body = await response.json().catch(() => ({}));
     setPending(false);
     if (!response.ok) {
-      setError(typeof body.error === "string" ? body.error : "Could not save globals.");
+      stashAdminDraft("site_globals", globals);
+      setError(typeof body.error === "string" ? `${body.error} (draft kept locally.)` : "Could not save globals.");
       return;
     }
-    if (body.globals) setGlobals(body.globals as SiteGlobals);
-    setNotice("Footer & stats saved — live site updated.");
+    if (body.globals) {
+      const saved = body.globals as SiteGlobals;
+      setGlobals(saved);
+      baseline.current = JSON.stringify(saved);
+      clearAdminDraft("site_globals");
+    }
+    setNotice("Footer, stats & homepage layout saved — live site updated.");
   }
 
   return (
-    <form onSubmit={save} className="mt-10 space-y-6 rounded-2xl border border-gold/20 bg-[#0D2117] p-5 sm:p-7">
+    <>
+    <AdminHomeLayout globals={globals} onChange={setGlobals} />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void save();
+      }}
+      className="mt-10 space-y-6 rounded-2xl border border-gold/20 bg-[#0D2117] p-5 sm:p-7"
+    >
       <p className="section-kicker">Site-wide · Footer & social proof</p>
       <p className="text-sm text-mist">Edits every footer block and homepage stat counter labels/values (when wired on the homepage).</p>
 
@@ -112,5 +130,7 @@ export function AdminSiteGlobals({ initial }: { initial: SiteGlobals }) {
         {pending ? "Saving…" : "Save footer & stats ↗"}
       </button>
     </form>
+      <AdminFloatingSaveBar dirty={dirty} pending={pending} notice={notice} error={error} previewHref="/" onSave={() => void save()} />
+    </>
   );
 }

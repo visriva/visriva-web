@@ -1,4 +1,21 @@
-import { QR_SOFT_COPY_MESSAGE } from "@/lib/qr-constants";
+import { QR_GIVEAWAY_STATIONS, QR_SOFT_COPY_MESSAGE } from "@/lib/qr-constants";
+import { ensureLayout, sortSections, visibleSectionIds, type PageLayoutState } from "@/lib/page-section-layout";
+
+export const QR_SECTION_IDS = ["hero", "whatsapp", "steps", "entry", "hamper", "winners", "b2b", "rules"] as const;
+export type QrSectionId = (typeof QR_SECTION_IDS)[number];
+
+export const QR_SECTION_LABELS: Record<QrSectionId, string> = {
+  hero: "Hero",
+  whatsapp: "WhatsApp soft-copy",
+  steps: "How it works",
+  entry: "Entry form",
+  hamper: "Prize hamper showcase",
+  winners: "Weekly winners",
+  b2b: "B2B quote capture",
+  rules: "Rules & terms",
+};
+
+export type QrPrizeCard = { title: string; description: string; image_url: string; image_alt: string };
 
 export type QrStep = { number: string; title: string; copy: string };
 export type QrWinner = { week: string; name: string; station: string; event: string; image_url: string; image_alt: string };
@@ -50,10 +67,13 @@ export type QrPageContent = {
     kicker: string;
     title: string;
     bullets: string[];
+    prize_cards: QrPrizeCard[];
     image_url: string;
     image_alt: string;
     image_fallback_label: string;
   };
+  layout: PageLayoutState;
+  station_options: string[];
   winners: { kicker: string; title: string; items: QrWinner[] };
   b2b: { title: string; body: string; cta_text: string; cta_href: string };
   rules: { title: string; items: string[] };
@@ -107,10 +127,13 @@ export const DEFAULT_QR_PAGE_CONTENT: QrPageContent = {
       "Curated Visriva luxury goodies & studio surprises",
       "Delivered across Bengaluru with a personal note",
     ],
+    prize_cards: [],
     image_url: "",
     image_alt: "Visriva weekly hamper",
     image_fallback_label: "Hamper visual — add photo in admin",
   },
+  layout: ensureLayout(QR_SECTION_IDS),
+  station_options: [...QR_GIVEAWAY_STATIONS],
   winners: {
     kicker: "Weekly winners",
     title: "The Winners Wall",
@@ -182,6 +205,16 @@ function mergeWinner(raw: unknown, fallback: QrWinner): QrWinner {
   };
 }
 
+function mergePrizeCard(raw: unknown, fallback: QrPrizeCard): QrPrizeCard {
+  const row = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
+  return {
+    title: trim(row.title, 160) || fallback.title,
+    description: trim(row.description, 400) || fallback.description,
+    image_url: trim(row.image_url, 2000),
+    image_alt: trim(row.image_alt, 200) || fallback.image_alt,
+  };
+}
+
 export function mergeQrPageContent(raw: unknown): QrPageContent {
   const d = DEFAULT_QR_PAGE_CONTENT;
   if (!raw || typeof raw !== "object") return structuredClone(d);
@@ -200,6 +233,9 @@ export function mergeQrPageContent(raw: unknown): QrPageContent {
 
   const stepItems = Array.isArray(steps.items) ? steps.items : [];
   const winnerItems = Array.isArray(winners.items) ? winners.items : [];
+  const prizeCards = Array.isArray(hamper.prize_cards) ? hamper.prize_cards : [];
+  const stationOptions = Array.isArray(r.station_options) ? r.station_options : [];
+  const layoutRaw = r.layout && typeof r.layout === "object" ? (r.layout as PageLayoutState) : undefined;
 
   return {
     seo: {
@@ -242,6 +278,9 @@ export function mergeQrPageContent(raw: unknown): QrPageContent {
         .map((line) => trim(line, 300))
         .filter(Boolean)
         .slice(0, 8),
+      prize_cards: (prizeCards.length ? prizeCards : d.hamper.prize_cards)
+        .map((item, i) => mergePrizeCard(item, d.hamper.prize_cards[i] ?? { title: "Prize", description: "", image_url: "", image_alt: "Prize" }))
+        .slice(0, 12),
       image_url: trim(hamper.image_url, 2000),
       image_alt: trim(hamper.image_alt, 200) || d.hamper.image_alt,
       image_fallback_label: trim(hamper.image_fallback_label, 160) || d.hamper.image_fallback_label,
@@ -284,7 +323,21 @@ export function mergeQrPageContent(raw: unknown): QrPageContent {
       success_body: trim(form.success_body, 800) || d.form.success_body,
       success_cta: trim(form.success_cta, 120) || d.form.success_cta,
     },
+    layout: ensureLayout(QR_SECTION_IDS, layoutRaw),
+    station_options: (stationOptions.length ? stationOptions : d.station_options)
+      .map((line) => trim(line, 120))
+      .filter(Boolean)
+      .slice(0, 24),
   };
+}
+
+export function visibleQrSectionIds(content: QrPageContent): QrSectionId[] {
+  const ids = visibleSectionIds(content.layout);
+  return ids.filter((id): id is QrSectionId => (QR_SECTION_IDS as readonly string[]).includes(id));
+}
+
+export function adminOrderedQrSections(content: QrPageContent) {
+  return sortSections(content.layout.sections).filter((s) => (QR_SECTION_IDS as readonly string[]).includes(s.id));
 }
 
 export function resolveQrWhatsAppFromContent(content: QrPageContent, envDigits: string) {
