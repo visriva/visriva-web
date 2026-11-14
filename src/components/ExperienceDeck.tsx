@@ -3,18 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { HomeExperience } from "@/lib/home-content-types";
+import { DEFAULT_HOME_CONTENT } from "@/lib/home-content-types";
 import type { Service, ServiceCategory } from "@/lib/services";
 import { categoryMeta } from "@/lib/services";
 
-const tabs:{id:"all"|ServiceCategory;label:string;note:string}[]=[
- {id:"all",label:"Everything",note:"The full collection"},
- {id:"photo-booths",label:"Photo experiences",note:"Capture the moment"},
- {id:"ai-merchandise",label:"AI & live merch",note:"Make it yours"},
- {id:"games",label:"VR & games",note:"Bring on the play"},
-];
+type TabId = "all" | ServiceCategory;
 
-export function ExperienceDeck({services}:{services:Service[]}){
- const [active,setActive]=useState<(typeof tabs)[number]["id"]>("all");
+export function ExperienceDeck({ services, content }: { services: Service[]; content?: HomeExperience }) {
+ const c = content ?? DEFAULT_HOME_CONTENT.experience;
+ const tabs = c.tabs as { id: TabId; label: string; note: string }[];
+ const [active,setActive]=useState<TabId>(tabs[0]?.id ?? "all");
  const [flipped,setFlipped]=useState<string|null>(null);
  const [compareIds,setCompareIds]=useState<string[]>([]);
  const [compareOpen,setCompareOpen]=useState(false);
@@ -29,7 +28,7 @@ export function ExperienceDeck({services}:{services:Service[]}){
   return()=>window.removeEventListener("keydown",onKey);
  },[compareOpen]);
 
- function changeTab(id:(typeof tabs)[number]["id"]){
+ function changeTab(id: TabId){
   setActive(id);setFlipped(null);
   rail.current?.scrollTo({left:0,behavior:"smooth"});
  }
@@ -45,8 +44,8 @@ export function ExperienceDeck({services}:{services:Service[]}){
   <div className="pointer-events-none absolute -left-36 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[#F8F7EF]/80 blur-[110px]"/>
   <div className="relative mx-auto max-w-[1500px]">
    <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
-    <div><p className="section-kicker">The Visriva collection</p><h2 className="mt-4 max-w-3xl font-display text-6xl leading-[.9] sm:text-7xl">Find the experience.<br/><em className="gold-gradient">Make it unforgettable.</em></h2></div>
-    <p className="max-w-md text-sm leading-7 text-[#667B6B]">Explore the live station inventory. Swipe through the collection, turn a card to see what is included, or compare up to three experiences side by side.</p>
+    <div><p className="section-kicker">{c.kicker}</p><h2 className="mt-4 max-w-3xl font-display text-6xl leading-[.9] sm:text-7xl">{c.title}<br/><em className="gold-gradient">{c.title_accent}</em></h2></div>
+    <p className="max-w-md text-sm leading-7 text-[#667B6B]">{c.sidebar}</p>
    </div>
 
    <div className="mt-10 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
@@ -95,11 +94,11 @@ export function ExperienceDeck({services}:{services:Service[]}){
       </div>
      </article>;
     })}
-    {filtered.length===0?<p className="w-full rounded-2xl border border-dashed border-[#B8CBB4] bg-[#F8F7EF]/70 p-10 text-center text-sm text-[#667B6B]">No experiences in this category yet. Contact the team for a tailored setup.</p>:null}
+    {filtered.length===0?<p className="w-full rounded-2xl border border-dashed border-[#B8CBB4] bg-[#F8F7EF]/70 p-10 text-center text-sm text-[#667B6B]">{c.empty_state}</p>:null}
    </div>
    <div className="mt-7 flex flex-col items-center justify-between gap-5 rounded-2xl border border-white/80 bg-[#F8F7EF]/85 p-6 shadow-[0_12px_35px_rgba(39,67,48,.06)] sm:flex-row sm:p-8">
-    <div><p className="section-kicker">Designed around your event</p><p className="mt-2 font-display text-3xl text-[#294937]">Mix, match and make it yours.</p></div>
-    <div className="flex flex-wrap gap-3"><Link href="/rate-card" className="rounded-full border border-[#B8CBB4] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#355642] transition hover:bg-[#E8EFE4]">View rate card</Link><Link href="/quote" className="liquid-button rounded-full px-7 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">Build your event brief ↗</Link></div>
+    <div><p className="section-kicker">{c.footer_kicker}</p><p className="mt-2 font-display text-3xl text-[#294937]">{c.footer_title}</p></div>
+    <div className="flex flex-wrap gap-3"><Link href={c.rate_card_href} className="rounded-full border border-[#B8CBB4] px-6 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#355642] transition hover:bg-[#E8EFE4]">{c.rate_card_label}</Link><Link href={c.quote_cta_href} className="liquid-button rounded-full px-7 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">{c.quote_cta_label}</Link></div>
    </div>
   </div>
   {compareIds.length>0?<div className="sticky bottom-4 z-40 mx-auto mt-5 flex max-w-[700px] items-center justify-between gap-4 rounded-2xl border border-[#C9D7C4] bg-[#F8F7EF]/95 p-3 pl-5 shadow-[0_18px_55px_rgba(32,63,48,.16)] backdrop-blur-xl"><div><p className="text-xs font-semibold text-[#294937]">{compareIds.length} of 3 experiences selected</p><p className="mt-1 text-[10px] text-[#718574]">Compare pricing, footprint and inclusions</p></div><div className="flex gap-2"><button type="button" onClick={()=>setCompareIds([])} className="rounded-full px-3 py-2 text-[9px] font-bold uppercase tracking-wider text-[#7D8B7C]">Clear</button><button type="button" onClick={()=>setCompareOpen(true)} disabled={compareIds.length<2} className="rounded-full bg-[#294937] px-5 py-3 text-[10px] font-bold uppercase tracking-[.12em] text-white disabled:opacity-40">Compare now ↗</button></div></div>:null}

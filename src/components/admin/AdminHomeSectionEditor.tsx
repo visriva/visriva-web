@@ -2,7 +2,7 @@
 
 import { AdminListItemToolbar } from "@/components/admin/AdminListItemToolbar";
 import { UniversalImageUploader } from "@/components/admin/UniversalImageUploader";
-import type { HomeContent, HomeListItem } from "@/lib/home-content-types";
+import type { HomeContent, HomeExperienceTab, HomeListItem, HomeQuotePrompt } from "@/lib/home-content-types";
 import type { HomeSectionId } from "@/lib/site-globals-types";
 import { moveListItem } from "@/lib/page-section-layout";
 
@@ -23,9 +23,19 @@ export function AdminHomeSectionEditor({
     case "stats":
       return <p className="text-xs text-mist">Stat counters: edit in <strong className="text-champagne">Footer & social proof</strong> below, then save.</p>;
     case "experience":
-      return <p className="text-xs text-mist">Service cards: <strong className="text-champagne">Services</strong> catalog + publish status.</p>;
+      return (
+        <>
+          <ExperienceEditor value={content.experience} onChange={(experience) => onChange({ ...content, experience })} />
+          <p className="mt-4 text-xs text-mist">Service card images & pricing: <strong className="text-champagne">Services</strong> catalog.</p>
+        </>
+      );
     case "quote":
-      return <p className="text-xs text-mist">Quote deck animations are theme defaults; lead form lives on <strong className="text-champagne">/quote</strong>.</p>;
+      return (
+        <>
+          <QuoteEditor value={content.quote} onChange={(quote) => onChange({ ...content, quote })} />
+          <p className="mt-4 text-xs text-mist">Full quote form: <strong className="text-champagne">/quote</strong> (Website CMS).</p>
+        </>
+      );
     case "brand_story":
       return <BrandStoryEditor value={content.brand_story} onChange={(brand_story) => onChange({ ...content, brand_story })} />;
     case "featured":
@@ -37,6 +47,112 @@ export function AdminHomeSectionEditor({
     default:
       return null;
   }
+}
+
+function ExperienceEditor({ value, onChange }: { value: HomeContent["experience"]; onChange: (v: HomeContent["experience"]) => void }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      <label className="text-sm text-mist">Kicker<input className={input} value={value.kicker} onChange={(e) => onChange({ ...value, kicker: e.target.value })} /></label>
+      <label className="text-sm text-mist">Title<input className={input} value={value.title} onChange={(e) => onChange({ ...value, title: e.target.value })} /></label>
+      <label className="text-sm text-mist">Title accent<input className={input} value={value.title_accent} onChange={(e) => onChange({ ...value, title_accent: e.target.value })} /></label>
+      <label className="text-sm text-mist md:col-span-2">Sidebar<textarea className={`${input} min-h-20`} value={value.sidebar} onChange={(e) => onChange({ ...value, sidebar: e.target.value })} /></label>
+      <label className="text-sm text-mist md:col-span-2">Empty category message<textarea className={`${input} min-h-16`} value={value.empty_state} onChange={(e) => onChange({ ...value, empty_state: e.target.value })} /></label>
+      <label className="text-sm text-mist">Footer kicker<input className={input} value={value.footer_kicker} onChange={(e) => onChange({ ...value, footer_kicker: e.target.value })} /></label>
+      <label className="text-sm text-mist">Footer title<input className={input} value={value.footer_title} onChange={(e) => onChange({ ...value, footer_title: e.target.value })} /></label>
+      <label className="text-sm text-mist">Rate card label<input className={input} value={value.rate_card_label} onChange={(e) => onChange({ ...value, rate_card_label: e.target.value })} /></label>
+      <label className="text-sm text-mist">Rate card link<input className={input} value={value.rate_card_href} onChange={(e) => onChange({ ...value, rate_card_href: e.target.value })} /></label>
+      <label className="text-sm text-mist">Quote CTA label<input className={input} value={value.quote_cta_label} onChange={(e) => onChange({ ...value, quote_cta_label: e.target.value })} /></label>
+      <label className="text-sm text-mist">Quote CTA link<input className={input} value={value.quote_cta_href} onChange={(e) => onChange({ ...value, quote_cta_href: e.target.value })} /></label>
+      <ExperienceTabsEditor tabs={value.tabs} onChange={(tabs) => onChange({ ...value, tabs })} />
+    </div>
+  );
+}
+
+function ExperienceTabsEditor({ tabs, onChange }: { tabs: HomeExperienceTab[]; onChange: (tabs: HomeExperienceTab[]) => void }) {
+  const ids: HomeExperienceTab["id"][] = ["all", "photo-booths", "ai-merchandise", "games"];
+  return (
+    <div className="md:col-span-2">
+      <p className="font-royal text-[10px] uppercase tracking-wider text-gold">Category filter tabs (ids fixed)</p>
+      <ul className="mt-2 space-y-2">
+        {tabs.map((tab, i) => (
+          <li key={tab.id} className="grid gap-2 rounded-xl border border-gold/15 p-3 md:grid-cols-[140px_1fr_1fr]">
+            <select className="field" value={tab.id} onChange={(e) => {
+              const next = [...tabs];
+              next[i] = { ...tab, id: e.target.value as HomeExperienceTab["id"] };
+              onChange(next);
+            }}>
+              {ids.map((id) => (
+                <option key={id} value={id}>{id}</option>
+              ))}
+            </select>
+            <input className="field" placeholder="Tab label" value={tab.label} onChange={(e) => {
+              const next = [...tabs];
+              next[i] = { ...tab, label: e.target.value };
+              onChange(next);
+            }} />
+            <input className="field" placeholder="Note (optional)" value={tab.note} onChange={(e) => {
+              const next = [...tabs];
+              next[i] = { ...tab, note: e.target.value };
+              onChange(next);
+            }} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function QuoteEditor({ value, onChange }: { value: HomeContent["quote"]; onChange: (v: HomeContent["quote"]) => void }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      <label className="text-sm text-mist">Primary CTA label<input className={input} value={value.primary_cta_label} onChange={(e) => onChange({ ...value, primary_cta_label: e.target.value })} /></label>
+      <label className="text-sm text-mist">Primary CTA link<input className={input} value={value.primary_cta_href} onChange={(e) => onChange({ ...value, primary_cta_href: e.target.value })} /></label>
+      <label className="text-sm text-mist">Next button label<input className={input} value={value.next_label} onChange={(e) => onChange({ ...value, next_label: e.target.value })} /></label>
+      <label className="text-sm text-mist">Auto-rotate (ms)<input type="number" className={input} min={3000} max={60000} step={500} value={value.rotate_ms} onChange={(e) => onChange({ ...value, rotate_ms: Number(e.target.value) || 6500 })} /></label>
+      <QuotePromptsEditor prompts={value.prompts} onChange={(prompts) => onChange({ ...value, prompts })} />
+    </div>
+  );
+}
+
+function QuotePromptsEditor({ prompts, onChange }: { prompts: HomeQuotePrompt[]; onChange: (prompts: HomeQuotePrompt[]) => void }) {
+  return (
+    <div className="md:col-span-2">
+      <p className="font-royal text-[10px] uppercase tracking-wider text-gold">Rotating ideas</p>
+      <ul className="mt-2 space-y-2">
+        {prompts.map((item, i) => (
+          <li key={i} className="flex gap-2 rounded-xl border border-gold/15 p-3">
+            <AdminListItemToolbar
+              index={i}
+              total={prompts.length}
+              onMoveUp={() => onChange(moveListItem(prompts, i, "up"))}
+              onMoveDown={() => onChange(moveListItem(prompts, i, "down"))}
+              onRemove={() => onChange(prompts.filter((_, idx) => idx !== i))}
+            />
+            <div className="grid flex-1 gap-2">
+              <input className="field" placeholder="Eyebrow" value={item.eyebrow} onChange={(e) => {
+                const next = [...prompts];
+                next[i] = { ...item, eyebrow: e.target.value };
+                onChange(next);
+              }} />
+              <input className="field" placeholder="Title" value={item.title} onChange={(e) => {
+                const next = [...prompts];
+                next[i] = { ...item, title: e.target.value };
+                onChange(next);
+              }} />
+              <textarea className="field min-h-16" placeholder="Copy" value={item.copy} onChange={(e) => {
+                const next = [...prompts];
+                next[i] = { ...item, copy: e.target.value };
+                onChange(next);
+              }} />
+            </div>
+          </li>
+        ))}
+      </ul>
+      <button type="button" className="mt-2 text-xs text-gold-2 underline" onClick={() => onChange([...prompts, { eyebrow: "New idea", title: "Headline", copy: "" }])}>
+        + Add slide
+      </button>
+    </div>
+  );
 }
 
 function BrandStoryEditor({ value, onChange }: { value: HomeContent["brand_story"]; onChange: (v: HomeContent["brand_story"]) => void }) {

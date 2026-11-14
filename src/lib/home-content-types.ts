@@ -41,7 +41,40 @@ export type HomeClosing = {
   button_href: string;
 };
 
+export type HomeExperienceTab = {
+  id: "all" | "photo-booths" | "ai-merchandise" | "games";
+  label: string;
+  note: string;
+};
+
+export type HomeExperience = {
+  kicker: string;
+  title: string;
+  title_accent: string;
+  sidebar: string;
+  empty_state: string;
+  footer_kicker: string;
+  footer_title: string;
+  rate_card_label: string;
+  rate_card_href: string;
+  quote_cta_label: string;
+  quote_cta_href: string;
+  tabs: HomeExperienceTab[];
+};
+
+export type HomeQuotePrompt = { eyebrow: string; title: string; copy: string };
+
+export type HomeQuote = {
+  prompts: HomeQuotePrompt[];
+  primary_cta_label: string;
+  primary_cta_href: string;
+  next_label: string;
+  rotate_ms: number;
+};
+
 export type HomeContent = {
+  experience: HomeExperience;
+  quote: HomeQuote;
   brand_story: HomeBrandStory;
   featured: HomeFeatured;
   process: HomeProcess;
@@ -54,7 +87,42 @@ const DEFAULT_PROMISES: HomeListItem[] = [
   { n: "03", title: "Keepsakes worth keeping", body: "Personalised prints and merchandise turn a brilliant event into a memory guests can take home." },
 ];
 
+const DEFAULT_EXPERIENCE_TABS: HomeExperienceTab[] = [
+  { id: "all", label: "Everything", note: "The full collection" },
+  { id: "photo-booths", label: "Photo experiences", note: "Capture the moment" },
+  { id: "ai-merchandise", label: "AI & live merch", note: "Make it yours" },
+  { id: "games", label: "VR & games", note: "Bring on the play" },
+];
+
+const DEFAULT_QUOTE_PROMPTS: HomeQuotePrompt[] = [
+  { eyebrow: "The atmosphere", title: "Make the room feel alive.", copy: "A hosted photo moment, an interactive game or a live customisation bar gives guests a reason to gather." },
+  { eyebrow: "The keepsake", title: "Give the memory a place to live.", copy: "Instant prints and personalised merchandise turn a passing moment into something guests can take home." },
+  { eyebrow: "The connection", title: "Bring every guest into the story.", copy: "Choose experiences that invite people to participate, create and share the celebration." },
+];
+
 export const DEFAULT_HOME_CONTENT: HomeContent = {
+  experience: {
+    kicker: "The Visriva collection",
+    title: "Find the experience.",
+    title_accent: "Make it unforgettable.",
+    sidebar:
+      "Explore the live station inventory. Swipe through the collection, turn a card to see what is included, or compare up to three experiences side by side.",
+    empty_state: "No experiences in this category yet. Contact the team for a tailored setup.",
+    footer_kicker: "Designed around your event",
+    footer_title: "Mix, match and make it yours.",
+    rate_card_label: "View rate card",
+    rate_card_href: "/rate-card",
+    quote_cta_label: "Build your event brief ↗",
+    quote_cta_href: "/quote",
+    tabs: DEFAULT_EXPERIENCE_TABS,
+  },
+  quote: {
+    prompts: DEFAULT_QUOTE_PROMPTS,
+    primary_cta_label: "Build your event brief ↗",
+    primary_cta_href: "/quote",
+    next_label: "Next idea →",
+    rotate_ms: 6500,
+  },
   brand_story: {
     image_url: "/images/party.jpg",
     image_alt: "Guests enjoying an event experience",
@@ -96,6 +164,37 @@ function trim(value: unknown, max = 2000) {
   return String(value ?? "").trim().slice(0, max);
 }
 
+const EXPERIENCE_TAB_IDS = new Set<HomeExperienceTab["id"]>(["all", "photo-booths", "ai-merchandise", "games"]);
+
+function mergeTabs(raw: unknown, fallback: HomeExperienceTab[]): HomeExperienceTab[] {
+  if (!Array.isArray(raw) || !raw.length) return fallback;
+  const byId = new Map(fallback.map((t) => [t.id, t]));
+  return raw.slice(0, 6).map((item, i) => {
+    const row = item && typeof item === "object" ? (item as Record<string, unknown>) : {};
+    const idRaw = trim(row.id, 40);
+    const id = EXPERIENCE_TAB_IDS.has(idRaw as HomeExperienceTab["id"]) ? (idRaw as HomeExperienceTab["id"]) : fallback[i]?.id ?? "all";
+    const fb = byId.get(id) ?? fallback[i] ?? fallback[0];
+    return {
+      id,
+      label: trim(row.label, 80) || fb.label,
+      note: trim(row.note, 200) || fb.note,
+    };
+  });
+}
+
+function mergeQuotePrompts(raw: unknown, fallback: HomeQuotePrompt[], max = 6): HomeQuotePrompt[] {
+  if (!Array.isArray(raw) || !raw.length) return fallback;
+  return raw.slice(0, max).map((item, i) => {
+    const row = item && typeof item === "object" ? (item as Record<string, unknown>) : {};
+    const fb = fallback[i] ?? fallback[0];
+    return {
+      eyebrow: trim(row.eyebrow, 120) || fb.eyebrow,
+      title: trim(row.title, 200) || fb.title,
+      copy: trim(row.copy, 800) || fb.copy,
+    };
+  });
+}
+
 function mergeItems(raw: unknown, fallback: HomeListItem[], max = 8): HomeListItem[] {
   if (!Array.isArray(raw) || !raw.length) return fallback;
   return raw.slice(0, max).map((item, i) => {
@@ -113,12 +212,38 @@ export function mergeHomeContent(partial: unknown): HomeContent {
   const d = DEFAULT_HOME_CONTENT;
   if (!partial || typeof partial !== "object") return structuredClone(d);
   const p = partial as Partial<HomeContent>;
+  const experience = p.experience ?? {};
+  const quote = p.quote ?? {};
   const brand = p.brand_story ?? {};
   const featured = p.featured ?? {};
   const process = p.process ?? {};
   const closing = p.closing ?? {};
 
+  const rotateMs = Number((quote as HomeQuote).rotate_ms);
+  const safeRotate = Number.isFinite(rotateMs) ? Math.min(60_000, Math.max(3000, Math.round(rotateMs))) : d.quote.rotate_ms;
+
   return {
+    experience: {
+      kicker: trim((experience as HomeExperience).kicker, 120) || d.experience.kicker,
+      title: trim((experience as HomeExperience).title, 200) || d.experience.title,
+      title_accent: trim((experience as HomeExperience).title_accent, 200) || d.experience.title_accent,
+      sidebar: trim((experience as HomeExperience).sidebar, 800) || d.experience.sidebar,
+      empty_state: trim((experience as HomeExperience).empty_state, 400) || d.experience.empty_state,
+      footer_kicker: trim((experience as HomeExperience).footer_kicker, 120) || d.experience.footer_kicker,
+      footer_title: trim((experience as HomeExperience).footer_title, 200) || d.experience.footer_title,
+      rate_card_label: trim((experience as HomeExperience).rate_card_label, 120) || d.experience.rate_card_label,
+      rate_card_href: trim((experience as HomeExperience).rate_card_href, 500) || d.experience.rate_card_href,
+      quote_cta_label: trim((experience as HomeExperience).quote_cta_label, 120) || d.experience.quote_cta_label,
+      quote_cta_href: trim((experience as HomeExperience).quote_cta_href, 500) || d.experience.quote_cta_href,
+      tabs: mergeTabs((experience as HomeExperience).tabs, d.experience.tabs),
+    },
+    quote: {
+      prompts: mergeQuotePrompts((quote as HomeQuote).prompts, d.quote.prompts),
+      primary_cta_label: trim((quote as HomeQuote).primary_cta_label, 120) || d.quote.primary_cta_label,
+      primary_cta_href: trim((quote as HomeQuote).primary_cta_href, 500) || d.quote.primary_cta_href,
+      next_label: trim((quote as HomeQuote).next_label, 120) || d.quote.next_label,
+      rotate_ms: safeRotate,
+    },
     brand_story: {
       image_url: trim((brand as HomeBrandStory).image_url, 2000) || d.brand_story.image_url,
       image_alt: trim((brand as HomeBrandStory).image_alt, 200) || d.brand_story.image_alt,

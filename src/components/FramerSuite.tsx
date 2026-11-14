@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
+import type { HomeQuote } from "@/lib/home-content-types";
+import { DEFAULT_HOME_CONTENT } from "@/lib/home-content-types";
 
 export function ActivityBadge({label="Studio available"}:{label?:string}){
  return <span className="inline-flex items-center gap-2 rounded-full border border-[#C9D7C4] bg-[#F8F7EF]/90 px-3 py-2 text-[9px] font-bold uppercase tracking-[.16em] text-[#355642]"><span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#78A87C] opacity-50"/><span className="relative inline-flex h-2 w-2 rounded-full bg-[#5F996A]"/></span>{label}</span>;
@@ -24,16 +26,45 @@ export function TearTicket({href="/rate-card",label="Explore the rate card"}:{hr
  return <Link href={href} className="ticket-link group relative inline-flex items-center gap-4 rounded-xl border border-dashed border-[#B8CBB4] bg-[#F8F7EF] px-5 py-4 text-[#294937] shadow-[0_10px_30px_rgba(39,67,48,.07)] transition hover:-translate-y-1 hover:shadow-xl"><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#E7EFE3] text-xl text-[#D4AF37]">✳</span><span><span className="block text-[9px] font-bold uppercase tracking-[.18em] text-[#947D34]">Your event, your mix</span><span className="mt-1 block text-sm font-semibold">{label}</span></span><span className="ml-2 text-lg transition-transform group-hover:translate-x-1">→</span></Link>;
 }
 
-const prompts=[
- {eyebrow:"The atmosphere",title:"Make the room feel alive.",copy:"A hosted photo moment, an interactive game or a live customisation bar gives guests a reason to gather."},
- {eyebrow:"The keepsake",title:"Give the memory a place to live.",copy:"Instant prints and personalised merchandise turn a passing moment into something guests can take home."},
- {eyebrow:"The connection",title:"Bring every guest into the story.",copy:"Choose experiences that invite people to participate, create and share the celebration."}
-];
-export function QuoteDeck(){
- const [index,setIndex]=useState(0);
- useEffect(()=>{const id=window.setInterval(()=>setIndex(v=>(v+1)%prompts.length),6500);return()=>window.clearInterval(id);},[]);
- const item=prompts[index];
- return <section className="relative overflow-hidden rounded-[1.7rem] border border-[#D4AF37]/25 bg-[linear-gradient(135deg,#F8F7EF,#E6EFE3)] p-7 shadow-[0_18px_55px_rgba(39,67,48,.07)] sm:p-10" aria-live="polite"><div className="absolute -right-12 -top-20 h-56 w-56 rounded-full bg-[#B8D0B1]/45 blur-3xl"/><div className="relative"><div className="flex items-center justify-between gap-4"><p className="section-kicker">{item.eyebrow}</p><div className="flex gap-2">{prompts.map((_,i)=><button key={i} type="button" aria-label={`Show idea ${i+1}`} aria-pressed={index===i} onClick={()=>setIndex(i)} className={`h-1.5 rounded-full transition-all ${index===i?"w-8 bg-[#D4AF37]":"w-3 bg-[#5B665D]"}`}/>)}</div></div><h3 className="mt-5 max-w-2xl font-display text-4xl leading-[.98] text-[#294937] sm:text-5xl">{item.title}</h3><p className="mt-4 max-w-xl text-sm leading-7 text-[#617768]">{item.copy}</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/quote" className="liquid-button rounded-full px-6 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">Build your event brief ↗</Link><button type="button" onClick={()=>setIndex(v=>(v+1)%prompts.length)} className="rounded-full border border-[#D4AF37]/35 px-5 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#355642]">Next idea →</button></div></div></section>;
+export function QuoteDeck({ content }: { content?: HomeQuote }) {
+ const c = content ?? DEFAULT_HOME_CONTENT.quote;
+ const prompts = c.prompts.length ? c.prompts : DEFAULT_HOME_CONTENT.quote.prompts;
+ const [index, setIndex] = useState(0);
+ useEffect(() => {
+  if (!prompts.length) return;
+  const id = window.setInterval(() => setIndex((v) => (v + 1) % prompts.length), c.rotate_ms);
+  return () => window.clearInterval(id);
+ }, [prompts.length, c.rotate_ms]);
+ useEffect(() => {
+  if (index >= prompts.length) setIndex(0);
+ }, [index, prompts.length]);
+ const item = prompts[index] ?? prompts[0];
+ if (!item) return null;
+ return (
+  <section className="relative overflow-hidden rounded-[1.7rem] border border-[#D4AF37]/25 bg-[linear-gradient(135deg,#F8F7EF,#E6EFE3)] p-7 shadow-[0_18px_55px_rgba(39,67,48,.07)] sm:p-10" aria-live="polite">
+   <div className="absolute -right-12 -top-20 h-56 w-56 rounded-full bg-[#B8D0B1]/45 blur-3xl" />
+   <div className="relative">
+    <div className="flex items-center justify-between gap-4">
+     <p className="section-kicker">{item.eyebrow}</p>
+     <div className="flex gap-2">
+      {prompts.map((_, i) => (
+       <button key={i} type="button" aria-label={`Show idea ${i + 1}`} aria-pressed={index === i} onClick={() => setIndex(i)} className={`h-1.5 rounded-full transition-all ${index === i ? "w-8 bg-[#D4AF37]" : "w-3 bg-[#5B665D]"}`} />
+      ))}
+     </div>
+    </div>
+    <h3 className="mt-5 max-w-2xl font-display text-4xl leading-[.98] text-[#294937] sm:text-5xl">{item.title}</h3>
+    <p className="mt-4 max-w-xl text-sm leading-7 text-[#617768]">{item.copy}</p>
+    <div className="mt-7 flex flex-wrap gap-3">
+     <Link href={c.primary_cta_href} className="liquid-button rounded-full px-6 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">
+      {c.primary_cta_label}
+     </Link>
+     <button type="button" onClick={() => setIndex((v) => (v + 1) % prompts.length)} className="rounded-full border border-[#D4AF37]/35 px-5 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#355642]">
+      {c.next_label}
+     </button>
+    </div>
+   </div>
+  </section>
+ );
 }
 
 export function GoogleMapEmbed({address}:{address?:string}){

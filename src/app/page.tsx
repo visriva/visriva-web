@@ -31,7 +31,7 @@ function splitTitleLines(text: string) {
 
 export default async function HomePage() {
   const [catalog, pageContent, globals] = await Promise.all([getPublishedCatalog(), getWebsitePage("home"), getSiteGlobals()]);
-  const { brand_story, featured, process, closing } = globals.home_content;
+  const { experience, quote, brand_story, featured, process, closing } = globals.home_content;
   const ids = featured.service_ids.length ? featured.service_ids : ["unlimited-dslr", "ai-station", "vr-station"];
   const featuredServices = catalog.list.filter((service) => ids.includes(service.id) && service.bookable !== false);
   const show = new Set(visibleSectionIds(globals.home_layout));
@@ -52,11 +52,11 @@ export default async function HomePage() {
         </div>
       ) : null}
 
-      {show.has("experience") ? <ExperienceDeck services={catalog.list} /> : null}
+      {show.has("experience") ? <ExperienceDeck services={catalog.list} content={experience} /> : null}
       {show.has("quote") ? (
         <section className="bg-[#F8F7EF] px-5 pb-8 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-[1500px]">
-            <QuoteDeck />
+            <QuoteDeck content={quote} />
           </div>
         </section>
       ) : null}
