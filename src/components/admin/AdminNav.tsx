@@ -12,6 +12,7 @@ import {
   QrCode,
   Users,
   Wrench,
+  Images,
 } from "lucide-react";
 import { adminNav } from "@/lib/admin-nav";
 
@@ -25,6 +26,7 @@ const icons = {
   bookings: CalendarDays,
   customers: Users,
   qr: QrCode,
+  eventImages: Images,
 } as const;
 
 export function AdminNav() {

@@ -9,6 +9,8 @@ import { QrMediaImage } from "@/components/qr/QrMediaImage";
 import type { QrPageContent, QrSectionId } from "@/lib/qr-content-types";
 import { visibleQrSectionIds } from "@/lib/qr-content-types";
 import type { QrPageSettings } from "@/lib/qr-constants";
+import type { EventPhotosSettings } from "@/lib/event-galleries-types";
+import { QrEventPhotosSection } from "@/components/qr/QrEventPhotosSection";
 
 function canEmbedExternalForm(url: string | null): boolean {
   if (!url) return false;
@@ -25,9 +27,10 @@ type Props = {
   settings: QrPageSettings;
   whatsappHref: string;
   phoneDisplay: string;
+  eventPhotosSettings: EventPhotosSettings;
 };
 
-export function QrExperience({ content, settings, whatsappHref, phoneDisplay }: Props) {
+export function QrExperience({ content, settings, whatsappHref, phoneDisplay, eventPhotosSettings }: Props) {
   const reduce = useReducedMotion();
   const useExternal = settings.form_mode === "external" && Boolean(settings.external_form_url);
   const embed = useExternal && canEmbedExternalForm(settings.external_form_url);
@@ -50,6 +53,9 @@ export function QrExperience({ content, settings, whatsappHref, phoneDisplay }: 
       <div className="pointer-events-none absolute inset-0 opacity-35 hero-grid" aria-hidden />
 
       <motion.main variants={stagger} initial="hidden" animate="show" className="relative z-10 mx-auto max-w-lg px-4 pb-20 pt-12 sm:max-w-xl sm:px-6 sm:pt-16">
+        <motion.div variants={item}>
+          <QrEventPhotosSection initialSettings={eventPhotosSettings} />
+        </motion.div>
         {sectionOrder.map((id) => (
           <motion.div key={id} variants={item} className={id === "hero" ? "" : "mt-10 sm:mt-12"}>
             <QrSectionBlock

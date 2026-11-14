@@ -11,7 +11,8 @@ export type AdminNavItem = {
     | "inventory"
     | "bookings"
     | "customers"
-    | "qr";
+    | "qr"
+    | "eventImages";
 };
 
 export const adminNav: AdminNavItem[] = [
@@ -24,4 +25,5 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/bookings", label: "Bookings", ready: true, icon: "bookings" },
   { href: "/admin/customers", label: "Customers", ready: true, icon: "customers" },
   { href: "/admin/qr", label: "QR giveaway (/qr)", ready: true, icon: "qr" },
+  { href: "/admin/event-images", label: "Event images", ready: true, icon: "eventImages" },
 ];

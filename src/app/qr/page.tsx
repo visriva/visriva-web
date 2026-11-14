@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { QrExperience } from "@/components/qr/QrExperience";
 import { formatPhoneDisplay, resolveQrWhatsAppFromContent } from "@/lib/qr-content-types";
+import { getEventPhotosSettings } from "@/lib/event-galleries";
 import { getQrPageContent } from "@/lib/qr-content";
 import { getQrPageSettings, resolveQrWhatsAppDigits } from "@/lib/qr-page";
 import { whatsAppNumber } from "@/lib/whatsapp";
@@ -16,7 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function QrPage() {
-  const [content, settings] = await Promise.all([getQrPageContent(), getQrPageSettings()]);
+  const [content, settings, eventPhotosSettings] = await Promise.all([
+    getQrPageContent(),
+    getQrPageSettings(),
+    getEventPhotosSettings(),
+  ]);
 
   const fallbackDigits = resolveQrWhatsAppDigits(settings) || whatsAppNumber();
   const digits = resolveQrWhatsAppFromContent(content, fallbackDigits);
@@ -24,5 +29,13 @@ export default async function QrPage() {
   const whatsappHref = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
   const phoneDisplay = formatPhoneDisplay(digits, content.whatsapp.phone_display_hint);
 
-  return <QrExperience content={content} settings={settings} whatsappHref={whatsappHref} phoneDisplay={phoneDisplay} />;
+  return (
+    <QrExperience
+      content={content}
+      settings={settings}
+      whatsappHref={whatsappHref}
+      phoneDisplay={phoneDisplay}
+      eventPhotosSettings={eventPhotosSettings}
+    />
+  );
 }
