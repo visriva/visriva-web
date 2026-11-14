@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AdminGate } from "@/components/admin/AdminGate";
 import { AdminQrPanel } from "@/components/admin/AdminQrPanel";
+import { getQrPageContentAdmin } from "@/lib/qr-content";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { getQrPageSettingsAdmin, type QrGiveawayEntry } from "@/lib/qr-page";
 
 export const metadata: Metadata = { title: "QR Giveaway", robots: { index: false, follow: false } };
 
 async function QrAdminContent() {
-  const settings = await getQrPageSettingsAdmin();
+  const [settings, content] = await Promise.all([getQrPageSettingsAdmin(), getQrPageContentAdmin()]);
 
   let entries: QrGiveawayEntry[] = [];
   const supabase = createAdminClient();
@@ -22,9 +23,9 @@ async function QrAdminContent() {
   }
 
   return (
-    <main className="px-4 pb-24 pt-28 sm:px-6 lg:px-10 lg:pt-10">
+    <main className="px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-8">
       <div className="mx-auto max-w-[1200px]">
-        <AdminQrPanel initialSettings={settings} initialEntries={entries} />
+        <AdminQrPanel initialSettings={settings} initialContent={content} initialEntries={entries} />
       </div>
     </main>
   );
@@ -32,7 +33,7 @@ async function QrAdminContent() {
 
 export default function AdminQrPage() {
   return (
-    <Suspense fallback={<main className="min-h-screen px-4 pt-28 text-sm text-mist">Loading QR settings…</main>}>
+    <Suspense fallback={<main className="min-h-screen px-4 pt-8 text-sm text-mist">Loading QR settings…</main>}>
       <AdminGate requireSupabase>
         <QrAdminContent />
       </AdminGate>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function AdminNewServicePage() {
   return (
     <AdminGate requireSupabase>
-      <main className="px-4 pb-24 pt-28 sm:px-6 lg:px-10 lg:pt-10">
+      <main className="px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-8">
         <div className="mx-auto max-w-[1100px]">
           <AdminServiceEditor mode="create" />
         </div>

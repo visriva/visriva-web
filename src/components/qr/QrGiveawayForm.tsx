@@ -2,24 +2,52 @@
 
 import { Loader2, Upload } from "lucide-react";
 import { useRef, useState } from "react";
+import { prepareImageForUpload, readImageMeta, type ImageMeta } from "@/lib/image-process";
 import { QR_GIVEAWAY_STATIONS } from "@/lib/qr-constants";
+import type { QrFormCopy } from "@/lib/qr-content-types";
 
-export function QrGiveawayForm() {
+export function QrGiveawayForm({ copy }: { copy: QrFormCopy }) {
   const [fullName, setFullName] = useState("");
   const [instagram, setInstagram] = useState("");
   const [phone, setPhone] = useState("");
   const [station, setStation] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [shotMeta, setShotMeta] = useState<ImageMeta | null>(null);
+  const [processingImage, setProcessingImage] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function onPick(next: File | null) {
-    setFile(next);
+  async function onPick(next: File | null) {
     if (preview) URL.revokeObjectURL(preview);
-    setPreview(next ? URL.createObjectURL(next) : null);
+  if (!next) {
+      setFile(null);
+      setPreview(null);
+      setShotMeta(null);
+      return;
+    }
+    setProcessingImage(true);
+    setError("");
+    try {
+      const meta = await readImageMeta(next);
+      const prepared = await prepareImageForUpload(next);
+      setFile(prepared);
+      setShotMeta({
+        ...meta,
+        sizeLabel: meta.sizeLabel,
+        format: (prepared.type.split("/")[1] || meta.format).toUpperCase(),
+      });
+      setPreview(URL.createObjectURL(prepared));
+    } catch {
+      setError("Could not read that photo. Try another image.");
+      setFile(null);
+      setPreview(null);
+      setShotMeta(null);
+    } finally {
+      setProcessingImage(false);
+    }
   }
 
   async function submit(event: React.FormEvent) {
@@ -54,21 +82,18 @@ export function QrGiveawayForm() {
 
   if (success) {
     return (
-      <div className="rounded-3xl border border-[#C9A227]/40 bg-white/5 p-8 text-center backdrop-blur-md" role="status">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-[#10B981]/50 bg-[#10B981]/15 text-3xl">
+      <div className="qr-glass-card rounded-3xl p-8 text-center" role="status">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-[#10B981]/50 bg-[#10B981]/15 text-3xl text-[#10B981]">
           ✓
         </div>
-        <h3 className="mt-5 font-display text-3xl text-[#F8F9FA]">You&apos;re In!</h3>
-        <p className="mt-2 text-sm leading-relaxed text-[#B8C2B4]">
-          Your weekly giveaway entry is logged. Winners are revealed every week — watch{" "}
-          <strong className="text-[#E5C158]">@visrivalivestation</strong> for live reaction reels.
-        </p>
+        <h3 className="mt-5 font-display text-3xl text-cream">{copy.success_title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-mist">{copy.success_body}</p>
         <button
           type="button"
           onClick={() => setSuccess(false)}
-          className="mt-6 min-h-11 rounded-full border border-[#C9A227]/40 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#E9DFBD]"
+          className="qr-gold-btn mt-6 min-h-11 rounded-full px-6 py-3 text-[10px] font-bold uppercase tracking-wider"
         >
-          Submit another entry
+          {copy.success_cta}
         </button>
       </div>
     );
@@ -78,30 +103,30 @@ export function QrGiveawayForm() {
     <form onSubmit={submit} className="space-y-4" id="qr-entry">
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
 
-      <label className="block text-sm text-[#B8C2B4]">
-        Full name <span className="text-[#E5C158]">*</span>
+      <label className="block text-sm text-mist">
+        {copy.full_name_label} <span className="text-gold-2">*</span>
         <input required className="field mt-2 min-h-11" value={fullName} onChange={(e) => setFullName(e.target.value)} autoComplete="name" />
       </label>
 
-      <label className="block text-sm text-[#B8C2B4]">
-        Instagram handle <span className="text-[#E5C158]">*</span>
+      <label className="block text-sm text-mist">
+        {copy.instagram_label} <span className="text-gold-2">*</span>
         <input
           required
           className="field mt-2 min-h-11"
-          placeholder="@visriva.co"
+          placeholder={copy.instagram_placeholder}
           value={instagram}
           onChange={(e) => setInstagram(e.target.value)}
           autoComplete="username"
         />
       </label>
 
-      <label className="block text-sm text-[#B8C2B4]">
-        Phone / WhatsApp <span className="text-[#E5C158]">*</span>
+      <label className="block text-sm text-mist">
+        {copy.phone_label} <span className="text-gold-2">*</span>
         <input
           required
           type="tel"
           className="field mt-2 min-h-11"
-          placeholder="+91 98XXX XXXXX"
+          placeholder={copy.phone_placeholder}
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           autoComplete="tel"
@@ -109,8 +134,8 @@ export function QrGiveawayForm() {
       </label>
 
       <fieldset>
-        <legend className="text-sm text-[#B8C2B4]">
-          Which Visriva station did you visit? <span className="text-[#E5C158]">*</span>
+        <legend className="text-sm text-mist">
+          {copy.station_legend} <span className="text-gold-2">*</span>
         </legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {QR_GIVEAWAY_STATIONS.map((item) => (
@@ -119,9 +144,7 @@ export function QrGiveawayForm() {
               type="button"
               onClick={() => setStation(item)}
               className={`min-h-11 rounded-full border px-4 py-2.5 text-xs font-medium transition ${
-                station === item
-                  ? "border-[#E5C158] bg-[#C9A227]/20 text-[#F8F9FA]"
-                  : "border-[#C9A227]/25 bg-white/5 text-[#E9DFBD] hover:border-[#C9A227]/50"
+                station === item ? "border-gold-2 bg-gold/20 text-cream" : "border-gold/25 bg-white/5 text-champagne hover:border-gold/50"
               }`}
             >
               {item}
@@ -130,7 +153,14 @@ export function QrGiveawayForm() {
         </div>
       </fieldset>
 
-      <ScreenshotField preview={preview} inputRef={inputRef} onPick={onPick} hasFile={Boolean(file)} />
+      <ScreenshotField
+        copy={copy}
+        preview={preview}
+        meta={shotMeta}
+        inputRef={inputRef}
+        onPick={onPick}
+        hasFile={Boolean(file)}
+      />
 
       {error ? (
         <p role="alert" className="text-sm text-red-300">
@@ -140,16 +170,16 @@ export function QrGiveawayForm() {
 
       <button
         type="submit"
-        disabled={pending || !station || !file}
-        className="liquid-button flex min-h-12 w-full items-center justify-center gap-2 rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.14em] disabled:opacity-50"
+        disabled={pending || processingImage || !station || !file}
+        className="qr-gold-btn flex min-h-12 w-full items-center justify-center gap-2 rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.14em] disabled:opacity-50"
       >
         {pending ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-            Submitting…
+            {copy.submitting}
           </>
         ) : (
-          "Submit giveaway entry →"
+          copy.submit_button
         )}
       </button>
     </form>
@@ -157,24 +187,31 @@ export function QrGiveawayForm() {
 }
 
 function ScreenshotField({
+  copy,
   preview,
+  meta,
   inputRef,
   onPick,
   hasFile,
 }: {
+  copy: QrFormCopy;
   preview: string | null;
+  meta: ImageMeta | null;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  onPick: (file: File | null) => void;
+  onPick: (file: File | null) => Promise<void>;
   hasFile: boolean;
 }) {
   const [dragging, setDragging] = useState(false);
 
   return (
-    <div className="text-sm text-[#B8C2B4]">
-      Screenshot (tag <strong className="text-[#E5C158]">@visriva.co</strong>) <span className="text-[#E5C158]">*</span>
+    <div className="text-sm text-mist">
+      {copy.screenshot_label} <span className="text-gold-2">*</span>
+      <p className="mt-1 rounded-full border border-gold/25 bg-gold/5 px-2.5 py-1 text-[10px] text-gold-2">
+        Recommended: story screenshot · any format (JPG, PNG, HEIC…)
+      </p>
       <div
         className={`mt-2 rounded-2xl border border-dashed p-4 text-center transition ${
-          dragging ? "border-[#E5C158] bg-[#C9A227]/10" : "border-[#C9A227]/35 bg-[#06241B]/60"
+          dragging ? "border-gold-2 bg-gold/10" : "border-gold/35 bg-ink/60"
         }`}
         onDragOver={(e) => {
           e.preventDefault();
@@ -185,23 +222,39 @@ function ScreenshotField({
           e.preventDefault();
           setDragging(false);
           const next = e.dataTransfer.files?.[0];
-          if (next?.type.startsWith("image/")) onPick(next);
+          if (next?.type.startsWith("image/") || /\.heic|\.heif/i.test(next.name)) void onPick(next);
         }}
       >
-        <input ref={inputRef} type="file" accept="image/*" capture="environment" className="sr-only" onChange={(e) => onPick(e.target.files?.[0] ?? null)} />
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*,.heic,.heif,.avif"
+          capture="environment"
+          className="sr-only"
+          onChange={(e) => void onPick(e.target.files?.[0] ?? null)}
+        />
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={preview} alt="Instagram screenshot preview" className="mx-auto max-h-48 rounded-xl object-contain" />
         ) : (
-          <Upload className="mx-auto h-8 w-8 text-[#C9A227]" aria-hidden />
+          <Upload className="mx-auto h-8 w-8 text-gold" aria-hidden />
         )}
-        <p className="mt-3 text-xs leading-relaxed text-[#8FA89B]">Drag &amp; drop or tap to upload your story/post screenshot</p>
+        {meta ? (
+          <div className="mt-3 flex flex-wrap justify-center gap-2 text-[10px] uppercase tracking-wider text-mist">
+            <span className="rounded border border-gold/25 px-2 py-1">
+              {meta.width} × {meta.height} px
+            </span>
+            <span className="rounded border border-gold/25 px-2 py-1">{meta.sizeLabel}</span>
+            <span className="rounded border border-gold/25 px-2 py-1 text-gold">{meta.format}</span>
+          </div>
+        ) : null}
+        <p className="mt-3 text-xs leading-relaxed text-mist">{copy.screenshot_hint}</p>
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="mt-4 min-h-11 rounded-full border border-[#C9A227]/40 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#E9DFBD]"
+          className="mt-4 min-h-11 rounded-full border border-gold/40 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-champagne"
         >
-          {hasFile ? "Change screenshot" : "Choose from gallery"}
+          {hasFile ? copy.upload_change : copy.upload_button}
         </button>
       </div>
     </div>

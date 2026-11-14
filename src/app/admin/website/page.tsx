@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Website CMS", robots: { index: false
 async function WebsitePagesContent() {
   const pages = await getWebsitePagesAdmin();
   return (
-    <main className="px-4 pb-24 pt-28 sm:px-6 lg:px-10 lg:pt-10">
+    <main className="px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-8">
       <div className="mx-auto max-w-[1500px]">
         <AdminWebsitePages pages={pages} />
       </div>
@@ -19,7 +19,7 @@ async function WebsitePagesContent() {
 
 export default function AdminWebsitePage() {
   return (
-    <Suspense fallback={<main className="min-h-screen px-4 pt-28 text-sm text-mist">Loading website editor…</main>}>
+    <Suspense fallback={<main className="min-h-screen px-4 pt-8 text-sm text-mist">Loading website editor…</main>}>
       <AdminGate requireSupabase>
         <WebsitePagesContent />
       </AdminGate>

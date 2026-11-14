@@ -14,7 +14,7 @@ export default async function AdminServicesPage() {
   return (
     <Suspense fallback={<div className="min-h-[70svh]" />}>
       <AdminGate requireSupabase>
-        <main className="px-4 pb-24 pt-28 sm:px-6 lg:px-10 lg:pt-10">
+        <main className="px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-8">
           <div className="mx-auto max-w-[1500px]">
             <AdminServicesBrowser rows={rows} />
           </div>

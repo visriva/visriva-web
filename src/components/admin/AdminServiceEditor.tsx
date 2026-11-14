@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { UniversalImageUploader } from "@/components/admin/UniversalImageUploader";
 import type { ServiceRow } from "@/lib/service-row";
 import type { PublishStatus } from "@/lib/services-types";
 
@@ -19,8 +20,6 @@ export function AdminServiceEditor({ mode, initial }: Props) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
   const [form, setForm] = useState({
     id: initial?.id ?? "",
     name: initial?.name ?? "",
@@ -82,22 +81,6 @@ export function AdminServiceEditor({ mode, initial }: Props) {
     }
 
     const id = body.service?.id ?? form.id;
-
-    if (imageFile) {
-      const imageData = new FormData();
-      imageData.set("image", imageFile);
-      const imageResponse = await fetch(`/api/admin/services/${encodeURIComponent(id)}/image`, {
-        method: "POST",
-        body: imageData,
-      });
-      const imageBody = (await imageResponse.json()) as { error?: string; image_path?: string };
-      if (!imageResponse.ok) {
-        setError(imageBody.error || "Saved, but image upload failed.");
-        setPending(false);
-        return;
-      }
-      if (imageBody.image_path) setField("image_path", imageBody.image_path);
-    }
 
     setMessage("Saved.");
     setPending(false);
@@ -233,19 +216,20 @@ export function AdminServiceEditor({ mode, initial }: Props) {
           <input type="checkbox" checked={form.coming_soon} onChange={(e) => setField("coming_soon", e.target.checked)} />
           Coming soon (published but not bookable)
         </label>
-        <label className="block text-sm text-mist md:col-span-2">
-          Image URL or path
-          <input className="field mt-2" value={form.image_path} onChange={(e) => setField("image_path", e.target.value)} />
-        </label>
-        <label className="block text-sm text-mist md:col-span-2">
-          Upload / replace image
-          <input
-            className="mt-2 block text-sm text-champagne"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+        <div className="md:col-span-2">
+          <UniversalImageUploader
+            label="Service cover photo"
+            preset="service"
+            slot={form.id || "service_new"}
+            uploadEndpoint={
+              mode === "edit" && form.id
+                ? `/api/admin/services/${encodeURIComponent(form.id)}/image`
+                : "/api/admin/upload-image"
+            }
+            value={form.image_path}
+            onChange={(value) => setField("image_path", value)}
           />
-        </label>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">

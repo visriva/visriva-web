@@ -1,64 +1,33 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Gift,
-  MessageCircle,
-  Sparkles,
-  Trophy,
-} from "lucide-react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { ChevronDown, ChevronLeft, ChevronRight, Gift, MessageCircle, Sparkles, Trophy } from "lucide-react";
 import { useCallback, useState } from "react";
-import { FadeUp } from "@/components/qr/FadeUp";
 import { QrGiveawayForm } from "@/components/qr/QrGiveawayForm";
+import { QrMediaImage } from "@/components/qr/QrMediaImage";
+import type { QrPageContent } from "@/lib/qr-content-types";
 import type { QrPageSettings } from "@/lib/qr-constants";
 
 function canEmbedExternalForm(url: string | null): boolean {
   if (!url) return false;
   try {
     const host = new URL(url).hostname.toLowerCase();
-    return (
-      host.includes("docs.google.com") ||
-      host === "forms.gle" ||
-      host.endsWith("typeform.com") ||
-      host.endsWith("tally.so")
-    );
+    return host.includes("docs.google.com") || host === "forms.gle" || host.endsWith("typeform.com") || host.endsWith("tally.so");
   } catch {
     return false;
   }
 }
 
-const STEPS = [
-  { n: "01", title: "Scan at the Station", copy: "You're already here!" },
-  { n: "02", title: "Tag Us on Instagram", copy: "Post your station moment & tag @visriva.co — snap a screenshot." },
-  { n: "03", title: "Submit Your Entry", copy: "Fill in your details below in under 30 seconds." },
-  { n: "04", title: "Weekly Winner Reveal", copy: "Winners announced every week with live reaction reels!" },
-] as const;
-
-const WINNERS = [
-  { name: "Ananya R.", station: "Live Photo Booth", event: "Tech town hall", week: "Week 42" },
-  { name: "Rohan K.", station: "DTF T-Shirt Printing", event: "Brand activation", week: "Week 41" },
-  { name: "Priya S.", station: "AI Station", event: "Corporate gala", week: "Week 40" },
-  { name: "Dev M.", station: "VR Gaming", event: "Product launch", week: "Week 39" },
-] as const;
-
-const RULES = [
-  "Follow & tag @visriva.co on Instagram with your station moment.",
-  "One entry per person per week.",
-  "Winner selected & announced every week on @visrivalivestation.",
-  "Prize: Branded Visriva hamper (custom photo magnet or keychain + curated goodies).",
-] as const;
-
 type Props = {
+  content: QrPageContent;
   settings: QrPageSettings;
-  whatsappDigits: string;
   whatsappHref: string;
+  phoneDisplay: string;
 };
 
-export function QrExperience({ settings, whatsappDigits, whatsappHref }: Props) {
+export function QrExperience({ content, settings, whatsappHref, phoneDisplay }: Props) {
+  const reduce = useReducedMotion();
   const useExternal = settings.form_mode === "external" && Boolean(settings.external_form_url);
   const embed = useExternal && canEmbedExternalForm(settings.external_form_url);
   const externalUrl = settings.external_form_url ?? "";
@@ -67,245 +36,254 @@ export function QrExperience({ settings, whatsappDigits, whatsappHref }: Props) 
     document.getElementById("qr-entry")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  return (
-    <div className="relative min-h-[100svh] overflow-x-hidden bg-[linear-gradient(180deg,#06241B_0%,#0B3D2E_45%,#06241B_100%)] text-[#F8F9FA]">
-      <div className="pointer-events-none absolute inset-0 opacity-40 hero-grid" aria-hidden />
-      <main className="relative z-10 mx-auto max-w-lg px-4 pb-16 pt-10 sm:max-w-xl sm:px-6 sm:pt-14">
-        <FadeUp className="text-center">
-          <div className="mx-auto flex flex-col items-center gap-3">
-            <Image src="/brand/visriva-logo.png" alt="Visriva emblem" width={72} height={72} className="h-[4.5rem] w-[4.5rem] object-contain" priority />
-            <span className="font-display text-4xl tracking-wide text-[#E5C158]">visriva</span>
-          </div>
-          <p className="mt-4 font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#C9A227]">Guest QR experience</p>
-          <h1 className="mt-3 font-display text-[2.1rem] leading-tight text-[#F8F9FA] sm:text-4xl">
-            Win a Curated <span className="italic text-[#E5C158]">Visriva Hamper</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#B8C2B4]">
-            Thank you for visiting our live station! Enter our weekly giveaway in 30 seconds for a chance to win custom keepsakes &amp; luxury goodies.
-          </p>
-          <button
-            type="button"
-            onClick={scrollToEntry}
-            className="liquid-button mt-8 min-h-12 rounded-full px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.16em]"
-          >
-            Enter weekly giveaway ↓
-          </button>
-        </FadeUp>
+  const stagger: Variants = reduce
+    ? { hidden: {}, show: {} }
+    : { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
+  const item: Variants = reduce
+    ? { hidden: {}, show: {} }
+    : {
+        hidden: { opacity: 0, y: 16 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+      };
 
-        <FadeUp className="mt-10" delay={80}>
-          <div className="rounded-3xl border border-[#C9A227]/35 bg-white/5 p-5 backdrop-blur-md sm:p-6">
+  return (
+    <div className="qr-luxury-bg relative min-h-[100svh] overflow-x-hidden text-cream">
+      <div className="qr-gold-orb -left-16 top-24 h-56 w-56" aria-hidden />
+      <div className="qr-gold-orb right-0 top-[42%] h-72 w-72" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 opacity-35 hero-grid" aria-hidden />
+
+      <motion.main
+        variants={stagger}
+        initial="hidden"
+        animate="show"
+        className="relative z-10 mx-auto max-w-lg px-4 pb-20 pt-12 sm:max-w-xl sm:px-6 sm:pt-16"
+      >
+        <motion.section variants={item} className="text-center">
+          <motion.div
+            variants={item}
+            className="qr-glass-card relative mx-auto max-w-md rounded-[2rem] px-6 py-10"
+          >
+            <span className="qr-corner left-4 top-4 border-l border-t" aria-hidden />
+            <span className="qr-corner bottom-4 right-4 border-b border-r" aria-hidden />
+            <QrMediaImage
+              src={content.hero.logo_url}
+              alt={content.hero.logo_alt}
+              className="mx-auto h-[4.5rem] w-[4.5rem] object-contain"
+              width={72}
+              height={72}
+            />
+            <p className="mt-3 font-display text-4xl tracking-wide text-gold-2">{content.hero.wordmark}</p>
+            <p className="mt-4 font-royal text-[0.62rem] uppercase tracking-[0.28em] text-gold">{content.hero.badge}</p>
+            <h1 className="mt-4 font-display text-[2.15rem] leading-tight text-cream sm:text-4xl">
+              {content.hero.title}{" "}
+              <span className="italic text-gold-2">{content.hero.title_accent}</span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-mist">{content.hero.subtitle}</p>
+            <button type="button" onClick={scrollToEntry} className="qr-gold-btn mt-8 min-h-12 rounded-full px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.16em]">
+              {content.hero.cta_text}
+            </button>
+          </motion.div>
+        </motion.section>
+
+        <motion.section variants={item} className="mt-10">
+          <LuxuryCard className="p-5 sm:p-6">
             <div className="flex items-start gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#C9A227]/40 bg-[#0B3D2E]/80 text-[#C9A227]">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-gold/40 bg-deep/80 text-gold">
                 <MessageCircle className="h-5 w-5" aria-hidden />
               </span>
-              <div>
-                <p className="text-sm font-semibold leading-snug text-[#F8F9FA]">
-                  <strong>You can send your physical copy photo on WhatsApp — our team will send you a soft copy!</strong>
-                </p>
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="liquid-button mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-3 text-[10px] font-bold uppercase tracking-[0.14em]"
-                >
-                  Send on WhatsApp
+              <div className="min-w-0">
+                <p className="text-sm font-semibold leading-snug text-cream">{content.whatsapp.body}</p>
+                <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="qr-gold-btn mt-4 inline-flex min-h-11 items-center rounded-full px-5 py-3 text-[10px] font-bold uppercase tracking-[0.14em]">
+                  {content.whatsapp.button_text}
                 </a>
-                <p className="mt-2 text-[10px] text-[#8FA89B]">+{whatsappDigits.replace(/^91/, "91 ")}</p>
+                {phoneDisplay ? <p className="mt-2 text-[10px] text-mist">{phoneDisplay}</p> : null}
               </div>
             </div>
-          </div>
-        </FadeUp>
+          </LuxuryCard>
+        </motion.section>
 
-        <FadeUp className="mt-12" delay={120}>
-          <p className="section-kicker text-center">How it works</p>
+        <motion.section variants={item} className="mt-12">
+          <p className="section-kicker text-center">{content.steps.kicker}</p>
           <ol className="mt-5 space-y-3">
-            {STEPS.map((step) => (
-              <li
-                key={step.n}
-                className="flex gap-4 rounded-2xl border border-[#C9A227]/20 bg-[#06241B]/50 p-4 backdrop-blur-sm"
-              >
-                <span className="font-display text-2xl text-[#C9A227]">{step.n}</span>
+            {content.steps.items.map((step) => (
+              <li key={`${step.number}-${step.title}`} className="qr-glass-card flex gap-4 rounded-2xl p-4">
+                <span className="font-display text-2xl text-gold">{step.number}</span>
                 <div>
-                  <p className="font-display text-xl text-[#F4F0DF]">{step.title}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-[#B8C2B4]">{step.copy}</p>
+                  <p className="font-display text-xl text-champagne">{step.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-mist">{step.copy}</p>
                 </div>
               </li>
             ))}
           </ol>
-        </FadeUp>
+        </motion.section>
 
-        <FadeUp className="mt-12" delay={160}>
-          <div className="rounded-3xl border border-[#C9A227]/30 bg-white/5 p-5 backdrop-blur-md sm:p-7">
+        <motion.section variants={item} className="mt-12">
+          <LuxuryCard className="p-5 sm:p-7">
             <div className="flex items-center gap-2">
-              <Gift className="h-4 w-4 text-[#C9A227]" aria-hidden />
-              <p className="section-kicker">Weekly giveaway entry</p>
+              <Gift className="h-4 w-4 text-gold" aria-hidden />
+              <p className="section-kicker">{content.entry.kicker}</p>
             </div>
-
             {useExternal ? (
-              <ExternalEntry url={externalUrl} embed={embed} />
+              <ExternalEntry content={content} url={externalUrl} embed={embed} />
             ) : (
               <div className="mt-5">
-                <QrGiveawayForm />
+                <QrGiveawayForm copy={content.form} />
               </div>
             )}
-          </div>
-        </FadeUp>
+          </LuxuryCard>
+        </motion.section>
 
-        <FadeUp className="mt-10" delay={200}>
-          <HamperCard />
-        </FadeUp>
+        <motion.section variants={item} className="mt-10">
+          <HamperCard content={content} />
+        </motion.section>
 
-        <FadeUp className="mt-12" delay={240}>
-          <WinnersCarousel />
-        </FadeUp>
+        <motion.section variants={item} className="mt-12">
+          <WinnersCarousel content={content} />
+        </motion.section>
 
-        <FadeUp className="mt-12" delay={280}>
-          <div className="rounded-3xl border border-[#C9A227]/25 bg-[linear-gradient(135deg,rgba(201,162,39,0.08),rgba(11,61,46,0.6))] p-6 text-center backdrop-blur-md">
-            <Sparkles className="mx-auto h-6 w-6 text-[#E5C158]" aria-hidden />
-            <p className="mt-3 font-display text-2xl text-[#F8F9FA]">Planning a corporate event, wedding, or brand activation?</p>
-            <p className="mt-2 text-sm text-[#B8C2B4]">Bring Visriva&apos;s live gifting &amp; tech stations to your guests.</p>
-            <Link href="/quote" className="liquid-button mt-6 inline-flex min-h-11 items-center rounded-full px-7 py-3 text-[10px] font-bold uppercase tracking-[0.14em]">
-              Get a free station quote ↗
+        <motion.section variants={item} className="mt-12">
+          <LuxuryCard className="p-6 text-center">
+            <Sparkles className="mx-auto h-6 w-6 text-gold-2" aria-hidden />
+            <p className="mt-3 font-display text-2xl text-cream">{content.b2b.title}</p>
+            <p className="mt-2 text-sm text-mist">{content.b2b.body}</p>
+            <Link href={content.b2b.cta_href} className="qr-gold-btn mt-6 inline-flex min-h-11 items-center rounded-full px-7 py-3 text-[10px] font-bold uppercase tracking-[0.14em]">
+              {content.b2b.cta_text}
             </Link>
-          </div>
-        </FadeUp>
+          </LuxuryCard>
+        </motion.section>
 
-        <FadeUp className="mt-10" delay={320}>
-          <RulesAccordion />
-        </FadeUp>
-      </main>
+        <motion.section variants={item} className="mt-10">
+          <RulesAccordion content={content} />
+        </motion.section>
+      </motion.main>
     </div>
   );
 }
 
-function ExternalEntry({ url, embed }: { url: string; embed: boolean }) {
+function LuxuryCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`qr-glass-card relative overflow-hidden rounded-3xl ${className}`}>
+      <span className="qr-corner left-3 top-3 border-l border-t" aria-hidden />
+      <span className="qr-corner bottom-3 right-3 border-b border-r" aria-hidden />
+      {children}
+    </div>
+  );
+}
+
+function ExternalEntry({ content, url, embed }: { content: QrPageContent; url: string; embed: boolean }) {
   return (
     <div className="mt-5 space-y-4">
-      <p className="text-sm leading-relaxed text-[#B8C2B4]">
-        Complete your official giveaway entry on our secure form — takes under a minute.
-      </p>
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="liquid-button flex min-h-12 w-full items-center justify-center rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.14em]"
-      >
-        Complete your official giveaway entry ↗
+      <p className="text-sm leading-relaxed text-mist">{content.entry.external_body}</p>
+      <a href={url} target="_blank" rel="noopener noreferrer" className="qr-gold-btn flex min-h-12 w-full items-center justify-center rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.14em]">
+        {content.entry.external_button}
       </a>
       {embed ? (
-        <iframe
-          title="Visriva giveaway form"
-          src={url}
-          className="mt-4 h-[min(70vh,520px)] w-full rounded-2xl border border-[#C9A227]/25 bg-[#06241B]"
-          loading="lazy"
-        />
+        <iframe title={content.entry.iframe_title} src={url} className="mt-4 h-[min(70vh,520px)] w-full rounded-2xl border border-gold/25 bg-ink" loading="lazy" />
       ) : null}
     </div>
   );
 }
 
-function HamperCard() {
+function HamperCard({ content }: { content: QrPageContent }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-[#C9A227]/35 bg-[#06241B]/70 p-6 backdrop-blur-md">
-      <span className="pointer-events-none absolute left-3 top-3 h-8 w-8 border-l-2 border-t-2 border-[#C9A227]/50" aria-hidden />
-      <span className="pointer-events-none absolute bottom-3 right-3 h-8 w-8 border-b-2 border-r-2 border-[#C9A227]/50" aria-hidden />
-      <p className="section-kicker">This week&apos;s hamper</p>
-      <h2 className="mt-2 font-display text-3xl text-[#F8F9FA]">Custom keepsakes + curated luxury</h2>
-      <ul className="mt-4 space-y-2 text-sm text-[#E9DFBD]">
-        <li>✳ Custom photo magnet or keychain from your event moment</li>
-        <li>✳ Curated Visriva luxury goodies &amp; studio surprises</li>
-        <li>✳ Delivered across Bengaluru with a personal note</li>
+    <LuxuryCard className="relative p-6">
+      <div className="qr-gold-orb -right-8 top-8 h-40 w-40 opacity-80" aria-hidden />
+      <p className="section-kicker">{content.hamper.kicker}</p>
+      <h2 className="mt-2 font-display text-3xl text-cream">{content.hamper.title}</h2>
+      <ul className="mt-4 space-y-2 text-sm text-champagne">
+        {content.hamper.bullets.map((line) => (
+          <li key={line}>✳ {line}</li>
+        ))}
       </ul>
-      <div className="mt-5 grid h-36 place-items-center rounded-2xl border border-dashed border-[#C9A227]/30 bg-[#0B3D2E]/50 text-xs uppercase tracking-widest text-[#8FA89B]">
-        Hamper visual — add winner photo / reel
-      </div>
-    </div>
+      {content.hamper.image_url ? (
+        <QrMediaImage src={content.hamper.image_url} alt={content.hamper.image_alt} className="mt-5 h-44 w-full rounded-2xl object-cover" width={800} height={440} />
+      ) : (
+        <div className="mt-5 grid h-36 place-items-center rounded-2xl border border-dashed border-gold/30 bg-deep/50 px-4 text-center text-[10px] uppercase tracking-widest text-mist">
+          {content.hamper.image_fallback_label}
+        </div>
+      )}
+    </LuxuryCard>
   );
 }
 
-function WinnersCarousel() {
+function WinnersCarousel({ content }: { content: QrPageContent }) {
+  const items = content.winners.items;
   const [index, setIndex] = useState(0);
-  const winner = WINNERS[index];
+  const winner = items[index] ?? items[0];
+
+  if (!winner) return null;
 
   return (
     <section aria-labelledby="winners-heading">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="section-kicker">Weekly winners</p>
-          <h2 id="winners-heading" className="mt-1 font-display text-3xl text-[#F8F9FA]">
-            The Winners Wall
+          <p className="section-kicker">{content.winners.kicker}</p>
+          <h2 id="winners-heading" className="mt-1 font-display text-3xl text-cream">
+            {content.winners.title}
           </h2>
         </div>
-        <Trophy className="h-6 w-6 text-[#C9A227]" aria-hidden />
+        <Trophy className="h-6 w-6 text-gold" aria-hidden />
       </div>
 
-      <div className="mt-5 rounded-3xl border border-[#C9A227]/25 bg-white/5 p-4 backdrop-blur-md sm:p-5">
+      <LuxuryCard className="mt-5 p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2">
-          <button
-            type="button"
-            aria-label="Previous winner"
-            onClick={() => setIndex((v) => (v === 0 ? WINNERS.length - 1 : v - 1))}
-            className="deck-arrow min-h-11 min-w-11"
-          >
+          <button type="button" aria-label="Previous winner" onClick={() => setIndex((v) => (v === 0 ? items.length - 1 : v - 1))} className="deck-arrow min-h-11 min-w-11">
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <span className="rounded-full border border-[#C9A227]/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E5C158]">
-            {winner.week}
-          </span>
-          <button
-            type="button"
-            aria-label="Next winner"
-            onClick={() => setIndex((v) => (v + 1) % WINNERS.length)}
-            className="deck-arrow min-h-11 min-w-11"
-          >
+          <span className="rounded-full border border-gold/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gold-2">{winner.week}</span>
+          <button type="button" aria-label="Next winner" onClick={() => setIndex((v) => (v + 1) % items.length)} className="deck-arrow min-h-11 min-w-11">
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-[140px_1fr]">
-          <div className="grid aspect-square place-items-center rounded-2xl border border-dashed border-[#C9A227]/35 bg-[#06241B]/80 text-[10px] uppercase tracking-wider text-[#8FA89B]">
-            Winner photo / reel
-          </div>
+          {winner.image_url ? (
+            <QrMediaImage src={winner.image_url} alt={winner.image_alt} className="aspect-square w-full rounded-2xl object-cover" width={280} height={280} />
+          ) : (
+            <div className="grid aspect-square place-items-center rounded-2xl border border-dashed border-gold/35 bg-ink/80 px-2 text-center text-[10px] uppercase tracking-wider text-mist">
+              {winner.image_alt}
+            </div>
+          )}
           <div>
-            <p className="font-display text-2xl text-[#F4F0DF]">{winner.name}</p>
-            <p className="mt-1 text-sm text-[#E5C158]">{winner.station}</p>
-            <p className="mt-2 text-xs text-[#B8C2B4]">{winner.event}</p>
+            <p className="font-display text-2xl text-champagne">{winner.name}</p>
+            <p className="mt-1 text-sm text-gold-2">{winner.station}</p>
+            <p className="mt-2 text-xs text-mist">{winner.event}</p>
           </div>
         </div>
 
         <div className="mt-4 flex justify-center gap-2">
-          {WINNERS.map((_, i) => (
+          {items.map((_, i) => (
             <button
               key={i}
               type="button"
               aria-label={`Show winner ${i + 1}`}
               onClick={() => setIndex(i)}
-              className={`h-1.5 rounded-full transition-all ${i === index ? "w-8 bg-[#C9A227]" : "w-2 bg-[#5B665D]"}`}
+              className={`h-1.5 rounded-full transition-all ${i === index ? "w-8 bg-gold" : "w-2 bg-mist/40"}`}
             />
           ))}
         </div>
-      </div>
+      </LuxuryCard>
     </section>
   );
 }
 
-function RulesAccordion() {
+function RulesAccordion({ content }: { content: QrPageContent }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-[#C9A227]/20 bg-[#06241B]/40">
+    <div className="qr-glass-card rounded-2xl">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex min-h-12 w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-[#E9DFBD]"
+        className="flex min-h-12 w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-champagne"
         aria-expanded={open}
       >
-        Rules &amp; terms
+        {content.rules.title}
         <ChevronDown className={`h-4 w-4 transition ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
       {open ? (
-        <ul className="space-y-2 border-t border-[#C9A227]/15 px-4 py-4 text-xs leading-relaxed text-[#B8C2B4]">
-          {RULES.map((rule) => (
+        <ul className="space-y-2 border-t border-gold/15 px-4 py-4 text-xs leading-relaxed text-mist">
+          {content.rules.items.map((rule) => (
             <li key={rule}>• {rule}</li>
           ))}
         </ul>
