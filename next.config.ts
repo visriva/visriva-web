@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
       { source: "/classic/:path*", destination: "/", permanent: true },
       { source: "/live", destination: "/", permanent: true },
       { source: "/live/:path*", destination: "/", permanent: true },
+
+      { source: "/review", destination: "/reviews", permanent: true },
     ];
   },
   async headers() {

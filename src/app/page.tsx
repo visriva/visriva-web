@@ -12,6 +12,8 @@ import { visibleSectionIds } from "@/lib/page-section-layout";
 import { getWebsitePage } from "@/lib/website-pages";
 import { siteUrl } from "@/lib/site";
 import { DynamicIslandNav, QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
+import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
+import { getGoogleReviewSettings } from "@/lib/google-review";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getWebsitePage("home");
@@ -30,7 +32,12 @@ function splitTitleLines(text: string) {
 }
 
 export default async function HomePage() {
-  const [catalog, pageContent, globals] = await Promise.all([getPublishedCatalog(), getWebsitePage("home"), getSiteGlobals()]);
+  const [catalog, pageContent, globals, googleReviewSettings] = await Promise.all([
+    getPublishedCatalog(),
+    getWebsitePage("home"),
+    getSiteGlobals(),
+    getGoogleReviewSettings(),
+  ]);
   const { experience, quote, brand_story, featured, process, closing } = globals.home_content;
   const ids = featured.service_ids.length ? featured.service_ids : ["unlimited-dslr", "ai-station", "vr-station"];
   const featuredServices = catalog.list.filter((service) => ids.includes(service.id) && service.bookable !== false);
@@ -153,6 +160,14 @@ export default async function HomePage() {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
+      ) : null}
+
+      {googleReviewSettings.enabled && googleReviewSettings.show_on_home ? (
+        <section className="bg-[#E6EFE3] px-5 py-20 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1500px]">
+            <VisrivaGoogleReviewSection settings={googleReviewSettings} variant="home" />
           </div>
         </section>
       ) : null}

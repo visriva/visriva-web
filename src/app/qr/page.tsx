@@ -5,6 +5,7 @@ import { getEventPhotosSettings } from "@/lib/event-galleries";
 import { getQrPageContent } from "@/lib/qr-content";
 import { getQrPageSettings, resolveQrWhatsAppDigits } from "@/lib/qr-page";
 import { whatsAppNumber } from "@/lib/whatsapp";
+import { getGoogleReviewSettings } from "@/lib/google-review";
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getQrPageContent();
@@ -17,10 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function QrPage() {
-  const [content, settings, eventPhotosSettings] = await Promise.all([
+  const [content, settings, eventPhotosSettings, googleReviewSettings] = await Promise.all([
     getQrPageContent(),
     getQrPageSettings(),
     getEventPhotosSettings(),
+    getGoogleReviewSettings(),
   ]);
 
   const fallbackDigits = resolveQrWhatsAppDigits(settings) || whatsAppNumber();
@@ -36,6 +38,7 @@ export default async function QrPage() {
       whatsappHref={whatsappHref}
       phoneDisplay={phoneDisplay}
       eventPhotosSettings={eventPhotosSettings}
+      googleReviewSettings={googleReviewSettings}
     />
   );
 }

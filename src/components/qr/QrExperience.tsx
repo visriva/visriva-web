@@ -11,6 +11,8 @@ import { visibleQrSectionIds } from "@/lib/qr-content-types";
 import type { QrPageSettings } from "@/lib/qr-constants";
 import type { EventPhotosSettings } from "@/lib/event-galleries-types";
 import { QrEventPhotosSection } from "@/components/qr/QrEventPhotosSection";
+import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
+import type { GoogleReviewSettings } from "@/lib/google-review-types";
 
 function canEmbedExternalForm(url: string | null): boolean {
   if (!url) return false;
@@ -28,9 +30,10 @@ type Props = {
   whatsappHref: string;
   phoneDisplay: string;
   eventPhotosSettings: EventPhotosSettings;
+  googleReviewSettings: GoogleReviewSettings;
 };
 
-export function QrExperience({ content, settings, whatsappHref, phoneDisplay, eventPhotosSettings }: Props) {
+export function QrExperience({ content, settings, whatsappHref, phoneDisplay, eventPhotosSettings, googleReviewSettings }: Props) {
   const reduce = useReducedMotion();
   const useExternal = settings.form_mode === "external" && Boolean(settings.external_form_url);
   const embed = useExternal && canEmbedExternalForm(settings.external_form_url);
@@ -56,6 +59,11 @@ export function QrExperience({ content, settings, whatsappHref, phoneDisplay, ev
         <motion.div variants={item}>
           <QrEventPhotosSection initialSettings={eventPhotosSettings} />
         </motion.div>
+        {googleReviewSettings.enabled && googleReviewSettings.show_on_qr ? (
+          <motion.div variants={item} className="mt-10 sm:mt-12">
+            <VisrivaGoogleReviewSection settings={googleReviewSettings} variant="qr" />
+          </motion.div>
+        ) : null}
         {sectionOrder.map((id) => (
           <motion.div key={id} variants={item} className={id === "hero" ? "" : "mt-10 sm:mt-12"}>
             <QrSectionBlock

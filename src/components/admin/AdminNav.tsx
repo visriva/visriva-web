@@ -13,6 +13,7 @@ import {
   Users,
   Wrench,
   Images,
+  Star,
 } from "lucide-react";
 import { adminNav } from "@/lib/admin-nav";
 
@@ -27,6 +28,7 @@ const icons = {
   customers: Users,
   qr: QrCode,
   eventImages: Images,
+  googleReviews: Star,
 } as const;
 
 export function AdminNav() {
