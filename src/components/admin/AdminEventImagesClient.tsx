@@ -15,7 +15,7 @@ import {
   type EventPhotosSettings,
 } from "@/lib/event-galleries-types";
 import { clearAdminDraft, readAdminDraft, stashAdminDraft } from "@/lib/admin-draft-storage";
-import { resolveGalleryEmbed } from "@/lib/gallery-embed";
+import { parseGalleryInput } from "@/lib/parseGalleryEmbed";
 
 const input = "field mt-2";
 
@@ -260,9 +260,17 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
               </select>
             </label>
             <label className="text-sm text-mist md:col-span-2">
-              Gallery link
-              <input className={input} placeholder="Google Drive folder, Pixieset, etc." value={draft.gallery_url ?? ""} onChange={(e) => setDraft({ ...draft, gallery_url: e.target.value })} />
+              Paste event link OR full <code className="text-gold-2">&lt;iframe&gt;</code> embed code
+              <textarea
+                className={`${input} min-h-28 font-mono text-xs`}
+                placeholder='https://fotoshare.co/e/… or <iframe src="…" allow="web-share" …></iframe>'
+                value={draft.gallery_url ?? ""}
+                onChange={(e) => setDraft({ ...draft, gallery_url: e.target.value })}
+              />
             </label>
+            {draft.gallery_url?.trim() ? (
+              <EmbedParsePreview raw={draft.gallery_url} className="md:col-span-2" />
+            ) : null}
             <div className="md:col-span-2">
               <UniversalImageUploader
                 label="Cover image (recommended 800×600)"
@@ -307,6 +315,24 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
   );
 }
 
+function EmbedParsePreview({ raw, className = "" }: { raw: string; className?: string }) {
+  const parsed = parseGalleryInput(raw);
+  if (!parsed.sourceUrl && !parsed.embedUrl) return null;
+  return (
+    <p className={`rounded-xl border border-gold/15 bg-black/20 px-3 py-2 text-[10px] leading-relaxed text-mist ${className}`}>
+      Parsed <span className="text-gold-2">{parsed.provider}</span>
+      {parsed.iframeAllow ? (
+        <>
+          {" "}
+          · allow=<span className="text-champagne">{parsed.iframeAllow.slice(0, 48)}{parsed.iframeAllow.length > 48 ? "…" : ""}</span>
+        </>
+      ) : null}
+      <br />
+      Guest iframe src: <span className="break-all text-champagne">{parsed.embedUrl || parsed.sourceUrl}</span>
+    </p>
+  );
+}
+
 function SettingsField({
   label,
   value,
@@ -343,7 +369,6 @@ function EventRowCard({
   onPatch: (id: string, patch: Record<string, unknown>) => void;
   onDelete: (id: string) => void;
 }) {
-  const embed = resolveGalleryEmbed(row.gallery_url);
   const previewHref = `/qr?tab=photos`;
 
   return (
@@ -376,18 +401,16 @@ function EventRowCard({
         </div>
       </div>
       <label className="mt-4 block text-xs text-mist">
-        Gallery URL
-        <input
-          className="field mt-1 font-mono text-xs"
+        Link or iframe embed
+        <textarea
+          className="field mt-1 min-h-24 font-mono text-xs"
           defaultValue={row.gallery_url}
           onBlur={(e) => {
             if (e.target.value !== row.gallery_url) onPatch(row.id, { gallery_url: e.target.value });
           }}
         />
       </label>
-      <p className="mt-2 text-[10px] text-mist">
-        Embed preview: <span className="text-gold-2">{embed.provider}</span> → {embed.embedUrl.slice(0, 80)}…
-      </p>
+      <EmbedParsePreview raw={row.gallery_url} className="mt-3" />
     </li>
   );
 }

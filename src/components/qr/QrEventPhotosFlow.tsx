@@ -10,6 +10,7 @@ import type { EventGalleryPublic, EventPhotosSettings } from "@/lib/event-galler
 
 const GATE_KEY = "visriva_event_photos_gate";
 const UNLOCK_KEY = "visriva_event_photos_unlock";
+const PW_KEY = "visriva_event_photos_pw";
 
 type UnlockPayload = {
   eventId: string;
@@ -19,6 +20,7 @@ type UnlockPayload = {
   frameUrl: string;
   directUrl: string;
   embedUrl: string;
+  iframeAllow?: string;
 };
 
 type Phase = "idle" | "gatekeeper" | "vault" | "gallery";
@@ -63,7 +65,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
 
   const loadEvents = useCallback(async () => {
     setEventsLoading(true);
-    const response = await fetch("/api/event-galleries");
+    const response = await fetch("/api/event-galleries", { cache: "no-store" });
     const body = await response.json().catch(() => ({}));
     setEventsLoading(false);
     if (response.ok) {
@@ -119,7 +121,10 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
 
   function backToVault() {
     setUnlock(null);
-    if (typeof window !== "undefined") sessionStorage.removeItem(UNLOCK_KEY);
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem(UNLOCK_KEY);
+      sessionStorage.removeItem(PW_KEY);
+    }
     setPhase("vault");
     setUseDirectView(false);
   }
@@ -130,7 +135,8 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
     setUnlockError("");
     const response = await fetch("/api/event-galleries/unlock", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" },
+      cache: "no-store",
       body: JSON.stringify({ eventId: selectedId, password }),
     });
     const body = await response.json().catch(() => ({}));
@@ -151,12 +157,53 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
       frameUrl: String(body.frameUrl),
       directUrl: String(body.directUrl),
       embedUrl: String(body.embedUrl),
+      iframeAllow: typeof body.iframeAllow === "string" ? body.iframeAllow : undefined,
     };
     setUnlock(payload);
-    if (typeof window !== "undefined") sessionStorage.setItem(UNLOCK_KEY, JSON.stringify(payload));
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(UNLOCK_KEY, JSON.stringify(payload));
+      sessionStorage.setItem(PW_KEY, password);
+    }
     setPhase("gallery");
     syncTabUrl(true);
   }
+
+  useEffect(() => {
+    if (phase !== "gallery" || !unlock?.eventId) return;
+
+    async function refreshEmbed() {
+      const eventId = unlock?.eventId;
+      if (!eventId || typeof window === "undefined") return;
+      const pw = sessionStorage.getItem(PW_KEY);
+      if (!pw) return;
+      const response = await fetch("/api/event-galleries/unlock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ eventId, password: pw }),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) return;
+      const next: UnlockPayload = {
+        eventId,
+        event_name: String(body.event_name),
+        event_date: String(body.event_date),
+        embed_mode: body.embed_mode === "fullscreen" ? "fullscreen" : "embed",
+        frameUrl: String(body.frameUrl),
+        directUrl: String(body.directUrl),
+        embedUrl: String(body.embedUrl),
+        iframeAllow: typeof body.iframeAllow === "string" ? body.iframeAllow : undefined,
+      };
+      setUnlock(next);
+      sessionStorage.setItem(UNLOCK_KEY, JSON.stringify(next));
+    }
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refreshEmbed();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [phase, unlock?.eventId]);
 
   const gallerySrc = useMemo(() => {
     if (!unlock) return "";
@@ -456,7 +503,7 @@ function GalleryView({
         </div>
       </div>
 
-      <EventGalleryEmbed src={gallerySrc} eventName={unlock.event_name} fullscreenPreferred={unlock.embed_mode === "fullscreen"} />
+      <EventGalleryEmbed src={gallerySrc} eventName={unlock.event_name} allow={unlock.iframeAllow} />
 
       <p className="text-center text-[10px] text-mist">
         Having trouble loading? Try{" "}

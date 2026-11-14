@@ -1,5 +1,5 @@
 import "server-only";
-import { cacheLife, cacheTag } from "next/cache";
+import { connection } from "next/server";
 import { createAdminClient } from "@/lib/supabase-admin";
 import {
   mergeEventPhotosSettings,
@@ -10,9 +10,7 @@ import {
 } from "@/lib/event-galleries-types";
 
 export async function getEventPhotosSettings(): Promise<EventPhotosSettings> {
-  "use cache";
-  cacheLife("minutes");
-  cacheTag("event-photos-settings");
+  await connection();
 
   const supabase = createAdminClient();
   if (!supabase) return mergeEventPhotosSettings(null);
@@ -23,9 +21,7 @@ export async function getEventPhotosSettings(): Promise<EventPhotosSettings> {
 }
 
 export async function getActiveEventGalleriesPublic(): Promise<EventGalleryPublic[]> {
-  "use cache";
-  cacheLife("minutes");
-  cacheTag("event-galleries");
+  await connection();
 
   const supabase = createAdminClient();
   if (!supabase) return [];
@@ -47,6 +43,8 @@ export async function getActiveEventGalleriesPublic(): Promise<EventGalleryPubli
 }
 
 export async function listEventGalleriesAdmin(): Promise<EventGalleryRow[]> {
+  await connection();
+
   const supabase = createAdminClient();
   if (!supabase) return [];
 
@@ -56,6 +54,8 @@ export async function listEventGalleriesAdmin(): Promise<EventGalleryRow[]> {
 }
 
 export async function getEventGalleryById(id: string): Promise<EventGalleryRow | null> {
+  await connection();
+
   const supabase = createAdminClient();
   if (!supabase) return null;
 

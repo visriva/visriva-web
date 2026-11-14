@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getEventGalleryById, getEventPhotosSettings } from "@/lib/event-galleries";
-import { pickGalleryFrameUrl, resolveGalleryEmbed } from "@/lib/gallery-embed";
+import { galleryIframeAllow, parseGalleryInput, pickGalleryFrameUrl } from "@/lib/parseGalleryEmbed";
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as { eventId?: string; password?: string } | null;
@@ -21,19 +21,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: settings.password_error }, { status: 401 });
   }
 
-  const resolution = resolveGalleryEmbed(event.gallery_url);
-  const frameUrl = pickGalleryFrameUrl(resolution, event.embed_mode, false);
+  const parsed = parseGalleryInput(event.gallery_url);
+  const frameUrl = pickGalleryFrameUrl(parsed, event.embed_mode, false);
 
   return NextResponse.json({
     ok: true,
     event_name: event.event_name,
     event_date: event.event_date,
     embed_mode: event.embed_mode,
-    provider: resolution.provider,
+    provider: parsed.provider,
     frameUrl,
-    directUrl: resolution.directUrl,
-    embedUrl: resolution.embedUrl,
-    likelyEmbeddable: resolution.likelyEmbeddable,
+    directUrl: parsed.directUrl,
+    embedUrl: parsed.embedUrl,
+    sourceUrl: parsed.sourceUrl,
+    iframeAllow: galleryIframeAllow(parsed),
+    likelyEmbeddable: parsed.likelyEmbeddable,
     cover_image: event.cover_image,
   });
 }
