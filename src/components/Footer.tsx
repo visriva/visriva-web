@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { gstin, instagramUrl, linkedinUrl, navigation } from "@/lib/site";
+import { gstin, navigation } from "@/lib/site";
+import type { SiteGlobals } from "@/lib/site-globals-types";
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
-export function Footer() {
+export function Footer({ globals }: { globals: SiteGlobals }) {
   const whatsapp = whatsAppLink(WHATSAPP_GREETING);
+  const instagramUrl = globals.instagram_url;
+  const linkedinUrl = globals.linkedin_url;
   const links = navigation.flatMap((item) =>
     item.children
       ? item.children.map((child) => ({ href: child.href, label: child.label }))
@@ -21,12 +24,10 @@ export function Footer() {
             <Image src="/brand/visriva-logo.png" alt="Visriva emblem" width={800} height={800} className="h-14 w-14 object-contain" />
             <span className="font-display text-4xl tracking-wide text-[#F4F0DF]">visriva</span>
           </div>
-          <p className="mt-6 max-w-sm text-sm leading-7 text-[#B8C2B4]">
-            Experiential stations that bring people together—and give them something memorable to take home. One creative team, from set-up to the final keepsake.
-          </p>
-          <p className="mt-7 text-[.62rem] font-semibold uppercase tracking-[.2em] text-[#D2B85C]">Make the moment stay.</p>
+          <p className="mt-6 max-w-sm text-sm leading-7 text-[#B8C2B4]">{globals.footer_blurb}</p>
+          <p className="mt-7 text-[.62rem] font-semibold uppercase tracking-[.2em] text-[#D2B85C]">{globals.footer_tagline}</p>
           <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#806B2D]/60 px-3 py-2 text-[.58rem] font-semibold uppercase tracking-[.17em] text-[#E4D7A6]">
-            <span className="h-2 w-2 rounded-full bg-[#65A878]" /> Bengaluru event studio
+            <span className="h-2 w-2 rounded-full bg-[#65A878]" /> {globals.footer_badge}
           </span>
         </div>
 
@@ -41,9 +42,9 @@ export function Footer() {
         <div className="lg:col-span-3">
           <p className="text-[.62rem] font-bold uppercase tracking-[.24em] text-[#D2B85C]">Contact the studio</p>
           <div className="mt-5 space-y-5 text-sm leading-6 text-[#D7D8C9]">
-            <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">Location</p><p>Bengaluru, Karnataka, India</p></div>
+            <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">Location</p><p>{globals.footer_location}</p></div>
             <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">WhatsApp</p>{whatsapp ? <a href={whatsapp} target="_blank" rel="noreferrer" className="text-[#E4D7A6] underline underline-offset-4 hover:text-[#E3C65E]">Request a quote ↗</a> : <Link href="/quote">Request a quote</Link>}</div>
-            <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">Business details</p><p>{gstin ? `GSTIN ${gstin}` : "GSTIN printed on the tax invoice"}</p><p className="mt-1 text-xs text-[#9DA995]">18% GST on B2B invoices. 50% non-refundable advance to hold a date.</p></div>
+            <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">Business details</p><p>{gstin ? `GSTIN ${gstin}` : "GSTIN printed on the tax invoice"}</p><p className="mt-1 text-xs text-[#9DA995]">{globals.footer_gst_note}</p></div>
           </div>
           <div className="mt-6 flex items-center gap-3">
             {instagramUrl ? <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="social-glass !border-[#806B2D]/60 !bg-[#10251A] !text-[#E4D7A6] hover:!bg-[#173322]"><svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1" fill="currentColor" stroke="none"/></svg></a> : null}
@@ -53,8 +54,10 @@ export function Footer() {
 
         <div className="border-t border-[#806B2D]/35 pt-8 lg:col-span-3 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
           <p className="text-[.62rem] font-bold uppercase tracking-[.24em] text-[#D2B85C]">Make it memorable</p>
-          <h2 className="mt-4 font-display text-4xl leading-[.98] text-[#F4F0DF]">Your next event <em className="text-[#D2B85C]">starts here.</em></h2>
-          <p className="mt-4 text-xs leading-6 text-[#AEB9AA]">Tell us what you are planning. We’ll help you build the right mix of experiences.</p>
+          <h2 className="mt-4 font-display text-4xl leading-[.98] text-[#F4F0DF]">
+            {globals.footer_cta_title} <em className="text-[#D2B85C]">{globals.footer_cta_accent}</em>
+          </h2>
+          <p className="mt-4 text-xs leading-6 text-[#AEB9AA]">{globals.footer_cta_copy}</p>
           <Link href="/rate-card" className="mt-8 flex items-center justify-between rounded-xl border border-dashed border-[#806B2D]/70 bg-[#0D2117] px-4 py-4 transition hover:border-[#D2B85C] hover:bg-[#10291B]">
             <span><span className="block text-[.55rem] font-bold uppercase tracking-[.18em] text-[#D2B85C]">Your event, your mix</span><span className="mt-1 block text-sm font-semibold text-[#F4F0DF]">Explore the rate card</span></span><span className="text-xl text-[#E4D7A6]">→</span>
           </Link>
@@ -62,8 +65,8 @@ export function Footer() {
         </div>
       </div>
       <div className="relative flex flex-col justify-between gap-2 border-t border-[#806B2D]/35 px-5 py-5 text-xs text-[#8F9B89] sm:flex-row sm:px-8 lg:px-12">
-        <span>© 2026 Visriva. All rights reserved.</span>
-        <span>Experiences designed to bring people together.</span>
+        <span>{globals.footer_copyright}</span>
+        <span>{globals.footer_rights_line}</span>
       </div>
     </footer>
   );

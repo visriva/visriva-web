@@ -8,6 +8,7 @@ import { StatsBar } from "@/components/StatsBar";
 import { RateList } from "@/components/RateList";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { processSteps } from "@/lib/site";
+import { getSiteGlobals } from "@/lib/site-globals";
 import { getWebsitePage } from "@/lib/website-pages";
 import { siteUrl } from "@/lib/site";
 import { DynamicIslandNav, QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
@@ -26,13 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [catalog, pageContent] = await Promise.all([getPublishedCatalog(), getWebsitePage("home")]);
+  const [catalog, pageContent, globals] = await Promise.all([getPublishedCatalog(), getWebsitePage("home"), getSiteGlobals()]);
   const featured = catalog.list.filter((service) => ["unlimited-dslr", "ai-station", "vr-station"].includes(service.id) && service.bookable !== false);
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
       <Hero pageContent={pageContent} />
       <div className="relative z-30 mx-auto -mt-3 mb-6 w-fit"><DynamicIslandNav active="Explore Visriva"/></div>
-      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar /></div>
+      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12"><StatsBar stats={globals.stats} /></div>
 
       <ExperienceDeck services={catalog.list} />
       <section className="bg-[#F8F7EF] px-5 pb-8 sm:px-8 lg:px-12"><div className="mx-auto max-w-[1500px]"><QuoteDeck/></div></section>
