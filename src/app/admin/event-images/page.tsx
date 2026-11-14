@@ -7,7 +7,11 @@ export default async function AdminEventImagesPage() {
 
   return (
     <AdminShell>
-      <AdminEventImagesClient initialSettings={settings} initialRows={rows} />
+      <main className="px-4 pb-20 pt-6 sm:px-6 lg:px-10 lg:pt-8">
+        <div className="mx-auto max-w-[1200px]">
+          <AdminEventImagesClient initialSettings={settings} initialRows={rows} />
+        </div>
+      </main>
     </AdminShell>
   );
 }

@@ -105,7 +105,7 @@ function QrSectionBlock({
             <h1 className="mt-4 font-display text-[2.15rem] leading-tight text-cream sm:text-4xl">
               {content.hero.title} <span className="italic text-gold-2">{content.hero.title_accent}</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-mist">{content.hero.subtitle}</p>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/85">{content.hero.subtitle}</p>
             <button type="button" onClick={onScrollEntry} className="qr-gold-btn mt-8 min-h-12 rounded-full px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.16em]">
               {content.hero.cta_text}
             </button>

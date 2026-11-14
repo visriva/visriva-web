@@ -198,8 +198,14 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-gold">QR guest flow</p>
-          <h1 className="font-display text-4xl italic text-cream">Event images</h1>
-          <p className="mt-2 max-w-2xl text-sm text-mist">Manage password-protected galleries for <Link href="/qr?tab=photos" className="text-gold-2 underline">/qr</Link> guests.</p>
+          <h1 className="font-display text-4xl italic text-white">Event images</h1>
+          <p className="mt-3 max-w-2xl text-base admin-muted">
+            Manage password-protected galleries for{" "}
+            <Link href="/qr?tab=photos" className="font-semibold text-[#E8D48A] underline">
+              /qr
+            </Link>{" "}
+            guests.
+          </p>
         </div>
         <button type="button" onClick={startCreate} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-champagne">
           <Plus className="h-4 w-4" />
@@ -207,7 +213,7 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
         </button>
       </header>
 
-      <section className="space-y-4 rounded-2xl border border-gold/20 bg-white/[0.02] p-5 sm:p-6">
+      <section className="admin-surface space-y-5 p-6 sm:p-8">
         <h2 className="font-royal text-[0.62rem] uppercase tracking-[0.22em] text-gold">Gatekeeper popup copy</h2>
         <div className="grid gap-4 md:grid-cols-2">
           <SettingsField label="Hero CTA on /qr" value={settings.hero_button_text} onChange={(v) => { setSettings({ ...settings, hero_button_text: v }); setSettingsDirty(true); }} />
@@ -230,18 +236,18 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
       </section>
 
       {draft ? (
-        <section className="space-y-4 rounded-2xl border border-gold/25 bg-white/[0.02] p-5 sm:p-6">
+        <section className="admin-surface space-y-5 p-6 sm:p-8">
           <h2 className="font-display text-2xl text-cream">New event gallery</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="text-sm text-mist">
+            <label className="text-sm admin-muted">
               Event name
               <input className={input} value={draft.event_name ?? ""} onChange={(e) => setDraft({ ...draft, event_name: e.target.value })} />
             </label>
-            <label className="text-sm text-mist">
+            <label className="text-sm admin-muted">
               Event date
               <input type="date" className={input} value={draft.event_date ?? ""} onChange={(e) => onDraftDateChange(e.target.value)} />
             </label>
-            <label className="text-sm text-mist">
+            <label className="text-sm admin-muted">
               Password (DDMM)
               <input
                 className={input}
@@ -252,7 +258,7 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
                 }}
               />
             </label>
-            <label className="text-sm text-mist">
+            <label className="text-sm admin-muted">
               Display mode
               <select className={input} value={draft.embed_mode ?? "embed"} onChange={(e) => setDraft({ ...draft, embed_mode: e.target.value as "embed" | "fullscreen" })}>
                 <option value="embed">Embed inside visriva.com (recommended)</option>
@@ -292,7 +298,7 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
         </section>
       ) : null}
 
-      <section className="rounded-2xl border border-gold/20 bg-white/[0.02] p-5 sm:p-6">
+      <section className="admin-surface p-6 sm:p-8">
         <h2 className="font-royal text-[0.62rem] uppercase tracking-[0.22em] text-gold">Event galleries</h2>
         {loading ? (
           <p className="mt-4 flex items-center gap-2 text-sm text-mist">
@@ -345,7 +351,7 @@ function SettingsField({
   multiline?: boolean;
 }) {
   return (
-    <label className="text-sm text-mist">
+    <label className="text-sm admin-muted">
       {label}
       {multiline ? (
         <textarea className={`${input} min-h-20`} value={value} onChange={(e) => onChange(e.target.value)} />
@@ -372,7 +378,7 @@ function EventRowCard({
   const previewHref = `/qr?tab=photos`;
 
   return (
-    <li className="rounded-2xl border border-gold/20 bg-white/[0.03] p-4 sm:p-5">
+    <li className="rounded-2xl border-2 border-gold/30 bg-[#0A1F17] p-5 sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="font-display text-xl text-cream">{row.event_name}</p>
