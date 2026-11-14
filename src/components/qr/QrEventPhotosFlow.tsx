@@ -2,16 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EventGalleryEmbed } from "@/components/qr/EventGalleryEmbed";
 import { QrLuxuryModal } from "@/components/qr/QrLuxuryModal";
 import type { EventGalleryPublic, EventPhotosSettings } from "@/lib/event-galleries-types";
 
-const GATE_KEY = "visriva_event_photos_gate";
-const UNLOCK_KEY = "visriva_event_photos_unlock";
-const PW_KEY = "visriva_event_photos_pw";
+/** Query keys that must never appear on /qr (anti link-sharing). */
+const PHOTO_QUERY_KEYS = new Set(["tab", "event", "eventId", "unlocked", "photos"]);
 
 type UnlockPayload = {
   eventId: string;
@@ -28,9 +26,6 @@ type Phase = "idle" | "gatekeeper" | "vault" | "gallery";
 
 export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventPhotosSettings }) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const tabPhotos = searchParams.get("tab") === "photos";
 
   const [settings] = useState(initialSettings);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -45,6 +40,9 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
   const [unlock, setUnlock] = useState<UnlockPayload | null>(null);
   const [useDirectView, setUseDirectView] = useState(false);
 
+  /** In-memory only for this page load (cleared on refresh / new tab). Not stored in URL or storage. */
+  const unlockedPasswordRef = useRef("");
+
   const whatsappHref = useMemo(() => {
     const digits = settings.whatsapp_number.replace(/\D/g, "") || "918884484828";
     const withCountry = digits.length === 10 ? `91${digits}` : digits;
@@ -53,16 +51,21 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
 
   const phoneDisplay = useMemo(() => settings.whatsapp_number.replace(/\D/g, "") || "8884484828", [settings]);
 
-  const syncTabUrl = useCallback(
-    (photos: boolean) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (photos) params.set("tab", "photos");
-      else params.delete("tab");
-      const qs = params.toString();
-      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-    },
-    [pathname, router, searchParams],
-  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    let strip = false;
+    for (const key of [...url.searchParams.keys()]) {
+      if (PHOTO_QUERY_KEYS.has(key.toLowerCase())) {
+        url.searchParams.delete(key);
+        strip = true;
+      }
+    }
+    if (strip) {
+      const qs = url.searchParams.toString();
+      router.replace(qs ? `${url.pathname}?${qs}` : "/qr", { scroll: false });
+    }
+  }, [router]);
 
   const loadEvents = useCallback(async () => {
     setEventsLoading(true);
@@ -74,60 +77,40 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
     }
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const raw = sessionStorage.getItem(UNLOCK_KEY);
-      if (raw) setUnlock(JSON.parse(raw) as UnlockPayload);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!tabPhotos || phase !== "idle") return;
-    const passed = typeof window !== "undefined" && sessionStorage.getItem(GATE_KEY) === "1";
-    let stored: UnlockPayload | null = null;
-    try {
-      const raw = sessionStorage.getItem(UNLOCK_KEY);
-      if (raw) stored = JSON.parse(raw) as UnlockPayload;
-    } catch {
-      stored = null;
-    }
-    if (passed) {
-      setPhase(stored ? "gallery" : "vault");
-      if (stored) setUnlock(stored);
-      void loadEvents();
-    } else {
-      setPhase("gatekeeper");
-    }
-  }, [tabPhotos, phase, loadEvents]);
+  function resetVaultFields() {
+    setSelectedId("");
+    setPassword("");
+    setShowPassword(false);
+    setUnlockError("");
+    unlockedPasswordRef.current = "";
+  }
 
   function openGatekeeper() {
+    resetVaultFields();
+    setUnlock(null);
+    setUseDirectView(false);
     setPhase("gatekeeper");
   }
 
   function passGatekeeper() {
-    if (typeof window !== "undefined") sessionStorage.setItem(GATE_KEY, "1");
-    syncTabUrl(true);
     setPhase("vault");
     void loadEvents();
   }
 
   function closeFlow() {
     setPhase("idle");
-    syncTabUrl(false);
-    setUnlockError("");
+    resetVaultFields();
+    setUnlock(null);
+    setUseDirectView(false);
   }
 
   function backToVault() {
     setUnlock(null);
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem(UNLOCK_KEY);
-      sessionStorage.removeItem(PW_KEY);
-    }
-    setPhase("vault");
+    setPassword("");
     setUseDirectView(false);
+    unlockedPasswordRef.current = "";
+    setPhase("vault");
+    void loadEvents();
   }
 
   async function tryUnlock(event: React.FormEvent) {
@@ -160,13 +143,9 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
       embedUrl: String(body.embedUrl),
       iframeAllow: typeof body.iframeAllow === "string" ? body.iframeAllow : undefined,
     };
+    unlockedPasswordRef.current = password;
     setUnlock(payload);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(UNLOCK_KEY, JSON.stringify(payload));
-      sessionStorage.setItem(PW_KEY, password);
-    }
     setPhase("gallery");
-    syncTabUrl(true);
   }
 
   useEffect(() => {
@@ -174,9 +153,8 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
 
     async function refreshEmbed() {
       const eventId = unlock?.eventId;
-      if (!eventId || typeof window === "undefined") return;
-      const pw = sessionStorage.getItem(PW_KEY);
-      if (!pw) return;
+      const pw = unlockedPasswordRef.current;
+      if (!eventId || !pw) return;
       const response = await fetch("/api/event-galleries/unlock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -185,7 +163,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
       });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) return;
-      const next: UnlockPayload = {
+      setUnlock({
         eventId,
         event_name: String(body.event_name),
         event_date: String(body.event_date),
@@ -194,9 +172,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
         directUrl: String(body.directUrl),
         embedUrl: String(body.embedUrl),
         iframeAllow: typeof body.iframeAllow === "string" ? body.iframeAllow : undefined,
-      };
-      setUnlock(next);
-      sessionStorage.setItem(UNLOCK_KEY, JSON.stringify(next));
+      });
     }
 
     const onVisible = () => {
@@ -226,7 +202,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
           <p className="font-royal text-[0.65rem] uppercase tracking-[0.3em] text-[#E8D48A]">Your event memories</p>
           <h2 className="mt-3 font-display text-3xl leading-tight text-white sm:text-4xl">Event photo vault</h2>
           <p className="mt-4 text-base leading-relaxed text-white/88">
-            View and download photos from your Visriva station — without leaving this page.
+            View and download photos from your Visriva station — without leaving this page. For your privacy, you’ll verify on this device each time you open the vault.
           </p>
           <button
             type="button"
@@ -238,11 +214,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
         </div>
       </section>
 
-      <QrLuxuryModal
-        open={phase === "gatekeeper"}
-        onClose={closeFlow}
-        ariaLabelledBy="event-photos-gate-title"
-      >
+      <QrLuxuryModal open={phase === "gatekeeper"} onClose={closeFlow} ariaLabelledBy="event-photos-gate-title">
         <p id="event-photos-gate-title" className="pr-12 font-royal text-[0.65rem] uppercase tracking-[0.28em] text-[#E8D48A]">
           Step 1 · Before you view
         </p>
@@ -275,13 +247,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
         </button>
       </QrLuxuryModal>
 
-      <QrLuxuryModal
-        open={phase === "vault"}
-        onClose={closeFlow}
-        layout="scroll"
-        maxWidthClass="max-w-xl"
-        ariaLabelledBy="event-vault-title"
-      >
+      <QrLuxuryModal open={phase === "vault"} onClose={closeFlow} layout="scroll" maxWidthClass="max-w-xl" ariaLabelledBy="event-vault-title">
         <VaultForm
           settings={settings}
           eventsLoading={eventsLoading}
@@ -299,13 +265,7 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
         />
       </QrLuxuryModal>
 
-      <QrLuxuryModal
-        open={phase === "gallery" && Boolean(unlock)}
-        onClose={closeFlow}
-        layout="scroll"
-        maxWidthClass="max-w-5xl"
-        ariaLabelledBy="event-gallery-title"
-      >
+      <QrLuxuryModal open={phase === "gallery" && Boolean(unlock)} onClose={closeFlow} layout="scroll" maxWidthClass="max-w-5xl" ariaLabelledBy="event-gallery-title">
         {unlock ? (
           <GalleryView
             settings={settings}
@@ -316,10 +276,10 @@ export function QrEventPhotosFlow({ initialSettings }: { initialSettings: EventP
             useDirectView={useDirectView}
             onToggleDirect={() => setUseDirectView((v) => !v)}
             onChangeEvent={backToVault}
+            onHardRefresh={() => window.location.assign("/qr")}
           />
         ) : null}
       </QrLuxuryModal>
-
     </>
   );
 }
@@ -438,6 +398,7 @@ function GalleryView({
   useDirectView,
   onToggleDirect,
   onChangeEvent,
+  onHardRefresh,
 }: {
   settings: EventPhotosSettings;
   unlock: UnlockPayload;
@@ -447,6 +408,7 @@ function GalleryView({
   useDirectView: boolean;
   onToggleDirect: () => void;
   onChangeEvent: () => void;
+  onHardRefresh: () => void;
 }) {
   return (
     <div className="space-y-5">
@@ -487,10 +449,10 @@ function GalleryView({
 
       <p className="text-center text-sm text-white/75">
         Having trouble loading?{" "}
-        <Link href="/qr?tab=photos" className="font-semibold text-[#E8D48A] underline">
-          Refresh
-        </Link>{" "}
-        or WhatsApp us for a direct link.
+        <button type="button" onClick={onHardRefresh} className="font-semibold text-[#E8D48A] underline">
+          Reload this page
+        </button>{" "}
+        (you’ll verify again) or WhatsApp us for help.
       </p>
     </div>
   );

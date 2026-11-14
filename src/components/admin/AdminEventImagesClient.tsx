@@ -201,7 +201,7 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
           <h1 className="font-display text-4xl italic text-white">Event images</h1>
           <p className="mt-3 max-w-2xl text-base admin-muted">
             Manage password-protected galleries for{" "}
-            <Link href="/qr?tab=photos" className="font-semibold text-[#E8D48A] underline">
+            <Link href="/qr" className="font-semibold text-[#E8D48A] underline">
               /qr
             </Link>{" "}
             guests.
@@ -322,7 +322,7 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
         )}
       </section>
 
-      <AdminFloatingSaveBar dirty={settingsDirty} pending={pending} onSave={() => void saveSettings()} notice={notice} error={error} previewHref="/qr?tab=photos" />
+      <AdminFloatingSaveBar dirty={settingsDirty} pending={pending} onSave={() => void saveSettings()} notice={notice} error={error} previewHref="/qr" />
     </div>
   );
 }
@@ -381,7 +381,7 @@ function EventRowCard({
   onPatch: (id: string, patch: Record<string, unknown>) => void;
   onDelete: (id: string) => void;
 }) {
-  const previewHref = `/qr?tab=photos`;
+  const previewHref = "/qr";
 
   return (
     <li className="rounded-2xl border-2 border-gold/30 bg-[#0A1F17] p-5 sm:p-6">
