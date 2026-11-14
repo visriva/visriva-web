@@ -207,7 +207,11 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
             guests.
           </p>
         </div>
-        <button type="button" onClick={startCreate} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-champagne">
+        <button
+          type="button"
+          onClick={startCreate}
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-gold/45 bg-gold/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#F5E6B8]"
+        >
           <Plus className="h-4 w-4" />
           New event gallery
         </button>
@@ -239,16 +243,16 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
         <section className="admin-surface space-y-5 p-6 sm:p-8">
           <h2 className="font-display text-2xl text-cream">New event gallery</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="text-sm admin-muted">
-              Event name
+            <label className="block">
+              <span className="admin-label">Event name</span>
               <input className={input} value={draft.event_name ?? ""} onChange={(e) => setDraft({ ...draft, event_name: e.target.value })} />
             </label>
-            <label className="text-sm admin-muted">
-              Event date
+            <label className="block">
+              <span className="admin-label">Event date</span>
               <input type="date" className={input} value={draft.event_date ?? ""} onChange={(e) => onDraftDateChange(e.target.value)} />
             </label>
-            <label className="text-sm admin-muted">
-              Password (DDMM)
+            <label className="block">
+              <span className="admin-label">Password (DDMM)</span>
               <input
                 className={input}
                 value={draft.password ?? ""}
@@ -258,15 +262,17 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
                 }}
               />
             </label>
-            <label className="text-sm admin-muted">
-              Display mode
+            <label className="block">
+              <span className="admin-label">Display mode</span>
               <select className={input} value={draft.embed_mode ?? "embed"} onChange={(e) => setDraft({ ...draft, embed_mode: e.target.value as "embed" | "fullscreen" })}>
                 <option value="embed">Embed inside visriva.com (recommended)</option>
                 <option value="fullscreen">Branded full-screen frame</option>
               </select>
             </label>
-            <label className="text-sm text-mist md:col-span-2">
-              Paste event link OR full <code className="text-gold-2">&lt;iframe&gt;</code> embed code
+            <label className="block md:col-span-2">
+              <span className="admin-label">
+                Paste event link OR full <code className="text-gold-2">&lt;iframe&gt;</code> embed code
+              </span>
               <textarea
                 className={`${input} min-h-28 font-mono text-xs`}
                 placeholder='https://fotoshare.co/e/… or <iframe src="…" allow="web-share" …></iframe>'
@@ -291,7 +297,7 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
             <button type="button" disabled={pending} onClick={() => void createEvent()} className="rounded-full bg-gold/20 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.14em] text-cream">
               Create event
             </button>
-            <button type="button" onClick={() => setDraft(null)} className="rounded-full border border-gold/30 px-6 py-3 text-[10px] uppercase tracking-[0.14em] text-mist">
+            <button type="button" onClick={() => setDraft(null)} className="rounded-full border-2 border-gold/35 px-6 py-3 text-[10px] uppercase tracking-[0.14em] admin-muted">
               Cancel
             </button>
           </div>
@@ -301,12 +307,12 @@ export function AdminEventImagesClient({ initialSettings, initialRows }: Props) 
       <section className="admin-surface p-6 sm:p-8">
         <h2 className="font-royal text-[0.62rem] uppercase tracking-[0.22em] text-gold">Event galleries</h2>
         {loading ? (
-          <p className="mt-4 flex items-center gap-2 text-sm text-mist">
+          <p className="mt-4 flex items-center gap-2 text-sm admin-muted">
             <Loader2 className="h-4 w-4 animate-spin" />
             Loading…
           </p>
         ) : rows.length === 0 ? (
-          <p className="mt-4 text-sm text-mist">No events yet. Create one above.</p>
+          <p className="mt-4 text-sm admin-muted">No events yet. Create one above.</p>
         ) : (
           <ul className="mt-4 space-y-4">
             {rows.map((row) => (
@@ -325,7 +331,7 @@ function EmbedParsePreview({ raw, className = "" }: { raw: string; className?: s
   const parsed = parseGalleryInput(raw);
   if (!parsed.sourceUrl && !parsed.embedUrl) return null;
   return (
-    <p className={`rounded-xl border border-gold/15 bg-black/20 px-3 py-2 text-[10px] leading-relaxed text-mist ${className}`}>
+    <p className={`rounded-xl border border-gold/25 bg-[#041912] px-3 py-2.5 text-[10px] leading-relaxed admin-muted ${className}`}>
       Parsed <span className="text-gold-2">{parsed.provider}</span>
       {parsed.iframeAllow ? (
         <>
@@ -351,8 +357,8 @@ function SettingsField({
   multiline?: boolean;
 }) {
   return (
-    <label className="text-sm admin-muted">
-      {label}
+    <label className="block">
+      <span className="admin-label">{label}</span>
       {multiline ? (
         <textarea className={`${input} min-h-20`} value={value} onChange={(e) => onChange(e.target.value)} />
       ) : (
@@ -382,7 +388,7 @@ function EventRowCard({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="font-display text-xl text-cream">{row.event_name}</p>
-          <p className="text-xs text-mist">{row.event_date}</p>
+          <p className="text-xs admin-muted">{row.event_date}</p>
           <button type="button" onClick={() => onCopy(row.password)} className="mt-2 inline-flex items-center gap-1 rounded-full border border-gold/30 px-3 py-1 text-[10px] font-mono text-gold-2">
             {row.password}
             <Copy className="h-3 w-3" />
@@ -397,7 +403,7 @@ function EventRowCard({
             type="button"
             disabled={pending}
             onClick={() => onPatch(row.id, { is_active: !row.is_active })}
-            className={`rounded-full px-3 py-2 text-[10px] uppercase tracking-wider ${row.is_active ? "border border-emerald-400/40 text-emerald-200" : "border border-mist/40 text-mist"}`}
+            className={`rounded-full border-2 px-3 py-2 text-[10px] font-bold uppercase tracking-wider ${row.is_active ? "border-emerald-400/50 text-emerald-200" : "border-white/20 text-white/60"}`}
           >
             {row.is_active ? "Active" : "Hidden"}
           </button>
@@ -406,8 +412,8 @@ function EventRowCard({
           </button>
         </div>
       </div>
-      <label className="mt-4 block text-xs text-mist">
-        Link or iframe embed
+      <label className="mt-4 block">
+        <span className="admin-label">Link or iframe embed</span>
         <textarea
           className="field mt-1 min-h-24 font-mono text-xs"
           defaultValue={row.gallery_url}

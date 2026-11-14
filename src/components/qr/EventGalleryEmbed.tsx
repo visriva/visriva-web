@@ -11,7 +11,7 @@ type Props = {
 export function EventGalleryEmbed({ src, eventName, allow }: Props) {
   if (!src) {
     return (
-      <div className="grid h-[40vh] min-h-[320px] place-items-center rounded-2xl border border-dashed border-gold/30 bg-ink/40 p-6 text-center text-sm text-mist">
+      <div className="grid h-[40vh] min-h-[320px] place-items-center rounded-2xl border-2 border-dashed border-[#C9A227]/40 bg-[#041912] p-6 text-center text-sm text-white/80">
         Gallery link is not configured yet.
       </div>
     );

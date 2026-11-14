@@ -125,7 +125,7 @@ function QrSectionBlock({
                 <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="qr-gold-btn mt-4 inline-flex min-h-11 items-center rounded-full px-5 py-3 text-[10px] font-bold uppercase tracking-[0.14em]">
                   {content.whatsapp.button_text}
                 </a>
-                {phoneDisplay ? <p className="mt-2 text-[10px] text-mist">{phoneDisplay}</p> : null}
+                {phoneDisplay ? <p className="mt-2 text-[10px] qr-body-muted">{phoneDisplay}</p> : null}
               </div>
             </div>
           </LuxuryCard>
@@ -141,7 +141,7 @@ function QrSectionBlock({
                 <span className="font-display text-2xl text-gold">{step.number}</span>
                 <div>
                   <p className="font-display text-xl text-champagne">{step.title}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-mist">{step.copy}</p>
+                  <p className="mt-1 text-xs leading-relaxed qr-body-muted">{step.copy}</p>
                 </div>
               </li>
             ))}
@@ -184,7 +184,7 @@ function QrSectionBlock({
           <LuxuryCard className="p-6 text-center">
             <Sparkles className="mx-auto h-6 w-6 text-gold-2" aria-hidden />
             <p className="mt-3 font-display text-2xl text-cream">{content.b2b.title}</p>
-            <p className="mt-2 text-sm text-mist">{content.b2b.body}</p>
+            <p className="mt-2 text-sm qr-body-muted">{content.b2b.body}</p>
             <Link href={content.b2b.cta_href} className="qr-gold-btn mt-6 inline-flex min-h-11 items-center rounded-full px-7 py-3 text-[10px] font-bold uppercase tracking-[0.14em]">
               {content.b2b.cta_text}
             </Link>
@@ -215,7 +215,7 @@ function LuxuryCard({ children, className = "" }: { children: React.ReactNode; c
 function ExternalEntry({ content, url, embed }: { content: QrPageContent; url: string; embed: boolean }) {
   return (
     <div className="mt-5 space-y-4">
-      <p className="text-sm leading-relaxed text-mist">{content.entry.external_body}</p>
+      <p className="text-sm leading-relaxed qr-body-muted">{content.entry.external_body}</p>
       <a href={url} target="_blank" rel="noopener noreferrer" className="qr-gold-btn flex min-h-12 w-full items-center justify-center rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.14em]">
         {content.entry.external_button}
       </a>
@@ -248,7 +248,7 @@ function HamperCard({ content }: { content: QrPageContent }) {
                 <QrMediaImage src={card.image_url} alt={card.image_alt} className="h-28 w-full rounded-xl object-cover" width={400} height={224} />
               ) : null}
               <p className="mt-2 font-display text-lg text-champagne">{card.title}</p>
-              {card.description ? <p className="mt-1 text-xs text-mist">{card.description}</p> : null}
+              {card.description ? <p className="mt-1 text-xs qr-body-muted">{card.description}</p> : null}
             </div>
           ))}
         </div>
@@ -256,7 +256,7 @@ function HamperCard({ content }: { content: QrPageContent }) {
       {content.hamper.image_url ? (
         <QrMediaImage src={content.hamper.image_url} alt={content.hamper.image_alt} className="mt-5 h-44 w-full rounded-2xl object-cover" width={800} height={440} />
       ) : (
-        <div className="mt-5 grid h-36 place-items-center rounded-2xl border border-dashed border-gold/30 bg-deep/50 px-4 text-center text-[10px] uppercase tracking-widest text-mist">
+        <div className="mt-5 grid h-36 place-items-center rounded-2xl border border-dashed border-gold/30 bg-deep/50 px-4 text-center text-[10px] uppercase tracking-widest qr-body-muted">
           {content.hamper.image_fallback_label}
         </div>
       )}
@@ -295,14 +295,14 @@ function WinnersCarousel({ content }: { content: QrPageContent }) {
           {winner.image_url ? (
             <QrMediaImage src={winner.image_url} alt={winner.image_alt} className="aspect-square w-full rounded-2xl object-cover" width={280} height={280} />
           ) : (
-            <div className="grid aspect-square place-items-center rounded-2xl border border-dashed border-gold/35 bg-ink/80 px-2 text-center text-[10px] uppercase tracking-wider text-mist">
+            <div className="grid aspect-square place-items-center rounded-2xl border border-dashed border-gold/35 bg-ink/80 px-2 text-center text-[10px] uppercase tracking-wider qr-body-muted">
               {winner.image_alt}
             </div>
           )}
           <div>
             <p className="font-display text-2xl text-champagne">{winner.name}</p>
             <p className="mt-1 text-sm text-gold-2">{winner.station}</p>
-            <p className="mt-2 text-xs text-mist">{winner.event}</p>
+            <p className="mt-2 text-xs qr-body-muted">{winner.event}</p>
           </div>
         </div>
         <div className="mt-4 flex justify-center gap-2">
@@ -324,7 +324,7 @@ function RulesAccordion({ content }: { content: QrPageContent }) {
         <ChevronDown className={`h-4 w-4 transition ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
       {open ? (
-        <ul className="space-y-2 border-t border-gold/15 px-4 py-4 text-xs leading-relaxed text-mist">
+        <ul className="space-y-2 border-t border-gold/15 px-4 py-4 text-xs leading-relaxed qr-body-muted">
           {content.rules.items.map((rule) => (
             <li key={rule}>• {rule}</li>
           ))}

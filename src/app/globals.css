@@ -98,7 +98,8 @@ body[data-menu="open"] .whatsapp-bubble { display:none; }
 
 .qr-luxury-bg { position:relative; background:linear-gradient(165deg,#06241B 0%,#0B3D2E 42%,#072A1F 100%); }
 .qr-gold-orb { position:absolute; border-radius:9999px; background:rgb(201 162 39 / 14%); filter:blur(64px); pointer-events:none; }
-.qr-glass-card { border:1px solid rgb(201 162 39 / 32%); background:rgb(8 35 27 / 92%); box-shadow:0 24px 80px rgb(0 0 0 / 28%); }
+.qr-glass-card { border:1px solid rgb(201 162 39 / 38%); background:rgb(7 41 30 / 96%); box-shadow:0 20px 56px rgb(0 0 0 / 32%); }
+.qr-body-muted { color:rgb(255 255 255 / 82%); }
 .qr-modal-panel { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; filter:none !important; transform:none; isolation:isolate; }
 .qr-field-light { width:100%; border:2px solid rgb(201 162 39 / 45%); border-radius:14px; background:#041912; color:#fff; padding:.9rem 1rem; outline:none; }
 .qr-field-light:focus { border-color:#E5C158; box-shadow:0 0 0 4px rgb(201 162 39 / 20%); }
