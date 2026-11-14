@@ -14,4 +14,5 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/bookings", label: "Bookings", ready: false },
   { href: "/admin/customers", label: "Customers", ready: false },
   { href: "/admin/website", label: "Website CMS", ready: true },
+  { href: "/admin/qr", label: "QR giveaway", ready: true },
 ];

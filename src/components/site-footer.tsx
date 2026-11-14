@@ -6,7 +6,7 @@ import { WhatsAppBubble } from "@/components/WhatsAppBubble";
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/admin") || pathname.startsWith("/qr")) return null;
 
   return (
     <>

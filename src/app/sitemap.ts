@@ -11,6 +11,7 @@ const paths = [
   "/client-requirements",
   "/rate-card",
   "/quote",
+  "/qr",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
