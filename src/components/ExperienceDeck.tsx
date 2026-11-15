@@ -7,6 +7,8 @@ import type { HomeExperience } from "@/lib/home-content-types";
 import { DEFAULT_HOME_CONTENT } from "@/lib/home-content-types";
 import type { Service, ServiceCategory } from "@/lib/services";
 import { categoryMeta } from "@/lib/services";
+import { BouncyNavPill } from "@/components/framer-ui";
+import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 
 type TabId = "all" | ServiceCategory;
 
@@ -49,9 +51,7 @@ export function ExperienceDeck({ services, content }: { services: Service[]; con
    </div>
 
    <div className="mt-10 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-    <div className="bouncy-tabs flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/80 bg-[#F8F7EF]/85 p-1.5 scrollbar-none" role="tablist" aria-label="Filter experiences">
-     {tabs.map(tab=><button key={tab.id} type="button" role="tab" aria-selected={active===tab.id} onClick={()=>changeTab(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-4 py-3 text-[10px] font-bold uppercase tracking-[.12em] sm:px-5 ${active===tab.id?"is-active bg-[#294937] text-white shadow-[0_7px_18px_rgba(41,73,55,.2)]":"text-[#607768] hover:bg-[#EAF1E6] hover:text-[#294937]"}`}>{tab.label}</button>)}
-    </div>
+    <BouncyNavPill items={tabs.map((t) => ({ id: t.id, label: t.label }))} active={active} onChange={(id) => changeTab(id as TabId)} ariaLabel="Filter experiences" layoutId="experiences-pill" />
     <div className="flex items-center justify-between gap-3">
      <span className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#829182]">{filtered.length} experiences</span>
      <div className="flex gap-2"><button type="button" aria-label="Previous experiences" onClick={()=>move(-1)} className="deck-arrow">←</button><button type="button" aria-label="Next experiences" onClick={()=>move(1)} className="deck-arrow">→</button></div>

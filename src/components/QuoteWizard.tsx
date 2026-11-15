@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GoldBurst } from "@/components/GoldBurst";
+import { BackTrigger, MotionSubmitButton, MultiStepProgress, PaperBackground } from "@/components/FramerSuite";
+import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 import { inr } from "@/lib/format";
 import { emptyDraft, quoteMessage, type QuoteDraft } from "@/lib/quote";
 import { categoryMeta, countsFromIds, estimateWithLookup, type Service, type ServiceCategory } from "@/lib/services";
@@ -171,25 +173,23 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
   }
 
   return (
-    <main id="content" className="min-h-screen bg-[#e6efe3] px-4 pb-24 pt-[112px] sm:px-6 lg:px-10">
+    <PaperBackground>
+    <main id="content" className="min-h-screen px-4 pb-24 pt-[112px] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1420px]">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div><p className="section-kicker">Visriva booking studio</p><h1 className="display-heading mt-2 text-5xl text-[#294937] sm:text-6xl">Let's plan something<br className="hidden sm:block"/><em className="gold-gradient">worth remembering.</em></h1><p className="mt-4 max-w-2xl text-sm leading-7 text-[#667B6B]">Build your event request in a few simple steps. You can review everything before sending, and there is no payment at this stage.</p></div>
-          <Link href="/client-requirements" className="rounded-full border border-[#c2d4be] bg-[#f8f7ef]/80 px-5 py-3 text-xs font-semibold text-[#526f5a] transition hover:border-[#a88f3e]">Venue checklist ↗</Link>
+          <div><p className="section-kicker">Visriva booking studio</p><h1 className="display-heading mt-2 text-5xl text-[#F4F0DF] sm:text-6xl">Let's plan something<br className="hidden sm:block"/><em className="text-[#E5C158] not-italic">worth remembering.</em></h1><p className="mt-4 max-w-2xl text-sm leading-7 text-[#C9D6CB]">Build your event request in a few simple steps. You can review everything before sending, and there is no payment at this stage.</p></div>
+          <div className="flex flex-wrap gap-2">
+            <BackTrigger />
+            <Link href="/client-requirements" className="inline-flex items-center gap-1 rounded-full border border-[#806B2D]/55 bg-[#0D2117] px-5 py-3 text-xs font-semibold text-[#E9DFBD] transition hover:border-[#E5C158]">
+              Venue checklist
+              <ArrowUpRightIcon className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
 
-        <div className="mb-6 rounded-2xl border border-[#B8A04D]/25 bg-[#F8F7EF]/85 p-4 shadow-[0_8px_26px_rgba(39,67,48,.04)] sm:p-5">
-          <div className="grid gap-3 sm:grid-cols-4">
-            {steps.map((item,index)=>{
-              const active=index===step;
-              const complete=index<step;
-              return <button key={item.label} type="button" onClick={()=>{if(index<step){setStep(index);setError("");}}} disabled={index>step} className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active?"bg-[#E1EDDC]":complete?"opacity-100":"opacity-55"}`}>
-                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold ${complete?"bg-[#355b42] text-white":active?"bg-[#b8a04d] text-[#203f30]":"border border-[#c7d8c2] text-[#79907d]"}`}>{complete?"✓":`0${index+1}`}</span>
-                <span><span className={`block text-xs font-semibold ${active||complete?"text-[#294937]":"text-[#89988B]"}`}>{item.label}</span><span className="mt-1 block text-[10px] text-[#849386]">{item.helper}</span></span>
-              </button>;
-            })}
-          </div>
-          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#E1E9DD]"><div className="h-full rounded-full bg-gradient-to-r from-[#0B8054] to-[#B8A04D] transition-all duration-500" style={{width:`${((step+1)/steps.length)*100}%`}}/></div>
+        <div className="mb-6 rounded-2xl border border-[#806B2D]/35 bg-[#0D2117]/90 p-4 sm:p-5">
+          <MultiStepProgress steps={[...steps]} current={step} />
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#1A2E24]"><div className="h-full rounded-full bg-gradient-to-r from-[#0B8054] to-[#B8A04D] transition-all duration-500" style={{width:`${((step+1)/steps.length)*100}%`}}/></div>
         </div>
 
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -334,7 +334,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
             {error?<p role="alert" className="mt-6 rounded-xl border border-[#d7b5a5] bg-[#fbefeb] px-4 py-3 text-sm text-[#9a4d37]">{error}</p>:null}
             <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[#dce6d8] pt-6">
               {step>0?<button type="button" onClick={()=>{setStep((value)=>value-1);setError("");}} className="rounded-full border border-[#c6d7c1] px-6 py-3.5 text-xs font-semibold text-[#48634f] transition hover:bg-[#edf3e9]">← Back</button>:<span className="text-xs text-[#8a9a8a]">Your progress is saved in this browser.</span>}
-              {step<3?<button type="button" onClick={nextStep} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em]">Continue to {steps[step+1].label} →</button>:<button type="button" disabled={sending} onClick={submit} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em] disabled:cursor-not-allowed disabled:opacity-60">{sending?"Sending your request…":"Send event request ↗"}</button>}
+              {step<3?<button type="button" onClick={nextStep} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em]">Continue to {steps[step+1].label} →</button>:<MotionSubmitButton pending={sending} onClick={submit}>Send event request</MotionSubmitButton>}
             </div>
           </section>
 
@@ -349,6 +349,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
         </div>
       </div>
     </main>
+    </PaperBackground>
   );
 }
 

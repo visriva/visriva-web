@@ -11,7 +11,7 @@ import { getSiteGlobals } from "@/lib/site-globals";
 import { visibleSectionIds } from "@/lib/page-section-layout";
 import { getWebsitePage } from "@/lib/website-pages";
 import { siteUrl } from "@/lib/site";
-import { QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
+import { DesignStudioNav, QuoteDeck, TestimonialsLoopCarousel, WaveRevealButton } from "@/components/FramerSuite";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
 import { getGoogleReviewSettings } from "@/lib/google-review";
 
@@ -45,7 +45,24 @@ export default async function HomePage() {
 
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
-      {show.has("hero") ? <Hero pageContent={pageContent} /> : null}
+      {show.has("hero") ? (
+        <>
+          <Hero pageContent={pageContent} />
+          <div className="relative z-20 mx-auto -mt-2 mb-4 max-w-[1500px] px-4 sm:px-6 lg:px-10">
+            <DesignStudioNav
+              activeHref="/"
+              items={[
+                { href: "/#experiences", label: "Experiences" },
+                { href: "/rate-card", label: "Rate card" },
+                { href: "/gallery", label: "Gallery" },
+                { href: "/qr", label: "Event photos" },
+                { href: "/reviews", label: "Reviews" },
+                { href: "/quote", label: "Plan event" },
+              ]}
+            />
+          </div>
+        </>
+      ) : null}
       {show.has("stats") ? (
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
           <StatsBar stats={globals.stats} />
@@ -153,6 +170,22 @@ export default async function HomePage() {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
+      ) : null}
+
+      {googleReviewSettings.enabled && googleReviewSettings.cards.length ? (
+        <section className="bg-[#DCE9D8] px-5 py-16 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1100px]">
+            <TestimonialsLoopCarousel
+              items={googleReviewSettings.cards.map((c) => ({
+                id: c.id,
+                author: c.author,
+                quote: c.quote,
+                rating: c.rating,
+                label: `${c.event_label} · ${c.date_label}`,
+              }))}
+            />
           </div>
         </section>
       ) : null}

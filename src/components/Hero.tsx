@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
+import { ActivityBadge } from "@/components/framer-ui";
 import { SwipeLettersLink } from "@/components/ui";
 
 const highlights = [
@@ -40,7 +41,7 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
 
       <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-10 px-4 sm:gap-12 sm:px-6 lg:min-h-[min(720px,88svh)] lg:grid-cols-[1.05fr_.95fr] lg:gap-14 lg:px-10 lg:py-16">
         <div className="max-w-[700px]">
-          <HeroBadge eyebrow={eyebrow} />
+          <ActivityBadge dark label={eyebrow.startsWith("✦") ? eyebrow : `✦ ${eyebrow.toUpperCase()}`} />
           <h1 className="font-display text-[2.35rem] font-medium leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
             {title}
             <br />
@@ -114,14 +115,5 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
         </div>
       </div>
     </section>
-  );
-}
-
-function HeroBadge({ eyebrow }: { eyebrow: string }) {
-  return (
-    <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#C9A227]/40 bg-[#06241B]/60 px-4 py-2 text-[10px] font-semibold uppercase tracking-[.2em] text-[#E5C158]">
-      <span aria-hidden>✦</span>
-      {eyebrow}
-    </div>
   );
 }

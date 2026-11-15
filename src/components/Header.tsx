@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Menu, Search, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { CamoLiquidButton } from "@/components/framer-ui";
 import { instagramUrl, navigation, phoneDisplay } from "@/lib/site";
 import { desktopQuickNav, mobileDrawerNav } from "@/lib/public-nav";
 import { whatsAppLink, WHATSAPP_GREETING } from "@/lib/whatsapp";
@@ -139,18 +140,16 @@ export function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setSearchOpen((v) => !v);
-              setQuery("");
-            }}
-            aria-label="Search services"
-            aria-expanded={searchOpen}
-            className="hidden h-10 w-10 place-items-center rounded-full border border-[#B69A47]/50 text-[#E5C158] transition hover:border-[#E5C158] lg:grid"
-          >
-            <Search className="h-[17px] w-[17px]" strokeWidth={1.8} />
-          </button>
+          <div className="hidden lg:block">
+            <CamoLiquidButton
+              label="Search"
+              expanded={searchOpen}
+              onClick={() => {
+                setSearchOpen((v) => !v);
+                setQuery("");
+              }}
+            />
+          </div>
 
           <Link
             href="/quote"

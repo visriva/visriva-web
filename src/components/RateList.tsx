@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useMemo,useRef,useState } from "react";
 import type { Service,ServiceCategory } from "@/lib/services";
+import { BouncyNavPill } from "@/components/FramerSuite";
 import { SwipeLettersLink } from "@/components/ui";
 import { categoryMeta } from "@/lib/services";
 
@@ -23,9 +24,7 @@ export function RateList({services}:{services:Service[]}){
  function changeFilter(id:Filter){setActive(id);setExpanded(null);rail.current?.scrollTo({left:0,behavior:"smooth"});}
  return <div>
   <div className="mb-7 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
-   <div className="bouncy-tabs flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/80 bg-[#F8F7EF]/90 p-1.5 scrollbar-none" role="tablist" aria-label="Filter rate card">
-    {tabs.map(tab=><button key={tab.id} type="button" role="tab" aria-selected={active===tab.id} onClick={()=>changeFilter(tab.id)} className={`bouncy-tab shrink-0 rounded-full px-5 py-3 text-[10px] font-bold uppercase tracking-[.12em] ${active===tab.id?"is-active bg-[#294937] text-white":"text-[#607768] hover:bg-[#EAF1E6]"}`}>{tab.label}</button>)}
-   </div>
+   <BouncyNavPill items={tabs.map((t) => ({ id: t.id, label: t.label }))} active={active} onChange={(id) => changeFilter(id as Filter)} ariaLabel="Filter rate card" />
    <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[.14em] text-[#819181]"><span>{filtered.length} options</span><span className="h-1 w-1 rounded-full bg-[#B8A04D]"/><span>{available.length} bookable now</span></div>
   </div>
   <div ref={rail} className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">

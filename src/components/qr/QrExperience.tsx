@@ -11,6 +11,7 @@ import { visibleQrSectionIds } from "@/lib/qr-content-types";
 import type { QrPageSettings } from "@/lib/qr-constants";
 import type { EventPhotosSettings } from "@/lib/event-galleries-types";
 import { QrEventPhotosSection } from "@/components/qr/QrEventPhotosSection";
+import { BouncyNavPill } from "@/components/framer-ui";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
 import type { GoogleReviewSettings } from "@/lib/google-review-types";
 
@@ -34,6 +35,7 @@ type Props = {
 };
 
 export function QrExperience({ content, settings, whatsappHref, phoneDisplay, eventPhotosSettings, googleReviewSettings }: Props) {
+  const [qrMode, setQrMode] = useState<"photos" | "giveaway">("photos");
   const reduce = useReducedMotion();
   const useExternal = settings.form_mode === "external" && Boolean(settings.external_form_url);
   const embed = useExternal && canEmbedExternalForm(settings.external_form_url);
@@ -42,6 +44,12 @@ export function QrExperience({ content, settings, whatsappHref, phoneDisplay, ev
 
   const scrollToEntry = useCallback(() => {
     document.getElementById("qr-entry")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const jumpQrMode = useCallback((mode: "photos" | "giveaway") => {
+    setQrMode(mode);
+    const target = mode === "photos" ? "qr-photos" : "qr-entry";
+    document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   const stagger: Variants = reduce ? { hidden: {}, show: {} } : { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
@@ -56,7 +64,20 @@ export function QrExperience({ content, settings, whatsappHref, phoneDisplay, ev
       <div className="pointer-events-none absolute inset-0 opacity-35 hero-grid" aria-hidden />
 
       <motion.main variants={stagger} initial="hidden" animate="show" className="relative z-10 mx-auto max-w-lg px-4 pb-20 pt-12 sm:max-w-xl sm:px-6 sm:pt-16">
-        <motion.div variants={item}>
+        <motion.div variants={item} className="mb-8">
+          <BouncyNavPill
+            dark
+            layoutId="qr-mode-pill"
+            ariaLabel="QR experience mode"
+            active={qrMode}
+            onChange={(id) => jumpQrMode(id as "photos" | "giveaway")}
+            items={[
+              { id: "photos", label: "Event photo vault" },
+              { id: "giveaway", label: "Weekly giveaway" },
+            ]}
+          />
+        </motion.div>
+        <motion.div variants={item} id="qr-photos">
           <QrEventPhotosSection initialSettings={eventPhotosSettings} />
         </motion.div>
         {googleReviewSettings.enabled && googleReviewSettings.show_on_qr ? (
@@ -158,7 +179,7 @@ function QrSectionBlock({
       );
     case "entry":
       return (
-        <section>
+        <section id="qr-entry">
           <LuxuryCard className="p-5 sm:p-7">
             <div className="flex items-center gap-2">
               <Gift className="h-4 w-4 text-gold" aria-hidden />

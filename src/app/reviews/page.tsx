@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
+import { ReviewsPageChrome } from "@/components/reviews/ReviewsPageChrome";
 import { getGoogleReviewSettings } from "@/lib/google-review";
 import { pageMeta } from "@/lib/seo";
 
@@ -16,8 +17,9 @@ export default async function ReviewsPage() {
   const settings = await getGoogleReviewSettings();
 
   return (
-    <main id="content" className="bg-[#06241B] px-4 pb-24 pt-28 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-[1100px]">
+    <main id="content" className="bg-[#041A13] px-4 pb-24 pt-24 sm:px-6 lg:px-10">
+      <ReviewsPageChrome>
+      <div className="mx-auto max-w-[1100px] pt-6">
         <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#E8D48A]">Visriva · Client feedback</p>
         <VisrivaGoogleReviewSection settings={{ ...settings, enabled: true }} variant="page" />
         <p className="mt-10 text-center text-sm text-white/70">
@@ -27,6 +29,7 @@ export default async function ReviewsPage() {
           </Link>
         </p>
       </div>
+      </ReviewsPageChrome>
     </main>
   );
 }

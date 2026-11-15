@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { RateList } from "@/components/RateList";
+import { LiquidGlassPricingCard, PaperBackground, TearTicket, WaveRevealButton } from "@/components/FramerSuite";
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { getWebsitePage } from "@/lib/website-pages";
@@ -22,20 +23,42 @@ export default async function RateCardPage() {
         image="/images/workshop.jpg"
         alt="A live merchandise and event customisation station"
       />
-      <section className="mx-auto max-w-[1500px] px-4 py-16 sm:px-6 lg:px-10">
+      <section className="mx-auto max-w-[1500px] px-4 py-10 sm:px-6 lg:px-10">
+        <div className="mb-12 grid gap-5 md:grid-cols-3">
+          {catalog.list.slice(0, 3).map((service) => (
+            <LiquidGlassPricingCard
+              key={service.id}
+              name={service.name}
+              price={service.priceLabel}
+              image={service.image}
+              footprint={service.footprint}
+              href={`/quote?services=${service.id}`}
+            />
+          ))}
+        </div>
+      </section>
+      <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
           <div><p className="section-kicker">Current inventory</p><h2 className="mt-3 font-display text-5xl text-[#294937]">Choose your experience.</h2></div>
           <p className="max-w-md text-xs leading-6 text-[#718574]">Prices shown are starting figures before applicable GST and transit. Items marked coming soon are not currently bookable.</p>
         </div>
         <RateList services={catalog.list}/>
       </section>
-      <section className="px-4 pb-20 sm:px-6 lg:px-10">
-        <PolicyStrip/>
-        <div className="mx-auto mt-10 flex max-w-[1500px] flex-wrap items-center justify-between gap-5 rounded-2xl border border-[#cbdcc7] bg-[#f8f7ef] p-6 sm:p-8">
-          <div><p className="section-kicker">Ready to plan?</p><h2 className="mt-2 font-display text-3xl text-[#294937]">Build your event brief.</h2></div>
-          <a href="/quote" className="liquid-button rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.14em]">Start booking ↗</a>
-        </div>
-      </section>
+      <PaperBackground>
+        <section className="px-4 pb-20 pt-12 sm:px-6 lg:px-10">
+          <PolicyStrip />
+          <div className="mx-auto mt-10 flex max-w-[1500px] flex-col flex-wrap items-start justify-between gap-5 rounded-2xl border border-[#806B2D]/35 p-6 sm:flex-row sm:items-center sm:p-8">
+            <div>
+              <p className="section-kicker">Ready to plan?</p>
+              <h2 className="mt-2 font-display text-3xl text-[#F4F0DF]">Build your event brief.</h2>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <TearTicket href="/quote" label="Start your booking brief" />
+              <WaveRevealButton href="/quote" label="Plan your event" />
+            </div>
+          </div>
+        </section>
+      </PaperBackground>
     </main>
   );
 }
