@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring, type PanInfo } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { STATION_FILTER_SPRING } from "@/components/framer-ui/motion";
 
@@ -23,6 +23,7 @@ export const stationCardVariants = {
   },
 } as const;
 
+/** Native horizontal scroll + snap (no transform drag — avoids scroll jank). */
 export const ExperienceStationRail = forwardRef<
   HTMLDivElement,
   {
@@ -33,24 +34,32 @@ export const ExperienceStationRail = forwardRef<
   }
 >(function ExperienceStationRail({ children, itemCount, onActiveIndexChange, className = "" }, railRef) {
   const reduce = useReducedMotion();
-  const x = useMotionValue(0);
-  const xSmooth = useSpring(x, { stiffness: 420, damping: 36 });
-  const maxDrag = Math.max(0, itemCount * CARD_STEP - 320);
+  const internalRef = useRef<HTMLDivElement | null>(null);
+
+  const setRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      internalRef.current = node;
+      if (typeof railRef === "function") railRef(node);
+      else if (railRef) railRef.current = node;
+    },
+    [railRef],
+  );
 
   const syncIndex = useCallback(() => {
-    const el = (railRef && "current" in railRef ? railRef.current : null) as HTMLDivElement | null;
+    const el = internalRef.current;
     if (!el || !onActiveIndexChange) return;
     const idx = Math.min(itemCount - 1, Math.max(0, Math.round(el.scrollLeft / CARD_STEP)));
     onActiveIndexChange(idx);
-  }, [itemCount, onActiveIndexChange, railRef]);
+  }, [itemCount, onActiveIndexChange]);
 
   useEffect(() => {
-    const el = (railRef && "current" in railRef ? railRef.current : null) as HTMLDivElement | null;
+    const el = internalRef.current;
     if (!el) return;
     const onScroll = () => syncIndex();
     el.addEventListener("scroll", onScroll, { passive: true });
+    syncIndex();
     return () => el.removeEventListener("scroll", onScroll);
-  }, [syncIndex, railRef]);
+  }, [syncIndex, itemCount]);
 
   return (
     <div className="relative mt-8 [perspective:1400px]">
@@ -59,24 +68,13 @@ export const ExperienceStationRail = forwardRef<
           Swipe through the collection →
         </p>
       ) : null}
-      <motion.div
-        ref={railRef}
-        style={reduce ? undefined : { x: xSmooth }}
-        drag={reduce ? false : "x"}
-        dragConstraints={{ left: -maxDrag, right: 0 }}
-        dragElastic={0.12}
-        whileTap={reduce ? undefined : { cursor: "grabbing" }}
-        className={`flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-5 scrollbar-none ${reduce ? "" : "cursor-grab"} ${className}`}
+      <div
+        ref={setRef}
+        className={`flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-5 scrollbar-none overscroll-x-contain touch-pan-x ${className}`}
         aria-label="Experience carousel"
-        onDragEnd={(_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-          const el = (railRef && "current" in railRef ? railRef.current : null) as HTMLDivElement | null;
-          if (!el) return;
-          el.scrollBy({ left: -info.velocity.x * 0.35, behavior: "smooth" });
-          window.setTimeout(syncIndex, 280);
-        }}
       >
         {children}
-      </motion.div>
+      </div>
     </div>
   );
 });
@@ -93,12 +91,14 @@ export function StationGoldPagination({
   totalLabel: string;
 }) {
   const dots = Math.min(count, 14);
+  const activeDot = Math.min(Math.max(0, activeIndex), Math.max(0, dots - 1));
+
   return (
     <div className="flex items-center gap-3">
       <span className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#829182]">{totalLabel}</span>
       <div className="flex items-center gap-2" role="tablist" aria-label="Station carousel position">
         {Array.from({ length: dots }, (_, i) => {
-          const on = i === activeIndex % dots;
+          const on = i === activeDot;
           return (
             <motion.button
               key={i}
@@ -110,7 +110,7 @@ export function StationGoldPagination({
               animate={
                 on
                   ? {
-                      scale: 1.15,
+                      scale: 1.12,
                       boxShadow: "0 0 0 2px rgba(229,193,88,0.35), 0 0 14px rgba(201,162,39,0.65)",
                     }
                   : { scale: 1, boxShadow: "0 0 0 0px transparent" }
@@ -140,7 +140,7 @@ export function LiquidGlassStationFlipCard({
 }) {
   const reduce = useReducedMotion();
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
-  const wrapRef = useRef<HTMLButtonElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   const onMove = (e: React.MouseEvent) => {
     if (reduce || flipped) return;
@@ -149,42 +149,48 @@ export function LiquidGlassStationFlipCard({
     const rect = el.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ rx: py * -10, ry: px * 12 });
+    setTilt({ rx: py * -8, ry: px * 10 });
   };
 
   return (
-    <motion.button
+    <div
       ref={wrapRef}
-      type="button"
-      onClick={onFlip}
+      data-studio-skip
+      className={`w-full [perspective:1400px] ${className}`}
       onMouseMove={onMove}
       onMouseLeave={() => setTilt({ rx: 0, ry: 0 })}
-      whileTap={reduce ? undefined : { scale: 0.985 }}
-      transition={STATION_FILTER_SPRING}
-      className={`block w-full text-left [transform-style:preserve-3d] ${className}`}
-      style={{ perspective: 1400 }}
     >
-      <motion.div
-        animate={reduce ? undefined : { rotateX: flipped ? 0 : tilt.rx, rotateY: flipped ? 0 : tilt.ry }}
+      <motion.button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onFlip();
+        }}
+        whileTap={reduce ? undefined : { scale: 0.99 }}
         transition={STATION_FILTER_SPRING}
-        className="relative min-h-[430px] [transform-style:preserve-3d]"
+        className="block w-full text-left [transform-style:preserve-3d]"
+        aria-pressed={flipped}
       >
         <motion.div
-          animate={{ rotateY: flipped ? 180 : 0 }}
+          animate={reduce ? undefined : { rotateX: flipped ? 0 : tilt.rx, rotateY: flipped ? 0 : tilt.ry }}
           transition={STATION_FILTER_SPRING}
-          className="relative min-h-[430px] [transform-style:preserve-3d]"
+          className="relative min-h-[430px] w-full [transform-style:preserve-3d]"
         >
-          <motion.div className="absolute inset-0 [backface-visibility:hidden]" style={{ transform: "translateZ(2px)" }}>
-            {front}
-          </motion.div>
           <motion.div
-            className="absolute inset-0 [backface-visibility:hidden]"
-            style={{ transform: "rotateY(180deg) translateZ(2px)" }}
+            animate={{ rotateY: flipped ? 180 : 0 }}
+            transition={STATION_FILTER_SPRING}
+            className="relative min-h-[430px] w-full [transform-style:preserve-3d]"
           >
-            {back}
+            <div className="absolute inset-0 [backface-visibility:hidden] [transform:translateZ(2px)]">{front}</div>
+            <div
+              className="absolute inset-0 [backface-visibility:hidden]"
+              style={{ transform: "rotateY(180deg) translateZ(2px)" }}
+            >
+              {back}
+            </div>
           </motion.div>
         </motion.div>
-      </motion.div>
-    </motion.button>
+      </motion.button>
+    </div>
   );
 }

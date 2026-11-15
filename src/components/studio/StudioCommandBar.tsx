@@ -98,6 +98,15 @@ export function StudioCommandBar() {
         >
           <Zap className="h-3 w-3" /> Publish live
         </button>
+        <Link
+          href="/"
+          onClick={() => {
+            if (typeof window !== "undefined") localStorage.removeItem("visriva-studio-mode");
+          }}
+          className="rounded-full border border-white/20 px-2 py-1 text-[10px] font-semibold text-[#E6DEC8]"
+        >
+          Exit studio
+        </Link>
       </div>
     </header>
   );

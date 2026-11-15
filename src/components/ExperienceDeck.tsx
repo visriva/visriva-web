@@ -9,7 +9,6 @@ import type { Service, ServiceCategory } from "@/lib/services";
 import { categoryMeta } from "@/lib/services";
 import {
   BouncyNavPill,
-  DotButton,
   ExperienceStationRail,
   LiquidGlassStationFlipCard,
   StationGoldPagination,
@@ -106,7 +105,7 @@ export function ExperienceDeck({ services, content }: { services: Service[]; con
                   initial={reduce ? false : { opacity: 0, y: 20, scale: 0.96 }}
                   animate={reduce ? undefined : { opacity: 1, y: 0, scale: 1 }}
                   transition={{ ...STATION_FILTER_SPRING, delay: index * 0.08 }}
-                  className="experience-flip-wrap w-[min(84vw,390px)] shrink-0 snap-start"
+                  className="w-[min(84vw,390px)] shrink-0 snap-start"
                   style={reduce ? undefined : { transformOrigin: "center center" }}
                 >
                   <LiquidGlassStationFlipCard
@@ -163,25 +162,15 @@ export function ExperienceDeck({ services, content }: { services: Service[]; con
                       label="Explore category"
                       className="!text-[10px] !font-bold !uppercase !tracking-[0.15em] !text-[#947D34]"
                     />
-                    <div className="flex items-center gap-2">
-                      {!isCompared && compareIds.length >= 3 ? (
-                        <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#607768]/50">Max 3</span>
-                      ) : (
-                        <DotButton
-                          label={isCompared ? "Remove from compare" : "Add to compare"}
-                          onClick={() => toggleCompare(service.id)}
-                        />
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => toggleCompare(service.id)}
-                        disabled={!isCompared && compareIds.length >= 3}
-                        aria-pressed={isCompared}
-                        className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-[0.12em] transition ${isCompared ? "border-[#294937] bg-[#294937] text-white" : "border-[#B8CBB4] bg-[#F8F7EF]/75 text-[#607768] hover:border-[#A88F3E]"} disabled:opacity-40`}
-                      >
-                        {isCompared ? "✓ Added" : "Compare +"}
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => toggleCompare(service.id)}
+                      disabled={!isCompared && compareIds.length >= 3}
+                      aria-pressed={isCompared}
+                      className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-[0.12em] transition ${isCompared ? "border-[#294937] bg-[#294937] text-white" : "border-[#B8CBB4] bg-[#F8F7EF]/75 text-[#607768] hover:border-[#A88F3E]"} disabled:opacity-40`}
+                    >
+                      {isCompared ? "✓ Added" : "Compare +"}
+                    </button>
                   </div>
                 </motion.article>
               );

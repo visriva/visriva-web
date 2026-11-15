@@ -70,7 +70,7 @@ export function describeElement(el: Element): { tag: string; label: string; kind
 export function isStudioEditableTarget(el: Element | null): el is HTMLElement {
   if (!el || !(el instanceof HTMLElement)) return false;
   if (SKIP_TAGS.has(el.tagName)) return false;
-  if (el.closest(SKIP_ANCESTOR)) return false;
+  if (el.closest(SKIP_ANCESTOR) || el.closest("[data-studio-skip]")) return false;
   if (el.closest("[data-studio-id]") === el && el.hasAttribute("data-studio-skip")) return false;
   return el.matches(STUDIO_EDITABLE_SELECTOR) || Boolean(el.querySelector(STUDIO_EDITABLE_SELECTOR));
 }
@@ -79,7 +79,7 @@ export function findEditableAtPoint(x: number, y: number, root: HTMLElement): HT
   const stack = document.elementsFromPoint(x, y) as HTMLElement[];
   for (const el of stack) {
     if (!root.contains(el)) continue;
-    if (el.closest(SKIP_ANCESTOR)) continue;
+    if (el.closest(SKIP_ANCESTOR) || el.closest("[data-studio-skip]")) continue;
     if (el.matches(STUDIO_EDITABLE_SELECTOR)) return el;
     const match = el.closest(STUDIO_EDITABLE_SELECTOR);
     if (match && root.contains(match)) return match as HTMLElement;

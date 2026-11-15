@@ -26,14 +26,14 @@ export function StudioCanvasBridge() {
     };
 
     const onClick = (e: MouseEvent) => {
+      if (!(e.target instanceof Element)) return;
+      if (e.target.closest("[data-studio-ui], [data-studio-skip]")) return;
       const target = findEditableAtPoint(e.clientX, e.clientY, root);
       if (!target) return;
-      e.preventDefault();
-      e.stopPropagation();
       const id = elementStudioId(target);
       const { tag, label } = describeElement(target);
-      studio.patchOverride({ studioId: id, tag, label, text: target.textContent ?? undefined });
       studio.selectById(id);
+      studio.patchOverride({ studioId: id, tag, label });
     };
 
     const onScroll = () => {
@@ -41,11 +41,11 @@ export function StudioCanvasBridge() {
     };
 
     root.addEventListener("mousemove", onMove, { passive: true });
-    root.addEventListener("click", onClick, true);
+    root.addEventListener("click", onClick);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       root.removeEventListener("mousemove", onMove);
-      root.removeEventListener("click", onClick, true);
+      root.removeEventListener("click", onClick);
       window.removeEventListener("scroll", onScroll);
       if (raf.current) cancelAnimationFrame(raf.current);
     };
@@ -78,7 +78,7 @@ function StudioCanvasOverlays() {
           }}
         />
       ) : null}
-      {studio.xRay && xRayRect && hover ? (
+      {studio.xRay && xRayRect && hover && !hover.closest("[data-studio-skip]") ? (
         <SelectionFrame
           rect={xRayRect}
           kind={describeElement(studio.selectedEl ?? hover).kind}

@@ -12,6 +12,9 @@ export function StudioRuntimeApplier() {
     if (!studio || studio.isStudioMode) return;
     const root = document.getElementById("content");
     if (!root) return;
+    const hasOverrides =
+      Object.keys(studio.state.overrides).length > 0 || studio.state.insertedBlocks.length > 0;
+    if (!hasOverrides) return;
     applyPublishedState(root, studio.state, "desktop");
   }, [studio, studio?.state, studio?.isStudioMode]);
   return null;

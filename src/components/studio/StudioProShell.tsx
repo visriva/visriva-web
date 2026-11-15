@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { StudioCanvasBridge } from "@/components/studio/StudioCanvasBridge";
 import { StudioCommandBar } from "@/components/studio/StudioCommandBar";
@@ -36,15 +35,12 @@ export function StudioProShell({ children }: { children: React.ReactNode }) {
       <div className="flex min-h-0 flex-1">
         <StudioLayersPanel />
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[#06140F]">
-          <motion.div
-            className="mx-auto flex min-h-0 flex-1 origin-top flex-col overflow-auto transition-[width,transform] duration-300"
-            style={{
-              width: studio.canvasWidth,
-              transform: `scale(${studio.zoom / 100})`,
-            }}
+          <div
+            className="mx-auto flex min-h-0 w-full flex-1 flex-col overflow-auto transition-[max-width] duration-300"
+            style={{ maxWidth: studio.canvasWidth, fontSize: `${studio.zoom}%` }}
           >
             {children}
-          </motion.div>
+          </div>
         </div>
         <StudioInspector />
       </div>

@@ -214,9 +214,19 @@ export function MobileDesignDrawer({
   if (!mounted) return null;
 
   const shell = (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {open ? (
-        <div className="fixed inset-0 z-[999] lg:hidden" role="dialog" aria-modal="true" aria-label="Site navigation">
+        <motion.div
+          key="mobile-drawer"
+          className="fixed inset-0 z-[999] lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+        >
           <motion.button
             type="button"
             aria-label="Close menu backdrop"
@@ -224,11 +234,10 @@ export function MobileDesignDrawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
             onClick={onClose}
           />
           <motion.div
-            className="absolute inset-0 flex flex-col bg-[#041812]/97 p-6 text-white backdrop-blur-2xl"
+            className="absolute inset-y-0 right-0 flex w-full max-w-[100vw] flex-col bg-[#041812] p-6 text-white shadow-2xl sm:max-w-md"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -256,7 +265,7 @@ export function MobileDesignDrawer({
             </nav>
             {footer}
           </motion.div>
-        </div>
+        </motion.div>
       ) : null}
     </AnimatePresence>
   );

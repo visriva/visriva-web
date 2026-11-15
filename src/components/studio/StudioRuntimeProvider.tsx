@@ -118,7 +118,6 @@ export function StudioRuntimeProvider({ children }: { children: React.ReactNode 
   const hoverTarget = hoverEl ? history.present.overrides[elementStudioId(hoverEl)] ?? null : null;
   const hoverRect = hoverEl?.getBoundingClientRect() ?? null;
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const appliedRef = useRef(false);
 
   const canvasWidth = viewport === "desktop" ? 1440 : viewport === "tablet" ? 768 : 390;
 
@@ -132,10 +131,12 @@ export function StudioRuntimeProvider({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const urlStudio = searchParams.get("studio") === "true" || searchParams.get("studio") === "1";
-    const stored = typeof window !== "undefined" && localStorage.getItem(STUDIO_STORAGE_EDITOR) === "1";
-    const on = isAdmin && (urlStudio || stored);
+    const on = isAdmin && urlStudio;
     setStudioMode(on);
-    if (on) localStorage.setItem(STUDIO_STORAGE_EDITOR, "1");
+    if (typeof window !== "undefined") {
+      if (on) localStorage.setItem(STUDIO_STORAGE_EDITOR, "1");
+      else localStorage.removeItem(STUDIO_STORAGE_EDITOR);
+    }
   }, [isAdmin, searchParams]);
 
   useEffect(() => {
@@ -211,22 +212,15 @@ export function StudioRuntimeProvider({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const root = document.getElementById("content");
-    if (!root || appliedRef.current) return;
-    const run = () => {
-      applyPublishedState(root, history.present, bp);
-      refreshLayers();
-      appliedRef.current = true;
-    };
-    const t = window.requestAnimationFrame(run);
-    return () => cancelAnimationFrame(t);
-  }, [history.present, bp, refreshLayers]);
-
-  useEffect(() => {
-    if (!isStudioMode) return;
-    const root = document.getElementById("content");
     if (!root) return;
-    applyPublishedState(root, history.present, bp);
-    refreshLayers();
+    const hasOverrides =
+      Object.keys(history.present.overrides).length > 0 || history.present.insertedBlocks.length > 0;
+    if (!isStudioMode && !hasOverrides) return;
+    const t = window.requestAnimationFrame(() => {
+      applyPublishedState(root, history.present, bp);
+      if (isStudioMode) refreshLayers();
+    });
+    return () => cancelAnimationFrame(t);
   }, [history.present, bp, isStudioMode, refreshLayers]);
 
   const selectedEl = useMemo(() => {
