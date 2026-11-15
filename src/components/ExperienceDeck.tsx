@@ -7,6 +7,7 @@ import type { HomeExperience } from "@/lib/home-content-types";
 import { DEFAULT_HOME_CONTENT } from "@/lib/home-content-types";
 import type { Service, ServiceCategory } from "@/lib/services";
 import { categoryMeta } from "@/lib/services";
+import { EditableText } from "@/components/visual-builder/EditableText";
 import {
   BouncyNavPill,
   ExperienceStationRail,
@@ -68,14 +69,16 @@ export function ExperienceDeck({ services, content }: { services: Service[]; con
       <div className="relative mx-auto max-w-[1500px]">
         <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
           <div>
-            <p className="section-kicker">{c.kicker}</p>
+            <EditableText fieldKey="experience_kicker" defaultValue={c.kicker} as="p" className="section-kicker" />
             <h2 className="mt-4 max-w-3xl font-display text-6xl leading-[0.9] sm:text-7xl">
-              {c.title}
+              <EditableText fieldKey="experience_title" defaultValue={c.title} as="span" />
               <br />
-              <em className="gold-gradient">{c.title_accent}</em>
+              <em className="gold-gradient">
+                <EditableText fieldKey="experience_title_accent" defaultValue={c.title_accent} as="span" />
+              </em>
             </h2>
           </div>
-          <p className="max-w-md text-sm leading-7 text-[#667B6B]">{c.sidebar}</p>
+          <EditableText fieldKey="experience_sidebar" defaultValue={c.sidebar} as="p" className="max-w-md text-sm leading-7 text-[#667B6B]" />
         </div>
 
         <div className="mt-10 flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">

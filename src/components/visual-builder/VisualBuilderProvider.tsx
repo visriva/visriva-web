@@ -122,26 +122,40 @@ export function VisualBuilderProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     const urlEdit = searchParams.get("edit") === "1" || searchParams.get("edit") === "true";
     const stored = typeof window !== "undefined" && localStorage.getItem(STORAGE_EDITOR) === "1";
-    setEditorOn(isAdmin && (urlEdit || stored));
+    const on = isAdmin && (urlEdit || stored);
+    setEditorOn(on);
+    if (on && typeof window !== "undefined") localStorage.setItem(STORAGE_EDITOR, "1");
   }, [isAdmin, searchParams]);
 
   useEffect(() => {
-    if (!isAdmin || !editorOn) return;
-    const local = localStorage.getItem(`${STORAGE_DRAFT}-${pageKey}`);
-    if (local) {
-      try {
-        dispatch({ type: "set", next: JSON.parse(local) as VisualBuilderState });
-        return;
-      } catch {
-        /* fall through */
+    let cancelled = false;
+    async function load() {
+      const pubRes = await fetch(`/api/visual-builder/runtime?page=${pageKey}`);
+      const pubBody = pubRes.ok ? await pubRes.json() : null;
+      if (!cancelled && pubBody?.state) {
+        dispatch({ type: "set", next: pubBody.state as VisualBuilderState });
+      }
+      if (!isAdmin || !editorOn) return;
+      const local = localStorage.getItem(`${STORAGE_DRAFT}-${pageKey}`);
+      if (local) {
+        try {
+          if (!cancelled) dispatch({ type: "set", next: JSON.parse(local) as VisualBuilderState });
+          return;
+        } catch {
+          /* */
+        }
+      }
+      const draftRes = await fetch(`/api/admin/visual-builder?page=${pageKey}`);
+      if (!cancelled && draftRes.ok) {
+        const draftBody = await draftRes.json();
+        if (draftBody?.state) dispatch({ type: "set", next: draftBody.state as VisualBuilderState });
       }
     }
-    void fetch(`/api/admin/visual-builder?page=${pageKey}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((body) => {
-        if (body?.state) dispatch({ type: "set", next: body.state as VisualBuilderState });
-      });
-  }, [isAdmin, editorOn, pageKey]);
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [pageKey, isAdmin, editorOn]);
 
   const persistDraft = useCallback(
     (next: VisualBuilderState) => {

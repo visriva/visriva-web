@@ -5,6 +5,7 @@ import { ChevronDown, Monitor, Smartphone } from "lucide-react";
 import { useState } from "react";
 import { VISUAL_BUILDER_PAGES } from "@/lib/visual-builder-types";
 import { useVisualBuilder } from "@/components/visual-builder/VisualBuilderProvider";
+import { LiveEditHub } from "@/components/visual-builder/LiveEditHub";
 
 export function VisualBuilderToolbar() {
   const vb = useVisualBuilder();
@@ -49,6 +50,12 @@ export function VisualBuilderToolbar() {
             ↷ Redo
           </ToolbarBtn>
           <ToolbarBtn onClick={() => setDrawerOpen(true)}>+ Add / Restore</ToolbarBtn>
+          <Link
+            href="/?studio=true"
+            className="hidden rounded-full border border-[#2EE6D6]/40 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#2EE6D6] hover:bg-white/5 sm:inline-flex"
+          >
+            Pro studio
+          </Link>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -67,6 +74,7 @@ export function VisualBuilderToolbar() {
         </div>
       </div>
       <div className="h-12 shrink-0" aria-hidden />
+      <LiveEditHub />
       {drawerOpen ? (
         <RestoreDrawer
           archived={vb.state.home_layout?.archived ?? []}

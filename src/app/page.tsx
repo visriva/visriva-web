@@ -14,6 +14,7 @@ import { siteUrl } from "@/lib/site";
 import { DesignStudioNav, QuoteDeck, TestimonialsLoopCarousel, WaveRevealButton } from "@/components/FramerSuite";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
 import { getGoogleReviewSettings } from "@/lib/google-review";
+import { HomeFeaturedSection } from "@/components/visual-builder/HomeFeaturedSection";
 import { HomeLayoutSeed } from "@/components/visual-builder/HomeLayoutSeed";
 import { VisualSection } from "@/components/visual-builder/VisualSection";
 
@@ -136,29 +137,7 @@ export default async function HomePage() {
 
       {show.has("featured") ? (
         <VisualSection id="featured" label="Featured stations">
-        <section className="bg-[#DCE9D8] px-5 py-24 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-              <div>
-                <p className="section-kicker">{featured.kicker}</p>
-                <h2 className="display-heading mt-4 text-6xl text-[#244936] sm:text-7xl">
-                  {featured.title}
-                  <br />
-                  <em className="gold-gradient">{featured.title_accent}</em>
-                </h2>
-              </div>
-              <p className="max-w-sm text-sm leading-7 text-[#617768]">{featured.sidebar}</p>
-            </div>
-            <div className="mt-10">
-              <RateList services={featuredServices} />
-            </div>
-            <div className="mt-8 flex justify-end">
-              <Link href={featured.cta_href} className="liquid-button inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.15em]">
-                {featured.cta_text}
-              </Link>
-            </div>
-          </div>
-        </section>
+          <HomeFeaturedSection featured={featured} services={featuredServices} />
         </VisualSection>
       ) : null}
 
