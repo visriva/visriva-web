@@ -4,15 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { CamoLiquidButton } from "@/components/framer-ui";
+import { SwipeLettersLink } from "@/components/ui";
 import { instagramUrl, navigation, phoneDisplay } from "@/lib/site";
 import { desktopQuickNav, mobileDrawerNav } from "@/lib/public-nav";
 import { whatsAppLink, WHATSAPP_GREETING } from "@/lib/whatsapp";
 
 const INSTAGRAM = instagramUrl || "https://www.instagram.com/visriva.co/";
-const QUOTE_SHORT = "Get quote";
 const QUOTE_DESKTOP = "Plan your event";
 
 export function Header() {
@@ -76,16 +76,16 @@ export function Header() {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-[100] max-w-[100vw] px-3 pt-3 sm:px-4 lg:px-8">
       <div
-        className={`pointer-events-auto mx-auto flex max-w-[1790px] items-center justify-between gap-2 rounded-full border border-[#C9A227]/35 bg-[#06241B]/95 px-3 py-2.5 shadow-xl backdrop-blur-xl transition-shadow sm:gap-3 sm:px-4 lg:h-[78px] lg:rounded-[19px] lg:px-8 ${scrolled ? "shadow-2xl" : ""}`}
+        className={`pointer-events-auto mx-auto flex w-full max-w-[1790px] items-center justify-between gap-1.5 rounded-full border border-[#C9A227]/35 bg-[#07261C]/85 px-3 py-2 shadow-xl backdrop-blur-xl transition-shadow sm:gap-2 sm:px-3 lg:h-[78px] lg:gap-3 lg:rounded-[19px] lg:px-8 ${scrolled ? "shadow-2xl" : ""}`}
       >
-        <Link href="/" aria-label="Visriva home" className="flex min-w-0 shrink items-center gap-2.5">
+        <Link href="/" aria-label="Visriva home" className="flex min-w-0 shrink items-center gap-2">
           <Image
             src="/brand/visriva-logo.png"
             alt="Visriva"
             width={120}
             height={48}
             priority
-            className="h-9 w-auto max-w-[120px] object-contain object-left sm:h-10"
+            className="h-8 w-auto max-w-[104px] object-contain object-left sm:h-10 sm:max-w-[120px]"
           />
         </Link>
 
@@ -139,7 +139,19 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setSearchOpen((v) => !v);
+              setQuery("");
+            }}
+            aria-label="Search services"
+            aria-expanded={searchOpen}
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#B69A47]/70 bg-[#D8D6C9] text-[#947D34] transition hover:border-[#C9A227] hover:bg-[#F1EBD8] lg:hidden"
+          >
+            <Search className="h-4 w-4" strokeWidth={1.75} aria-hidden />
+          </button>
           <div className="hidden lg:block">
             <CamoLiquidButton
               label="Search"
@@ -153,27 +165,26 @@ export function Header() {
 
           <Link
             href="/quote"
-            className="inline-flex max-w-[40vw] items-center justify-center rounded-full bg-gradient-to-r from-[#C9A227] to-[#E5C158] px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[.12em] text-[#051C15] shadow-md sm:max-w-none sm:px-4 sm:text-xs lg:hidden"
-          >
-            {QUOTE_SHORT}
-          </Link>
-
-          <Link
-            href="/quote"
-            className="hidden items-center gap-2 rounded-full border border-[#D4AF37]/55 bg-[#0B3D2E] px-6 py-3 text-[.65rem] font-bold uppercase tracking-[.14em] text-[#F5F0E5] transition hover:border-[#E5C158] lg:inline-flex"
+            className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-gradient-to-r from-[#C9A227] to-[#E5C158] px-2 py-1.5 text-[8px] font-bold uppercase leading-none tracking-[.08em] text-[#051C15] shadow-md sm:gap-1 sm:px-2.5 sm:text-[9px] lg:hidden"
           >
             {QUOTE_DESKTOP}
-            <ArrowUpRight className="h-4 w-4 text-[#E5C158]" aria-hidden />
+            <ArrowUpRight className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5" aria-hidden />
           </Link>
+
+          <SwipeLettersLink
+            href="/quote"
+            label={QUOTE_DESKTOP}
+            className="hidden min-h-[50px] shrink-0 px-6 text-[.65rem] tracking-[.14em] lg:inline-flex"
+          />
 
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={open}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#C9A227]/45 bg-[#051F17]/80 text-white lg:hidden"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#B69A47]/70 bg-[#F1EBD8]/90 text-[#294937] lg:hidden"
           >
-            {open ? <X className="h-5 w-5 text-[#E5C158]" /> : <Menu className="h-5 w-5 text-[#E5C158]" />}
+            {open ? <X className="h-4 w-4 text-[#8E7835]" /> : <Menu className="h-4 w-4 text-[#8E7835]" aria-hidden />}
           </button>
         </div>
       </div>

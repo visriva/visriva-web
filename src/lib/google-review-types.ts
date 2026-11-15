@@ -64,7 +64,7 @@ export const DEFAULT_GOOGLE_REVIEW_SETTINGS: GoogleReviewSettings = {
     "A quick Google review helps other planners discover us. It takes less than a minute and means the world to our on-ground team.",
   rating_value: "5.0",
   rating_label: "Loved by event hosts in Bengaluru",
-  cta_primary: "Leave a Google review ↗",
+  cta_primary: "Leave a Google review",
   cta_secondary: "See how it works",
   wall_title: "What hosts are saying",
   prompt_chips: ["Host & crew", "Photo quality", "Guest experience", "On-time setup"],

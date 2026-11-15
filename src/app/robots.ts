@@ -7,22 +7,22 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        disallow: ["/admin", "/api/", "/docforclient", "/docforreview"],
       },
       {
         userAgent: "OAI-SearchBot",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        disallow: ["/admin", "/api/", "/docforclient", "/docforreview"],
       },
       {
         userAgent: "Claude-SearchBot",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        disallow: ["/admin", "/api/", "/docforclient", "/docforreview"],
       },
       {
         userAgent: "PerplexityBot",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        disallow: ["/admin", "/api/", "/docforclient", "/docforreview"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

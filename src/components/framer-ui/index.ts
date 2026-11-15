@@ -4,3 +4,5 @@ export * from "./navigation";
 export * from "./buttons";
 export * from "./cards-layout";
 export * from "./quote-deck";
+export * from "./carousels";
+export * from "./pricing";

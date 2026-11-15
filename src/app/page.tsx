@@ -48,7 +48,7 @@ export default async function HomePage() {
       {show.has("hero") ? (
         <>
           <Hero pageContent={pageContent} />
-          <div className="relative z-20 mx-auto -mt-2 mb-4 max-w-[1500px] px-4 sm:px-6 lg:px-10">
+          <div className="relative z-20 mx-auto -mt-2 mb-4 hidden max-w-[1500px] px-4 sm:px-6 md:block lg:px-10">
             <DesignStudioNav
               activeHref="/"
               items={[

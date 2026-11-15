@@ -116,21 +116,25 @@ export function MotionSubmitButton({
   pending = false,
   success = false,
   onClick,
+  type = "button",
+  className = "",
 }: {
   children?: React.ReactNode;
   pending?: boolean;
   success?: boolean;
   onClick?: () => void;
+  type?: "button" | "submit";
+  className?: string;
 }) {
   const phase: SubmitPhase = success ? "success" : pending ? "pending" : "idle";
   return (
     <motion.button
-      type="button"
+      type={type}
       onClick={onClick}
       disabled={pending || success}
       whileTap={phase === "idle" ? { scale: 0.98 } : undefined}
       transition={VISRIVA_SPRING}
-      className="liquid-button group inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-90"
+      className={`liquid-button group inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-90 sm:w-auto ${className}`}
     >
       <span>
         {phase === "pending" ? "Sending…" : phase === "success" ? "Sent" : children}

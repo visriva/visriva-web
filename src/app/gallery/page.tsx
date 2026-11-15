@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import fs from "node:fs";
 import path from "node:path";
 import { GalleryView } from "@/components/GalleryView";
+import { GalleryMotionStrip } from "@/components/gallery/GalleryMotionStrip";
 import { StudioPageBridge } from "@/components/StudioPageBridge";
 import { MoodSection } from "@/components/MoodSection";
 import { pageMeta } from "@/lib/seo";
@@ -27,6 +28,7 @@ export default async function GalleryPage() {
           These frames are stand-ins, graded to the house palette. Swap them for Visriva coverage without
           touching the layout.
         </p>
+        <GalleryMotionStrip />
         <div className="mt-12">
           <GalleryView films={films} />
         </div>

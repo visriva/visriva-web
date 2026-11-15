@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EventGalleryEmbed } from "@/components/qr/EventGalleryEmbed";
 import { QrLuxuryModal } from "@/components/qr/QrLuxuryModal";
+import { LightBulbButton, MotionSubmitButton } from "@/components/framer-ui";
 import type { EventGalleryPublic, EventPhotosSettings } from "@/lib/event-galleries-types";
 
 /** Query keys that must never appear on /qr (anti link-sharing). */
@@ -370,20 +371,16 @@ function VaultForm({
             </button>
           </div>
         </label>
-        <p className="rounded-xl border border-[#C9A227]/35 bg-[#041912] px-4 py-3 text-sm leading-relaxed text-[#F5E6B8]">{settings.password_hint}</p>
+        <LightBulbButton>Password hint</LightBulbButton>
+        <p className="text-sm leading-relaxed text-[#F5E6B8]/90">{settings.password_hint}</p>
 
         {error ? (
           <p className="rounded-xl border-2 border-red-400/50 bg-red-950/50 px-4 py-3 text-sm font-medium text-red-100">{error}</p>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={pending || !selectedId}
-          className="qr-gold-btn flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] disabled:opacity-50"
-        >
-          {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+        <MotionSubmitButton type="submit" pending={pending} className="qr-gold-btn !w-full">
           {settings.unlock_button_text}
-        </button>
+        </MotionSubmitButton>
       </form>
     </motion.div>
   );

@@ -164,7 +164,7 @@ function ReviewStudioPanel({
           : "Choose what stood out most at your event."}
       </p>
       <button type="button" onClick={onLaunch} className="qr-gold-btn mt-6 w-full min-h-11 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]">
-        Continue on Google ↗
+        Continue on Google
       </button>
     </div>
   );

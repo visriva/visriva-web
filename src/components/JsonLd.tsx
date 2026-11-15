@@ -72,9 +72,30 @@ export async function JsonLd() {
         url: siteUrl,
         name: "Visriva",
         publisher: { "@id": businessId },
-        inLanguage: "en-IN"
-      }
-    ]
+        inLanguage: "en-IN",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${siteUrl}/rate-card?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${siteUrl}/reviews`,
+        url: `${siteUrl}/reviews`,
+        name: "Visriva client reviews",
+        isPartOf: { "@id": `${siteUrl}/#website` },
+        about: { "@id": businessId },
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${siteUrl}/qr`,
+        url: `${siteUrl}/qr`,
+        name: "Visriva event photos and weekly giveaway",
+        isPartOf: { "@id": `${siteUrl}/#website` },
+        about: { "@id": businessId },
+      },
+    ],
   };
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader2, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
+import { MotionSubmitButton } from "@/components/framer-ui";
 import { useRef, useState } from "react";
 import { prepareImageForUpload, readImageMeta, type ImageMeta } from "@/lib/image-process";
 import type { QrFormCopy } from "@/lib/qr-content-types";
@@ -167,20 +168,14 @@ export function QrGiveawayForm({ copy, stations }: { copy: QrFormCopy; stations:
         </p>
       ) : null}
 
-      <button
+      <MotionSubmitButton
         type="submit"
-        disabled={pending || processingImage || !station || !file}
-        className="qr-gold-btn flex min-h-12 w-full items-center justify-center gap-2 rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.14em] disabled:opacity-50"
+        pending={pending || processingImage}
+        success={success}
+        className="qr-gold-btn !w-full"
       >
-        {pending ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-            {copy.submitting}
-          </>
-        ) : (
-          copy.submit_button
-        )}
-      </button>
+        {pending ? copy.submitting : copy.submit_button}
+      </MotionSubmitButton>
     </form>
   );
 }

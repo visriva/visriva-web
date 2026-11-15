@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
-import { ActivityBadge } from "@/components/framer-ui";
 import { SwipeLettersLink } from "@/components/ui";
 
 const highlights = [
@@ -35,37 +35,56 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
   const eyebrow = pageContent?.eyebrow || "Bengaluru's live engagement studio";
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#051F17] via-[#093024] to-[#06241B] pb-24 pt-[5.5rem] text-white sm:pt-28">
-      <div className="pointer-events-none absolute -right-32 top-0 h-[28rem] w-[28rem] rounded-full bg-[#C9A227]/10 blur-[100px]" />
-      <div className="pointer-events-none absolute -left-24 bottom-0 h-[22rem] w-[22rem] rounded-full bg-[#0B5A3D]/35 blur-[90px]" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#DCE8DF] via-[#E4EFE7] to-[#E6EFE3] pt-[4.75rem] text-[#203F30] sm:pt-[5.25rem]">
+      <div className="pointer-events-none absolute -right-24 -top-24 h-[34rem] w-[34rem] rounded-full bg-[#B7D0B2]/55 blur-[100px]" />
+      <div className="pointer-events-none absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[#F5EEDB]/80 blur-[100px]" />
 
-      <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-10 px-4 sm:gap-12 sm:px-6 lg:min-h-[min(720px,88svh)] lg:grid-cols-[1.05fr_.95fr] lg:gap-14 lg:px-10 lg:py-16">
-        <div className="max-w-[700px]">
-          <ActivityBadge dark label={eyebrow.startsWith("✦") ? eyebrow : `✦ ${eyebrow.toUpperCase()}`} />
-          <h1 className="font-display text-[2.35rem] font-medium leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            {title}
-            <br />
-            <em className="not-italic text-[#E5C158]">{accent}</em>
-          </h1>
-          <p className="mt-6 max-w-[620px] text-base leading-8 text-white/82 sm:text-lg">{description}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <SwipeLettersLink href="/quote" label="Plan your event" className="w-full justify-center sm:w-auto" />
-            <Link
-              href="/#experiences"
-              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-medium text-white transition hover:border-[#E5C158]/50 sm:w-auto"
-            >
-              Explore experiences
-              <ArrowUpRightIcon className="h-4 w-4 text-[#E5C158]" />
-            </Link>
+      <div className="relative z-10 border-y border-[#CBDAC6] bg-[#F8F7EF]/85 px-4 py-2.5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-2 text-[10px]">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#9DBD9D] bg-[#E2EEE0] px-3 py-1 font-semibold uppercase tracking-[.16em] text-[#355642]">
+              <i className="h-2 w-2 rounded-full bg-[#76A77D]" aria-hidden />
+              Visriva event studio
+            </span>
+            <span className="min-w-0 text-[#627967] leading-snug">
+              Owned stations · Live photo, AI, merchandise and VR experiences
+            </span>
           </div>
           <Link
             href="/client-requirements"
-            className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#E5C158] underline decoration-[#C9A227]/40 underline-offset-4"
+            className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#8E7835] underline decoration-[#B8A04D]/50 underline-offset-4"
           >
             Venue planning guide
-            <ArrowUpRightIcon className="h-3.5 w-3.5" />
+            <ArrowUpRight className="h-3.5 w-3.5 text-[#947D34]" aria-hidden />
           </Link>
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/15 pt-6 text-[10px] font-semibold uppercase tracking-[.14em] text-white/55">
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-10 px-4 pb-20 pt-10 sm:gap-12 sm:px-8 sm:pt-14 lg:min-h-[650px] lg:grid-cols-[1.05fr_.95fr] lg:gap-16 lg:px-12 lg:py-20">
+        <div className="max-w-[700px]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#BBCFB5] bg-[#F8F7EF]/75 px-4 py-2 text-[10px] font-semibold uppercase tracking-[.19em] text-[#52725B]">
+            <span className="text-[#A88F3E]" aria-hidden>
+              ✦
+            </span>
+            {eyebrow.toUpperCase()}
+          </div>
+          <h1 className="hero-display mt-6 text-[clamp(2.65rem,7.3vw,7.4rem)] uppercase leading-[.9] tracking-[-.045em] text-[#234A36]">
+            {title}
+            <br />
+            <span className="gold-gradient italic normal-case">{accent}</span>
+          </h1>
+          <p className="mt-7 max-w-[620px] text-base leading-8 text-[#607768] sm:text-lg">{description}</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <SwipeLettersLink href="/quote" label="Plan your event" className="w-full justify-center text-sm sm:w-auto" />
+            <Link
+              href="/#experiences"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[#A9C1A6] bg-[#F8F7EF]/80 px-6 py-4 text-sm font-medium text-[#355642] transition hover:-translate-y-0.5 hover:border-[#947D34] sm:w-auto"
+            >
+              Explore experiences
+              <ArrowUpRightIcon className="h-4 w-4 text-[#947D34]" />
+            </Link>
+          </div>
+          <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-[#C6D7C2] pt-6 text-[10px] font-semibold uppercase tracking-[.14em] text-[#627967]">
             <span>Corporate celebrations</span>
             <span>Brand activations</span>
             <span>Weddings &amp; private events</span>
@@ -74,9 +93,9 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
         </div>
 
         <div className="relative mx-auto w-full max-w-[600px]">
-          <div className="absolute -inset-4 rounded-[2rem] bg-[#C9A227]/15 blur-2xl" />
-          <div className="relative rounded-[2rem] border border-[#C9A227]/35 bg-[#07291E]/80 p-3 shadow-[0_25px_80px_rgba(0,0,0,.45)] sm:p-4">
-            <div className="relative h-[min(52vw,360px)] overflow-hidden rounded-[1.5rem] bg-[#041912] sm:h-[400px]">
+          <div className="absolute -inset-5 rounded-[2rem] bg-[#AACBA7]/45 blur-2xl" />
+          <div className="relative rounded-[2rem] border border-[#C8D9C2] bg-[#F8F7EF]/90 p-3 shadow-[0_25px_80px_rgba(39,67,48,.12)] backdrop-blur-2xl sm:p-4">
+            <div className="relative h-[min(52vw,360px)] overflow-hidden rounded-[1.5rem] bg-[#C6D8C1] sm:h-[420px]">
               <Image
                 key={item.image}
                 src={image}
@@ -84,33 +103,40 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
                 fill
                 priority
                 sizes="(min-width:1024px) 48vw, 92vw"
-                className="ken-burns object-cover"
+                className="ken-burns object-cover transition-opacity duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#051F17]/90 via-transparent to-[#051F17]/20" />
-              <div className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[.16em] text-white/90 backdrop-blur">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#193D2B]/80 via-transparent to-[#193D2B]/5" />
+              <div className="absolute left-4 top-4 rounded-full border border-white/60 bg-[#F8F7EF]/85 px-3 py-2 text-[9px] font-semibold uppercase tracking-[.16em] text-[#355642] backdrop-blur sm:left-5 sm:top-5">
                 The Visriva collection
               </div>
               <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
-                <p className="text-[10px] uppercase tracking-[.18em] text-[#E5C158]">{item.note}</p>
-                <h2 className="mt-2 font-display text-3xl leading-none sm:text-4xl">{item.title}</h2>
+                <p className="text-[10px] uppercase tracking-[.18em] text-[#E6D69D]">{item.note}</p>
+                <h2 className="mt-2 font-display text-3xl leading-none sm:text-5xl">{item.title}</h2>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-2 p-2 pt-3">
+            <div className="grid grid-cols-3 gap-2 p-2 pt-4">
               {highlights.map((highlight, index) => (
                 <button
                   type="button"
                   key={highlight.title}
                   onClick={() => setActive(index)}
-                  className={`rounded-xl border px-2 py-2.5 text-left text-[9px] font-semibold transition sm:px-3 sm:text-[10px] ${
+                  className={`rounded-xl border px-2 py-2.5 text-left text-[9px] font-semibold transition-all sm:px-3 sm:py-3 sm:text-[10px] ${
                     active === index
-                      ? "border-[#C9A227] bg-[#C9A227]/15 text-[#F5E6B8]"
-                      : "border-white/15 bg-white/5 text-white/65 hover:border-[#C9A227]/40"
+                      ? "border-[#A88F3E] bg-[#E5EDDF] text-[#294937] shadow-[inset_0_0_0_1px_#A88F3E]"
+                      : "border-[#D8E2D3] bg-white/60 text-[#738676] hover:border-[#A8C3A4]"
                   }`}
                 >
                   {highlight.title}
+                  <span className="mt-1 block font-normal opacity-75">
+                    {index === 0 ? "Capture" : index === 1 ? "Customise" : "Play"}
+                  </span>
                 </button>
               ))}
             </div>
+          </div>
+          <div className="absolute -bottom-5 -left-5 hidden rounded-2xl border border-[#D0DFCA] bg-[#F8F7EF]/95 px-5 py-4 shadow-xl sm:block">
+            <p className="section-kicker">One creative partner</p>
+            <p className="mt-1 font-display text-2xl text-[#294937]">From set-up to keepsake.</p>
           </div>
         </div>
       </div>

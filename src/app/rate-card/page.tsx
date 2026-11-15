@@ -1,7 +1,8 @@
 import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { RateList } from "@/components/RateList";
-import { LiquidGlassPricingCard, PaperBackground, TearTicket, WaveRevealButton } from "@/components/FramerSuite";
+import { PaperBackground, TearTicket, WaveRevealButton } from "@/components/FramerSuite";
+import { RateCardConfigurator } from "@/components/rate-card/RateCardConfigurator";
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 import { getWebsitePage } from "@/lib/website-pages";
@@ -24,18 +25,7 @@ export default async function RateCardPage() {
         alt="A live merchandise and event customisation station"
       />
       <section className="mx-auto max-w-[1500px] px-4 py-10 sm:px-6 lg:px-10">
-        <div className="mb-12 grid gap-5 md:grid-cols-3">
-          {catalog.list.slice(0, 3).map((service) => (
-            <LiquidGlassPricingCard
-              key={service.id}
-              name={service.name}
-              price={service.priceLabel}
-              image={service.image}
-              footprint={service.footprint}
-              href={`/quote?services=${service.id}`}
-            />
-          ))}
-        </div>
+        <RateCardConfigurator services={catalog.list} />
       </section>
       <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
