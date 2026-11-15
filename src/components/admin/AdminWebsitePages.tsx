@@ -39,7 +39,8 @@ export function AdminWebsitePages({pages}:{pages:WebsitePage[]}) {
       <p className="font-royal text-[10px] uppercase tracking-[.24em] text-gold">Website content</p>
       <h1 className="mt-2 font-display text-3xl italic text-cream">Pages</h1>
       <nav className="mt-5 grid gap-1">{pages.map(page=><button key={page.slug} type="button" onClick={()=>choose(page.slug)} className={`flex items-center justify-between rounded-xl px-3 py-3 text-left text-sm transition ${selected===page.slug?"border border-gold/40 bg-gold/10 text-cream":"text-mist hover:bg-white/5"}`}><span>{page.name}</span><span className="text-[9px] uppercase tracking-wider text-gold">{page.status}</span></button>)}</nav>
-      <Link href="/" target="_blank" className="mt-6 inline-block text-xs text-champagne underline">View live website ↗</Link>
+      <Link href="/?edit=1" target="_blank" className="mt-6 inline-block text-xs text-champagne underline">Open live visual builder</Link>
+      <Link href="/" target="_blank" className="mt-2 inline-block text-xs text-mist underline">View live website</Link>
     </aside>
     <form onSubmit={save} className="min-w-0 space-y-7">
       <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="font-royal text-[10px] uppercase tracking-[.24em] text-gold">Page editor · /{form.slug==="home"?"":form.slug}</p><h2 className="mt-2 font-display text-4xl italic text-cream">{form.name}</h2></div><select className="field max-w-44" value={form.status} onChange={e=>field("status",e.target.value as WebsitePage["status"])}><option value="draft">Draft</option><option value="published">Published</option></select></div>

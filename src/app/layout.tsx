@@ -4,6 +4,7 @@ import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
 import { Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
+import { VisualBuilderGate } from "@/components/visual-builder/VisualBuilderGate";
 import { FooterServer } from "@/components/FooterServer";
 import { SiteFooterWrapper } from "@/components/SiteFooterWrapper";
 import { WhatsAppBubble } from "@/components/WhatsAppBubble";
@@ -35,10 +36,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full max-w-[100vw] overflow-x-hidden bg-ink text-cream">
         <a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
         <JsonLd />
-        <Suspense fallback={<div className="h-[4.5rem]" aria-hidden />}>
-          <Navbar />
-        </Suspense>
-        {children}
+        <VisualBuilderGate>
+          <Suspense fallback={<div className="h-[4.5rem]" aria-hidden />}>
+            <Navbar />
+          </Suspense>
+          {children}
+        </VisualBuilderGate>
         <SiteFooterWrapper>
           <FooterServer />
           <WhatsAppBubble />

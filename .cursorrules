@@ -26,6 +26,11 @@
 - Keep URL exactly `/qr` — no `?tab=`, `?event=`, or photo-state query params.
 - Tab/mode/gatekeeper state in React `useState` only (no `localStorage` for unlock bypass).
 
+## LIVE VISUAL BUILDER
+- One `VisualBuilderGate` in `layout.tsx` only — never a second toolbar or duplicate Navbar.
+- Edit mode: admin session + `?edit=1` or `localStorage` `visriva-live-editor=1`.
+- Use `EditableText` / `EditableImage` / `VisualSection` wrappers — do not add new page sections when extending the builder.
+
 ## UI-ONLY UPGRADES
 - Framer / motion work must swap skins on **existing** components in `src/components/framer-ui/` — no new page sections, no duplicate chrome, no copy/CMS data changes unless explicitly requested.
 

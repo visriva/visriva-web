@@ -6,6 +6,9 @@ import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 import { ActivityBadge } from "@/components/framer-ui";
+import { EditableImage } from "@/components/visual-builder/EditableImage";
+import { EditableText } from "@/components/visual-builder/EditableText";
+import { useVisualBuilderOptional } from "@/components/visual-builder/VisualBuilderProvider";
 import { SwipeLettersLink } from "@/components/ui";
 
 const highlights = [
@@ -24,16 +27,20 @@ type HeroPageContent = {
 };
 
 export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) {
+  const vb = useVisualBuilderOptional();
   const [active, setActive] = useState(0);
   const item = highlights[active];
-  const title = pageContent?.hero_title || "Make every";
-  const accent = pageContent?.hero_accent || "moment memorable.";
+  const title = vb?.text("hero_title", pageContent?.hero_title || "Make every") ?? (pageContent?.hero_title || "Make every");
+  const accent = vb?.text("hero_accent", pageContent?.hero_accent || "moment memorable.") ?? (pageContent?.hero_accent || "moment memorable.");
   const description =
+    vb?.text("hero_description", pageContent?.hero_description || "") ||
     pageContent?.hero_description ||
     "Photo experiences, AI transformations, live merchandise and VR games—thoughtfully designed to bring guests into the celebration and give them something to take home.";
-  const image = pageContent?.hero_image || item.image;
-  const imageAlt = pageContent?.hero_alt || item.title;
-  const eyebrow = pageContent?.eyebrow || "Bengaluru's live engagement studio";
+  const image = vb?.image("hero_image", pageContent?.hero_image || item.image) ?? (pageContent?.hero_image || item.image);
+  const imageAlt = vb?.imageAlt("hero_image", pageContent?.hero_alt || item.title) ?? (pageContent?.hero_alt || item.title);
+  const eyebrow =
+    vb?.text("eyebrow", pageContent?.eyebrow || "Bengaluru's live engagement studio") ??
+    (pageContent?.eyebrow || "Bengaluru's live engagement studio");
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[#DCE8DF] via-[#E4EFE7] to-[#E6EFE3] pt-[4.75rem] text-[#203F30] sm:pt-[5.25rem]">
@@ -62,11 +69,18 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
         <div className="max-w-[700px]">
           <ActivityBadge variant="sage" className="mb-5 mt-6" label={`✦ ${eyebrow.toUpperCase()}`} />
           <h1 className="hero-display mt-6 text-[clamp(2.65rem,7.3vw,7.4rem)] uppercase leading-[.9] tracking-[-.045em] text-[#234A36]">
-            {title}
+            <EditableText fieldKey="hero_title" defaultValue={title} as="span" />
             <br />
-            <span className="gold-gradient italic normal-case">{accent}</span>
+            <span className="gold-gradient italic normal-case">
+              <EditableText fieldKey="hero_accent" defaultValue={accent} as="span" />
+            </span>
           </h1>
-          <p className="mt-7 max-w-[620px] text-base leading-8 text-[#607768] sm:text-lg">{description}</p>
+          <EditableText
+            fieldKey="hero_description"
+            defaultValue={description}
+            as="p"
+            className="mt-7 max-w-[620px] text-base leading-8 text-[#607768] sm:text-lg"
+          />
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <SwipeLettersLink href="/quote" label="Plan your event" className="w-full justify-center text-sm sm:w-auto" />
             <Link
@@ -89,11 +103,12 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
           <div className="absolute -inset-5 rounded-[2rem] bg-[#AACBA7]/45 blur-2xl" />
           <div className="relative rounded-[2rem] border border-[#C8D9C2] bg-[#F8F7EF]/90 p-3 shadow-[0_25px_80px_rgba(39,67,48,.12)] backdrop-blur-2xl sm:p-4">
             <div className="relative h-[min(52vw,360px)] overflow-hidden rounded-[1.5rem] bg-[#C6D8C1] sm:h-[420px]">
-              <Image
-                key={item.image}
+              <EditableImage
+                fieldKey="hero_image"
                 src={image}
                 alt={imageAlt}
                 fill
+                preset="hero"
                 priority
                 sizes="(min-width:1024px) 48vw, 92vw"
                 className="ken-burns object-cover transition-opacity duration-500"

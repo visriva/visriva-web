@@ -14,6 +14,8 @@ import { siteUrl } from "@/lib/site";
 import { DesignStudioNav, QuoteDeck, TestimonialsLoopCarousel, WaveRevealButton } from "@/components/FramerSuite";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
 import { getGoogleReviewSettings } from "@/lib/google-review";
+import { HomeLayoutSeed } from "@/components/visual-builder/HomeLayoutSeed";
+import { VisualSection } from "@/components/visual-builder/VisualSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getWebsitePage("home");
@@ -45,7 +47,9 @@ export default async function HomePage() {
 
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
+      <HomeLayoutSeed layout={globals.home_layout} />
       {show.has("hero") ? (
+        <VisualSection id="hero" label="Hero">
         <>
           <Hero pageContent={pageContent} />
           <div className="relative z-20 mx-auto -mt-2 mb-4 hidden max-w-[1500px] px-4 sm:px-6 md:block lg:px-10">
@@ -62,23 +66,33 @@ export default async function HomePage() {
             />
           </div>
         </>
+        </VisualSection>
       ) : null}
       {show.has("stats") ? (
+        <VisualSection id="stats" label="Stats">
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
           <StatsBar stats={globals.stats} />
         </div>
+        </VisualSection>
       ) : null}
 
-      {show.has("experience") ? <ExperienceDeck services={catalog.list} content={experience} /> : null}
+      {show.has("experience") ? (
+        <VisualSection id="experience" label="Experiences">
+          <ExperienceDeck services={catalog.list} content={experience} />
+        </VisualSection>
+      ) : null}
       {show.has("quote") ? (
+        <VisualSection id="quote" label="Quote deck">
         <section className="bg-[#F8F7EF] px-5 pb-8 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-[1500px]">
             <QuoteDeck content={quote} />
           </div>
         </section>
+        </VisualSection>
       ) : null}
 
       {show.has("brand_story") ? (
+        <VisualSection id="brand_story" label="Brand story">
         <section className="bg-[#F5F0DF] px-5 py-24 sm:px-8 lg:px-12">
           <div className="mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-[.95fr_1.05fr]">
             <Reveal className="relative">
@@ -117,9 +131,11 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        </VisualSection>
       ) : null}
 
       {show.has("featured") ? (
+        <VisualSection id="featured" label="Featured stations">
         <section className="bg-[#DCE9D8] px-5 py-24 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-[1500px]">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -143,9 +159,11 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        </VisualSection>
       ) : null}
 
       {show.has("process") ? (
+        <VisualSection id="process" label="Process">
         <section className="bg-[#F5F0DF] px-5 py-24 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-[1500px]">
             <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
@@ -172,6 +190,7 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        </VisualSection>
       ) : null}
 
       {googleReviewSettings.enabled && googleReviewSettings.cards.length ? (
@@ -199,6 +218,7 @@ export default async function HomePage() {
       ) : null}
 
       {show.has("closing") ? (
+        <VisualSection id="closing" label="Closing CTA">
         <section className="bg-[#DCE9D8] px-5 py-20 sm:px-8 lg:px-12">
           <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-8 rounded-[2rem] border border-[#CBDCC7] bg-[#F8F7EF] px-7 py-14 shadow-[0_25px_70px_rgba(39,67,48,.08)] sm:px-12 lg:flex-row lg:items-end">
             <div>
@@ -213,6 +233,7 @@ export default async function HomePage() {
             <WaveRevealButton href={closing.button_href} label={closing.button_label} />
           </div>
         </section>
+        </VisualSection>
       ) : null}
     </main>
   );
