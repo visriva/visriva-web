@@ -7,7 +7,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { mobileDrawerNav } from "@/lib/public-nav";
-import { BOUNCY_PILL_SPRING, ISLAND_SPRING, VISRIVA_SPRING, liquidGlassShell, liquidGlassShellScrolled } from "@/components/framer-ui/motion";
+import { BOUNCY_PILL_SPRING, ISLAND_SPRING, STATION_FILTER_SPRING, VISRIVA_SPRING, liquidGlassShell, liquidGlassShellScrolled } from "@/components/framer-ui/motion";
 
 export function LiquidGlassNavbarShell({
   scrolled,
@@ -42,6 +42,8 @@ export function BouncyNavPill({
   ariaLabel = "Filter",
   layoutId = "visriva-bouncy-pill",
   dark = false,
+  variant = "default",
+  pillTransition,
 }: {
   items: { id: string; label: string }[];
   active: string;
@@ -49,12 +51,24 @@ export function BouncyNavPill({
   ariaLabel?: string;
   layoutId?: string;
   dark?: boolean;
+  variant?: "default" | "frosted-gold";
+  pillTransition?: { type: "spring"; stiffness: number; damping: number; mass?: number };
 }) {
-  const shell = dark
-    ? "border-[#C9A227]/35 bg-[#041A13]/80"
-    : "border-white/80 bg-[#F8F7EF]/90";
-  const activeText = dark ? "text-[#051C15]" : "text-white";
-  const idleText = dark ? "text-white/70" : "text-[#607768]";
+  const spring = pillTransition ?? (layoutId === "stationFilterPill" ? STATION_FILTER_SPRING : BOUNCY_PILL_SPRING);
+  const shell =
+    variant === "frosted-gold"
+      ? "border border-[#C9A227]/35 bg-[#F8F7EF]/45 shadow-[0_8px_32px_rgba(39,67,48,.08),inset_0_1px_0_rgba(255,255,255,0.65)] backdrop-blur-xl backdrop-saturate-150"
+      : dark
+        ? "border-[#C9A227]/35 bg-[#041A13]/80"
+        : "border-white/80 bg-[#F8F7EF]/90";
+  const activeText = variant === "frosted-gold" ? "text-[#2A3D31]" : dark ? "text-[#051C15]" : "text-white";
+  const idleText = variant === "frosted-gold" ? "text-[#607768]" : dark ? "text-white/70" : "text-[#607768]";
+  const activePillClass =
+    variant === "frosted-gold"
+      ? "bg-gradient-to-r from-[#C9A227]/95 to-[#E5C158]/88 shadow-[0_6px_22px_rgba(201,162,39,.35),inset_0_1px_1px_rgba(255,255,255,0.55)] backdrop-blur-md"
+      : dark
+        ? "bg-gradient-to-r from-[#C9A227] to-[#E5C158]"
+        : "bg-[#294937]";
 
   return (
     <div
@@ -74,11 +88,7 @@ export function BouncyNavPill({
             className={`relative shrink-0 rounded-full px-4 py-2.5 text-[10px] font-bold uppercase tracking-[.12em] transition-colors sm:px-5 ${isActive ? activeText : `${idleText} hover:text-white`}`}
           >
             {isActive ? (
-              <motion.span
-                layoutId={layoutId}
-                transition={BOUNCY_PILL_SPRING}
-                className={`absolute inset-0 rounded-full ${dark ? "bg-gradient-to-r from-[#C9A227] to-[#E5C158]" : "bg-[#294937]"}`}
-              />
+              <motion.span layoutId={layoutId} transition={spring} className={`absolute inset-0 rounded-full ${activePillClass}`} />
             ) : null}
             <span className="relative z-10">{tab.label}</span>
           </button>

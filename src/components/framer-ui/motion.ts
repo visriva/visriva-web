@@ -4,6 +4,11 @@ export const VISRIVA_SPRING = { type: "spring" as const, stiffness: 380, damping
 /** BouncyNavPill — Ys1t4g elastic glide */
 export const BOUNCY_PILL_SPRING = { type: "spring" as const, stiffness: 460, damping: 24, mass: 0.8 };
 
+/** Station catalog category filter — showcase elastic glide */
+export const STATION_FILTER_SPRING = { type: "spring" as const, stiffness: 480, damping: 25, mass: 0.85 };
+
+export const STATION_STAGGER = { staggerChildren: 0.08, delayChildren: 0.04 };
+
 /** Dynamic Island / mobile drawer expansion */
 export const ISLAND_SPRING = { type: "spring" as const, stiffness: 400, damping: 30 };
 
