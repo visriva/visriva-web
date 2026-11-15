@@ -8,6 +8,8 @@ import { ArrowUpRight } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CamoLiquidButton, MobileDesignDrawer } from "@/components/framer-ui";
 import { ISLAND_SPRING } from "@/components/framer-ui/motion";
+import { useVisualBuilderOptional } from "@/components/visual-builder/VisualBuilderProvider";
+import { useStudioOptional } from "@/components/studio/StudioRuntimeProvider";
 import { SwipeLettersLink } from "@/components/ui";
 import { instagramUrl, navigation, phoneDisplay } from "@/lib/site";
 import { whatsAppLink, WHATSAPP_GREETING } from "@/lib/whatsapp";
@@ -32,6 +34,9 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
 
+  const vb = useVisualBuilderOptional();
+  const studio = useStudioOptional();
+  const editorChrome = Boolean(vb?.editorOn && !studio?.isStudioMode);
   const hidden = HIDE_PREFIXES.some((p) => pathname.startsWith(p));
   const waHref = whatsAppLink(WHATSAPP_GREETING);
 
@@ -80,7 +85,9 @@ export function Navbar() {
 
   return (
     <>
-      <header className="pointer-events-none fixed inset-x-0 top-3 z-[100] mx-auto w-full max-w-7xl bg-transparent px-3 sm:px-6">
+      <header
+        className={`pointer-events-none fixed inset-x-0 z-[100] mx-auto w-full max-w-7xl bg-transparent px-3 sm:px-6 ${editorChrome ? "top-14 sm:top-14" : "top-3"}`}
+      >
         <motion.div
           ref={capsuleRef}
           layout
@@ -186,7 +193,7 @@ export function Navbar() {
         ) : null}
       </header>
 
-      <div className="h-16 shrink-0 sm:h-20" aria-hidden />
+      <div className={`shrink-0 ${editorChrome ? "h-12 sm:h-14" : "h-16 sm:h-20"}`} aria-hidden />
 
       <MobileDesignDrawer
         open={open}

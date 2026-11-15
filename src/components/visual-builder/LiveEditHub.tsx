@@ -25,7 +25,7 @@ export function LiveEditHub() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 left-4 z-[10001] inline-flex items-center gap-2 rounded-full border border-[#C9A227]/55 bg-[#04150F]/95 px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider text-[#E5C158] shadow-2xl backdrop-blur-xl"
+        className="fixed bottom-24 left-4 z-[10001] inline-flex items-center gap-2 rounded-full border border-[#C9A227]/55 bg-[#04150F]/95 px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider text-[#E5C158] shadow-2xl backdrop-blur-xl"
       >
         <PenLine className="h-3.5 w-3.5" /> Live edit guide
       </button>
