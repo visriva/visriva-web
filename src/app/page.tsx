@@ -11,7 +11,7 @@ import { getSiteGlobals } from "@/lib/site-globals";
 import { visibleSectionIds } from "@/lib/page-section-layout";
 import { getWebsitePage } from "@/lib/website-pages";
 import { siteUrl } from "@/lib/site";
-import { DynamicIslandNav, QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
+import { QuoteDeck, WaveRevealButton } from "@/components/FramerSuite";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
 import { getGoogleReviewSettings } from "@/lib/google-review";
 
@@ -45,14 +45,7 @@ export default async function HomePage() {
 
   return (
     <main id="content" className="page-enter bg-[#E6EFE3]">
-      {show.has("hero") ? (
-        <>
-          <Hero pageContent={pageContent} />
-          <div className="relative z-30 mx-auto -mt-3 mb-6 w-fit">
-            <DynamicIslandNav active="Explore Visriva" />
-          </div>
-        </>
-      ) : null}
+      {show.has("hero") ? <Hero pageContent={pageContent} /> : null}
       {show.has("stats") ? (
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
           <StatsBar stats={globals.stats} />

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 import { gstin, navigation } from "@/lib/site";
 import type { SiteGlobals } from "@/lib/site-globals-types";
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
@@ -21,8 +22,7 @@ export function Footer({ globals }: { globals: SiteGlobals }) {
       <div className="relative mx-auto grid max-w-[1500px] gap-12 px-5 py-16 sm:px-8 lg:grid-cols-12 lg:px-12">
         <div className="lg:col-span-4">
           <div className="flex items-center gap-3">
-            <Image src="/brand/visriva-logo.png" alt="Visriva emblem" width={800} height={800} className="h-14 w-14 object-contain" />
-            <span className="font-display text-4xl tracking-wide text-[#F4F0DF]">visriva</span>
+            <Image src="/brand/visriva-logo.png" alt="Visriva" width={140} height={56} className="h-12 w-auto object-contain" />
           </div>
           <p className="mt-6 max-w-sm text-sm leading-7 text-[#B8C2B4]">{globals.footer_blurb}</p>
           <p className="mt-7 text-[.62rem] font-semibold uppercase tracking-[.2em] text-[#D2B85C]">{globals.footer_tagline}</p>
@@ -34,8 +34,20 @@ export function Footer({ globals }: { globals: SiteGlobals }) {
         <div className="lg:col-span-2">
           <p className="text-[.62rem] font-bold uppercase tracking-[.24em] text-[#D2B85C]">Explore</p>
           <ul className="mt-5 space-y-3 text-sm text-[#D7D8C9]">
-            {links.map((link) => <li key={link.href}><Link href={link.href} className="transition hover:text-[#E3C65E]">{link.label} ↗</Link></li>)}
-            <li><Link href="/quote" className="font-semibold text-[#E3C65E]">Plan your event ↗</Link></li>
+            {links.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="inline-flex items-center gap-1 transition hover:text-[#E3C65E]">
+                  {link.label}
+                  <ArrowUpRightIcon className="h-3.5 w-3.5 opacity-70" />
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/quote" className="inline-flex items-center gap-1 font-semibold text-[#E3C65E]">
+                Plan your event
+                <ArrowUpRightIcon className="h-3.5 w-3.5" />
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -43,7 +55,17 @@ export function Footer({ globals }: { globals: SiteGlobals }) {
           <p className="text-[.62rem] font-bold uppercase tracking-[.24em] text-[#D2B85C]">Contact the studio</p>
           <div className="mt-5 space-y-5 text-sm leading-6 text-[#D7D8C9]">
             <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">Location</p><p>{globals.footer_location}</p></div>
-            <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">WhatsApp</p>{whatsapp ? <a href={whatsapp} target="_blank" rel="noreferrer" className="text-[#E4D7A6] underline underline-offset-4 hover:text-[#E3C65E]">Request a quote ↗</a> : <Link href="/quote">Request a quote</Link>}</div>
+            <div>
+              <p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">WhatsApp</p>
+              {whatsapp ? (
+                <a href={whatsapp} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[#E4D7A6] underline underline-offset-4 hover:text-[#E3C65E]">
+                  Request a quote
+                  <ArrowUpRightIcon className="h-3.5 w-3.5" />
+                </a>
+              ) : (
+                <Link href="/quote">Request a quote</Link>
+              )}
+            </div>
             <div><p className="mb-1 text-[.55rem] font-bold uppercase tracking-[.18em] text-[#A8A78D]">Business details</p><p>{gstin ? `GSTIN ${gstin}` : "GSTIN printed on the tax invoice"}</p><p className="mt-1 text-xs text-[#9DA995]">{globals.footer_gst_note}</p></div>
           </div>
           <div className="mt-6 flex items-center gap-3">
@@ -61,7 +83,10 @@ export function Footer({ globals }: { globals: SiteGlobals }) {
           <Link href="/rate-card" className="mt-8 flex items-center justify-between rounded-xl border border-dashed border-[#806B2D]/70 bg-[#0D2117] px-4 py-4 transition hover:border-[#D2B85C] hover:bg-[#10291B]">
             <span><span className="block text-[.55rem] font-bold uppercase tracking-[.18em] text-[#D2B85C]">Your event, your mix</span><span className="mt-1 block text-sm font-semibold text-[#F4F0DF]">Explore the rate card</span></span><span className="text-xl text-[#E4D7A6]">→</span>
           </Link>
-          <Link href="/quote" className="mt-3 inline-flex rounded-full border border-[#806B2D]/70 px-4 py-2 text-xs text-[#E4D7A6] transition hover:border-[#D2B85C]">Need a hand? ↗</Link>
+          <Link href="/quote" className="mt-3 inline-flex items-center gap-1 rounded-full border border-[#806B2D]/70 px-4 py-2 text-xs text-[#E4D7A6] transition hover:border-[#D2B85C]">
+            Need a hand?
+            <ArrowUpRightIcon className="h-3.5 w-3.5" />
+          </Link>
         </div>
       </div>
       <div className="relative flex flex-col justify-between gap-2 border-t border-[#806B2D]/35 px-5 py-5 text-xs text-[#8F9B89] sm:flex-row sm:px-8 lg:px-12">

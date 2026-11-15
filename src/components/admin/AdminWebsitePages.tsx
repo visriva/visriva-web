@@ -43,7 +43,7 @@ export function AdminWebsitePages({pages}:{pages:WebsitePage[]}) {
     </aside>
     <form onSubmit={save} className="min-w-0 space-y-7">
       <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="font-royal text-[10px] uppercase tracking-[.24em] text-gold">Page editor · /{form.slug==="home"?"":form.slug}</p><h2 className="mt-2 font-display text-4xl italic text-cream">{form.name}</h2></div><select className="field max-w-44" value={form.status} onChange={e=>field("status",e.target.value as WebsitePage["status"])}><option value="draft">Draft</option><option value="published">Published</option></select></div>
-      <section className="rounded-2xl border border-gold/20 bg-[#0D2117] p-5 sm:p-7"><p className="section-kicker">01 · Hero section</p><div className="mt-5 grid gap-4 md:grid-cols-2">
+      <section className="rounded-2xl border border-gold/20 bg-[#0D2117] p-5 sm:p-7"><p className="section-kicker">01 · Hero section</p>{form.slug === "home" ? <p className="mt-3 text-xs text-mist">These fields power the homepage hero on mobile and desktop. Mobile menu labels live in code (`public-nav.ts`); footer &amp; WhatsApp use Site globals.</p> : null}<div className="mt-5 grid gap-4 md:grid-cols-2">
         <label className="text-sm text-mist">Page display name<input className={input} value={form.name} onChange={e=>field("name",e.target.value)}/></label>
         <label className="text-sm text-mist">Eyebrow<input className={input} value={form.eyebrow} onChange={e=>field("eyebrow",e.target.value)}/></label>
         <label className="text-sm text-mist">Main heading<input className={input} value={form.hero_title} onChange={e=>field("hero_title",e.target.value)}/></label>

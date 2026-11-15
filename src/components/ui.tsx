@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 
 export function Eyebrow({children}:{children:React.ReactNode}) { return <p className="section-kicker">{children}</p>; }
 
@@ -10,7 +11,7 @@ export function GoldLink({href,children,className=""}:{href:string;children:Reac
 export function SwipeLettersLink({href,label,className=""}:{href:string;label:string;className?:string}) {
   return <Link href={href} aria-label={label} className={"liquid-button swipe-cta inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.14em] "+className}>
     <span className="swipe-letters" aria-hidden="true">{Array.from(label).map((letter,index)=><span className="swipe-letter" style={{transitionDelay:(index*13)+"ms"}} key={index}><span>{letter===" "?"\u00a0":letter}</span><span>{letter===" "?"\u00a0":letter}</span></span>)}</span>
-    <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">↗</span>
+    <ArrowUpRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
   </Link>;
 }
 

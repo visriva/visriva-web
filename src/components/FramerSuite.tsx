@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 import type { HomeQuote } from "@/lib/home-content-types";
 import { DEFAULT_HOME_CONTENT } from "@/lib/home-content-types";
 
@@ -14,12 +15,12 @@ export function DotButton({label,onClick}:{label:string;onClick:()=>void}){
 }
 
 export function WaveRevealButton({href,label}:{href:string;label:string}){
- return <Link href={href} className="wave-button group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-[#D4AF37]/60 bg-[#0B3D2E] px-7 py-4 text-xs font-bold uppercase tracking-[.14em] text-[#F5F0E5] shadow-[0_12px_32px_rgba(0,0,0,.32)] transition hover:-translate-y-1"><span className="wave-button-fill absolute inset-x-0 bottom-0 h-0 bg-[#D4AF37] transition-[height] duration-500 group-hover:h-full"/><span className="relative z-10 transition-colors group-hover:text-[#07110D]">{label}</span><span className="relative z-10 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">↗</span></Link>;
+ return <Link href={href} className="wave-button group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-[#D4AF37]/60 bg-[#0B3D2E] px-7 py-4 text-xs font-bold uppercase tracking-[.14em] text-[#F5F0E5] shadow-[0_12px_32px_rgba(0,0,0,.32)] transition hover:-translate-y-1"><span className="wave-button-fill absolute inset-x-0 bottom-0 h-0 bg-[#D4AF37] transition-[height] duration-500 group-hover:h-full"/><span className="relative z-10 transition-colors group-hover:text-[#07110D]">{label}</span><ArrowUpRightIcon className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>;
 }
 
 export function LightBulbButton({children="Need a hand?"}:{children?:React.ReactNode}){
  const [on,setOn]=useState(false);
- return <div className="relative"><button type="button" aria-expanded={on} onClick={()=>setOn(v=>!v)} className="inline-flex items-center gap-2 rounded-full border border-[#C9D7C4] bg-[#F8F7EF]/90 px-4 py-3 text-xs font-semibold text-[#355642] transition hover:border-[#A88F3E]"><span className={on?"text-[#B08E25]":"text-[#829182]"}>☼</span>{children}</button>{on?<div className="absolute bottom-full right-0 z-30 mb-3 w-64 rounded-2xl border border-[#C9D7C4] bg-[#F8F7EF] p-4 text-sm leading-6 text-[#617768] shadow-xl"><strong className="text-[#294937]">Not sure where to start?</strong><p className="mt-1">Tell us your event date, guest count and venue. We’ll help shortlist the right stations.</p><Link href="/quote" className="mt-3 inline-block font-semibold text-[#D4AF37] underline underline-offset-4">Build a quick brief ↗</Link></div>:null}</div>;
+ return <div className="relative"><button type="button" aria-expanded={on} onClick={()=>setOn(v=>!v)} className="inline-flex items-center gap-2 rounded-full border border-[#C9D7C4] bg-[#F8F7EF]/90 px-4 py-3 text-xs font-semibold text-[#355642] transition hover:border-[#A88F3E]"><span className={on?"text-[#B08E25]":"text-[#829182]"}>☼</span>{children}</button>{on?<div className="absolute bottom-full right-0 z-30 mb-3 w-64 rounded-2xl border border-[#C9D7C4] bg-[#F8F7EF] p-4 text-sm leading-6 text-[#617768] shadow-xl"><strong className="text-[#294937]">Not sure where to start?</strong><p className="mt-1">Tell us your event date, guest count and venue. We’ll help shortlist the right stations.</p><Link href="/quote" className="mt-3 inline-flex items-center gap-1 font-semibold text-[#D4AF37] underline underline-offset-4">Build a quick brief <ArrowUpRightIcon className="h-3.5 w-3.5" /></Link></div>:null}</div>;
 }
 
 export function TearTicket({href="/rate-card",label="Explore the rate card"}:{href?:string;label?:string}){
@@ -78,7 +79,7 @@ export function PaperBackground({children}:{children:React.ReactNode}){
 }
 
 export function MotionSubmitButton({children="Send enquiry",pending=false,onClick}:{children?:React.ReactNode;pending?:boolean;onClick?:()=>void}){
- return <button type="button" onClick={onClick} disabled={pending} className="liquid-button group inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-60"><span>{pending?"Sending…":children}</span><span className="transition-transform group-hover:translate-x-1">{pending?"◌":"↗"}</span></button>;
+ return <button type="button" onClick={onClick} disabled={pending} className="liquid-button group inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-60"><span>{pending?"Sending…":children}</span>{pending ? <span>…</span> : <ArrowUpRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />}</button>;
 }
 
 export function BackTrigger(){
