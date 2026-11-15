@@ -2,13 +2,12 @@
 
 import { Suspense } from "react";
 import { VisualBuilderProvider } from "@/components/visual-builder/VisualBuilderProvider";
-import { VisualBuilderToolbar } from "@/components/visual-builder/VisualBuilderToolbar";
+import { StudioGate } from "@/components/studio/StudioGate";
 
 function VisualBuilderInner({ children }: { children: React.ReactNode }) {
   return (
     <VisualBuilderProvider>
-      <VisualBuilderToolbar />
-      {children}
+      <StudioGate>{children}</StudioGate>
     </VisualBuilderProvider>
   );
 }

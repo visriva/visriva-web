@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
         <JsonLd />
         <VisualBuilderGate>
-          <Suspense fallback={<div className="h-[4.5rem]" aria-hidden />}>
+          <Suspense fallback={null}>
             <Navbar />
           </Suspense>
           {children}

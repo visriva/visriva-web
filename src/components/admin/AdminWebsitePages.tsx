@@ -39,7 +39,10 @@ export function AdminWebsitePages({pages}:{pages:WebsitePage[]}) {
       <p className="font-royal text-[10px] uppercase tracking-[.24em] text-gold">Website content</p>
       <h1 className="mt-2 font-display text-3xl italic text-cream">Pages</h1>
       <nav className="mt-5 grid gap-1">{pages.map(page=><button key={page.slug} type="button" onClick={()=>choose(page.slug)} className={`flex items-center justify-between rounded-xl px-3 py-3 text-left text-sm transition ${selected===page.slug?"border border-gold/40 bg-gold/10 text-cream":"text-mist hover:bg-white/5"}`}><span>{page.name}</span><span className="text-[9px] uppercase tracking-wider text-gold">{page.status}</span></button>)}</nav>
-      <Link href="/?edit=1" target="_blank" className="mt-6 inline-block text-xs text-champagne underline">Open live visual builder</Link>
+      <Link href="/?studio=true" target="_blank" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#C9A227] to-[#E5C158] px-3 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider text-[#041812]">
+        🎨 Launch Pro Visual Studio
+      </Link>
+      <Link href="/?edit=1" target="_blank" className="mt-3 inline-block text-xs text-champagne underline">Classic live builder</Link>
       <Link href="/" target="_blank" className="mt-2 inline-block text-xs text-mist underline">View live website</Link>
     </aside>
     <form onSubmit={save} className="min-w-0 space-y-7">

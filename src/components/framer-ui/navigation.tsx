@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { mobileDrawerNav } from "@/lib/public-nav";
 import { BOUNCY_PILL_SPRING, ISLAND_SPRING, VISRIVA_SPRING, liquidGlassShell, liquidGlassShellScrolled } from "@/components/framer-ui/motion";
 
@@ -196,35 +197,59 @@ export function MobileDesignDrawer({
   onClose: () => void;
   footer?: React.ReactNode;
 }) {
-  if (!open) return null;
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.98, y: -8 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={ISLAND_SPRING}
-      className="fixed inset-0 z-[999] flex flex-col bg-[#041812]/95 p-6 text-white backdrop-blur-2xl lg:hidden"
-    >
-      <div className="flex items-center justify-between border-b border-[#C9A227]/25 pb-5">
-        <Image src="/brand/visriva-logo.png" alt="Visriva" width={100} height={40} className="h-9 w-auto" />
-        <button type="button" onClick={onClose} aria-label="Close" className="grid h-10 w-10 place-items-center rounded-full border border-[#C9A227]/40">
-          <X className="h-5 w-5 text-[#E5C158]" />
-        </button>
-      </div>
-      <nav className="flex-1 overflow-y-auto py-8">
-        {mobileDrawerNav.map((link, i) => (
-          <Link
-            key={link.href}
-            href={link.href}
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
+  const shell = (
+    <AnimatePresence>
+      {open ? (
+        <div className="fixed inset-0 z-[999] lg:hidden" role="dialog" aria-modal="true" aria-label="Site navigation">
+          <motion.button
+            type="button"
+            aria-label="Close menu backdrop"
+            className="absolute inset-0 cursor-default bg-[#041812]/88 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="flex items-center gap-4 border-b border-white/10 py-4 font-display text-2xl text-[#F4F0DF] hover:text-[#E5C158]"
+          />
+          <motion.div
+            className="absolute inset-0 flex flex-col bg-[#041812]/97 p-6 text-white backdrop-blur-2xl"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={ISLAND_SPRING}
           >
-            <span className="font-royal text-xs text-[#C9A227]">{String(i + 1).padStart(2, "0")}</span>
-            {link.label}
-            <ArrowUpRight className="ml-auto h-4 w-4 opacity-60" />
-          </Link>
-        ))}
-      </nav>
-      {footer}
-    </motion.div>
+            <div className="flex items-center justify-between border-b border-[#C9A227]/25 pb-5">
+              <Image src="/brand/visriva-logo.png" alt="Visriva" width={100} height={40} className="h-9 w-auto" />
+              <button type="button" onClick={onClose} aria-label="Close" className="grid h-10 w-10 place-items-center rounded-full border border-[#C9A227]/40">
+                <X className="h-5 w-5 text-[#E5C158]" />
+              </button>
+            </div>
+            <nav className="flex-1 overflow-y-auto py-8">
+              {mobileDrawerNav.map((link, i) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={onClose}
+                  className="flex items-center gap-4 border-b border-white/10 py-4 font-display text-2xl text-[#F4F0DF] hover:text-[#E5C158]"
+                >
+                  <span className="font-royal text-xs text-[#C9A227]">{String(i + 1).padStart(2, "0")}</span>
+                  {link.label}
+                  <ArrowUpRight className="ml-auto h-4 w-4 opacity-60" />
+                </Link>
+              ))}
+            </nav>
+            {footer}
+          </motion.div>
+        </div>
+      ) : null}
+    </AnimatePresence>
   );
+
+  return createPortal(shell, document.body);
 }

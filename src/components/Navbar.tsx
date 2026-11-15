@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CamoLiquidButton, MobileDesignDrawer } from "@/components/framer-ui";
-import { ISLAND_SPRING, NAVBAR_GLASS_IDLE, NAVBAR_GLASS_SCROLLED } from "@/components/framer-ui/motion";
+import { ISLAND_SPRING } from "@/components/framer-ui/motion";
 import { SwipeLettersLink } from "@/components/ui";
 import { instagramUrl, navigation, phoneDisplay } from "@/lib/site";
 import { whatsAppLink, WHATSAPP_GREETING } from "@/lib/whatsapp";
@@ -16,10 +16,16 @@ const HIDE_PREFIXES = ["/admin", "/qr", "/docforclient", "/docforreview"] as con
 const INSTAGRAM = instagramUrl || "https://www.instagram.com/visriva.co/";
 const experiences = navigation.find((item) => item.children)?.children ?? [];
 
+const CAPSULE_GLASS = {
+  idle: "bg-[#07261C]/40 backdrop-blur-xl backdrop-saturate-150 border border-white/30 shadow-[0_8px_28px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.4)]",
+  scrolled:
+    "bg-[#06241B]/55 backdrop-blur-2xl backdrop-saturate-150 border border-white/25 shadow-[0_10px_35px_rgba(0,0,0,0.28),inset_0_1px_1px_rgba(255,255,255,0.35)]",
+} as const;
+
 export function Navbar() {
   const pathname = usePathname();
   const reduce = useReducedMotion();
-  const capsuleRef = useRef<HTMLElement>(null);
+  const capsuleRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -54,9 +60,11 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prev;
     };
   }, [open]);
 
@@ -71,15 +79,17 @@ export function Navbar() {
   if (hidden) return null;
 
   return (
-    <div className="sticky top-3 z-[100] mx-auto w-full max-w-7xl px-3 sm:px-6">
-      <motion.header
-        ref={capsuleRef}
-        layout
-        onMouseMove={onCapsuleMove}
-        transition={ISLAND_SPRING}
-        className={`nova-navbar-glow w-full rounded-full px-3 py-2 transition-[padding,box-shadow] sm:px-6 ${scrolled ? "py-1.5 sm:py-2" : "py-2 sm:py-3"} ${scrolled ? NAVBAR_GLASS_SCROLLED : NAVBAR_GLASS_IDLE}`}
-      >
-        <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+    <>
+      <header className="pointer-events-none fixed inset-x-0 top-3 z-[100] mx-auto w-full max-w-7xl bg-transparent px-3 sm:px-6">
+        <motion.div
+          ref={capsuleRef}
+          layout
+          onMouseMove={onCapsuleMove}
+          transition={ISLAND_SPRING}
+          className={`nova-navbar-glow pointer-events-auto flex w-full items-center justify-between gap-2 rounded-full px-3.5 py-2 transition-all duration-300 sm:px-6 sm:py-3 ${
+            scrolled ? CAPSULE_GLASS.scrolled : CAPSULE_GLASS.idle
+          }`}
+        >
           <Link href="/" aria-label="Visriva home" className="flex shrink-0 items-center gap-2">
             <Image src="/brand/visriva-logo.png" alt="" width={40} height={40} priority className="h-8 w-8 object-contain sm:h-9 sm:w-9" />
             <span className="font-display text-lg text-white sm:text-2xl">visriva</span>
@@ -99,7 +109,7 @@ export function Navbar() {
                 <span className={`text-[#C9A227] transition-transform ${servicesOpen ? "rotate-180" : ""}`}>⌄</span>
               </button>
               {servicesOpen ? (
-                <div className="absolute left-1/2 top-[calc(100%+0.75rem)] z-50 w-[min(520px,88vw)] -translate-x-1/2 rounded-2xl border border-[#806B2D]/60 bg-[#091A13]/96 p-4 shadow-2xl backdrop-blur-2xl">
+                <div className="pointer-events-auto absolute left-1/2 top-[calc(100%+0.75rem)] z-50 w-[min(520px,88vw)] -translate-x-1/2 rounded-2xl border border-[#806B2D]/60 bg-[#091A13]/96 p-4 shadow-2xl backdrop-blur-2xl">
                   <p className="mb-3 px-1 text-[.62rem] font-bold uppercase tracking-[.24em] text-[#C9A227]">Explore stations</p>
                   <div className="grid gap-2 sm:grid-cols-3">
                     {experiences.map((child) => (
@@ -146,35 +156,37 @@ export function Navbar() {
               <span className="text-base leading-none">☰</span>
             </motion.button>
           </div>
-        </div>
-      </motion.header>
+        </motion.div>
 
-      {searchOpen ? (
-        <div className="mt-2 rounded-2xl border border-[#806B2D]/45 bg-[#06241B]/98 px-4 py-4 backdrop-blur-xl">
-          <label htmlFor="site-search" className="text-[.62rem] font-bold uppercase tracking-[.24em] text-[#E5C158]">
-            Find your experience
-          </label>
-          <input
-            id="site-search"
-            autoFocus
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search photo booths, AI, VR…"
-            className="mt-2 w-full rounded-xl border border-[#806B2D]/60 bg-[#10251A] px-4 py-3 text-sm text-[#F4F0DF] outline-none focus:border-[#E5C158]"
-          />
-          <div className="mt-3 flex flex-wrap gap-2">
-            {results.length ? (
-              results.map((item) => (
-                <Link key={item.href} href={item.href} onClick={() => setSearchOpen(false)} className="rounded-full border border-[#806B2D]/60 px-4 py-2 text-sm text-[#E9E1C4]">
-                  {item.label}
-                </Link>
-              ))
-            ) : (
-              <p className="text-sm text-[#B9C4B3]">Try “photo”, “AI”, or “VR”.</p>
-            )}
+        {searchOpen ? (
+          <div className="pointer-events-auto mt-2 rounded-2xl border border-[#806B2D]/45 bg-[#06241B]/92 px-4 py-4 backdrop-blur-xl">
+            <label htmlFor="site-search" className="text-[.62rem] font-bold uppercase tracking-[.24em] text-[#E5C158]">
+              Find your experience
+            </label>
+            <input
+              id="site-search"
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search photo booths, AI, VR…"
+              className="mt-2 w-full rounded-xl border border-[#806B2D]/60 bg-[#10251A] px-4 py-3 text-sm text-[#F4F0DF] outline-none focus:border-[#E5C158]"
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              {results.length ? (
+                results.map((item) => (
+                  <Link key={item.href} href={item.href} onClick={() => setSearchOpen(false)} className="rounded-full border border-[#806B2D]/60 px-4 py-2 text-sm text-[#E9E1C4]">
+                    {item.label}
+                  </Link>
+                ))
+              ) : (
+                <p className="text-sm text-[#B9C4B3]">Try “photo”, “AI”, or “VR”.</p>
+              )}
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </header>
+
+      <div className="h-16 shrink-0 sm:h-20" aria-hidden />
 
       <MobileDesignDrawer
         open={open}
@@ -197,6 +209,6 @@ export function Navbar() {
           </div>
         }
       />
-    </div>
+    </>
   );
 }
