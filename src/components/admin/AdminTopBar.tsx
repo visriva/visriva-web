@@ -1,11 +1,6 @@
-import { createAdminClient } from "@/lib/supabase-admin";
-
-export async function AdminTopBar() {
-  const supabase = createAdminClient();
-  const live = Boolean(supabase && process.env.SUPABASE_SERVICE_ROLE_KEY);
-
+export function AdminTopBar({ live }: { live: boolean }) {
   return (
-    <div className="border-b-2 border-gold/25 bg-[#081912]/95 px-4 py-4 sm:px-6 lg:px-10">
+    <div className="hidden border-b-2 border-gold/25 bg-[#081912]/95 px-4 py-4 sm:px-6 lg:block lg:px-10">
       <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-3">
         <p className="font-royal text-[0.6rem] uppercase tracking-[0.22em] text-mist">Executive command center</p>
         <span

@@ -74,7 +74,7 @@ export function Header() {
   const results = links.filter((item) => (item.label + " " + item.note).toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-[100] max-w-[100vw] px-3 pt-3 sm:px-4 lg:px-8">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 max-w-[100vw] px-3 pt-3 sm:px-4 lg:px-8">
       <div
         className={`pointer-events-auto mx-auto flex w-full max-w-[1790px] items-center justify-between gap-1.5 rounded-full border border-[#C9A227]/35 bg-[#07261C]/85 px-3 py-2 shadow-xl backdrop-blur-xl transition-shadow sm:gap-2 sm:px-3 lg:h-[78px] lg:gap-3 lg:rounded-[19px] lg:px-8 ${scrolled ? "shadow-2xl" : ""}`}
       >
@@ -227,7 +227,7 @@ export function Header() {
             <motion.button
               type="button"
               aria-label="Close menu backdrop"
-              className="pointer-events-auto fixed inset-0 z-[9998] bg-[#051F17]/75 backdrop-blur-sm lg:hidden"
+              className="pointer-events-auto fixed inset-0 z-[998] bg-[#051F17]/75 backdrop-blur-sm lg:hidden"
               initial={{ opacity: reduce ? 1 : 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -238,7 +238,7 @@ export function Header() {
               role="dialog"
               aria-modal="true"
               aria-label="Site navigation"
-              className="pointer-events-auto fixed inset-0 z-[9999] flex flex-col bg-[#051F17] p-6 text-white lg:hidden"
+              className="pointer-events-auto fixed inset-0 z-[999] flex flex-col bg-[#051F17] p-6 text-white lg:hidden"
               initial={reduce ? undefined : { x: "100%" }}
               animate={{ x: 0 }}
               exit={reduce ? undefined : { x: "100%" }}

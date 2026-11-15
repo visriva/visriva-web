@@ -38,8 +38,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <SiteFooterWrapper>
           <FooterServer />
-        </SiteFooterWrapper>
-        <SiteFooterWrapper>
           <WhatsAppBubble />
         </SiteFooterWrapper>
       </body>
