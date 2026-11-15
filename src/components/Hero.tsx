@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
+import { ActivityBadge } from "@/components/framer-ui";
 import { SwipeLettersLink } from "@/components/ui";
 
 const highlights = [
@@ -42,17 +43,14 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
       <div className="relative z-10 border-y border-[#CBDAC6] bg-[#F8F7EF]/85 px-4 py-2.5 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-2 text-[10px]">
           <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
-            <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#9DBD9D] bg-[#E2EEE0] px-3 py-1 font-semibold uppercase tracking-[.16em] text-[#355642]">
-              <i className="h-2 w-2 rounded-full bg-[#76A77D]" aria-hidden />
-              Visriva event studio
-            </span>
+            <ActivityBadge variant="sage" label="Visriva event studio" />
             <span className="min-w-0 text-[#627967] leading-snug">
               Owned stations · Live photo, AI, merchandise and VR experiences
             </span>
           </div>
           <Link
             href="/client-requirements"
-            className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#8E7835] underline decoration-[#B8A04D]/50 underline-offset-4"
+            className="light-bulb-link inline-flex shrink-0 items-center gap-1 font-semibold text-[#8E7835] underline decoration-[#B8A04D]/50 underline-offset-4"
           >
             Venue planning guide
             <ArrowUpRight className="h-3.5 w-3.5 text-[#947D34]" aria-hidden />
@@ -62,12 +60,7 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
 
       <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-10 px-4 pb-20 pt-10 sm:gap-12 sm:px-8 sm:pt-14 lg:min-h-[650px] lg:grid-cols-[1.05fr_.95fr] lg:gap-16 lg:px-12 lg:py-20">
         <div className="max-w-[700px]">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#BBCFB5] bg-[#F8F7EF]/75 px-4 py-2 text-[10px] font-semibold uppercase tracking-[.19em] text-[#52725B]">
-            <span className="text-[#A88F3E]" aria-hidden>
-              ✦
-            </span>
-            {eyebrow.toUpperCase()}
-          </div>
+          <ActivityBadge variant="sage" className="mb-5 mt-6" label={`✦ ${eyebrow.toUpperCase()}`} />
           <h1 className="hero-display mt-6 text-[clamp(2.65rem,7.3vw,7.4rem)] uppercase leading-[.9] tracking-[-.045em] text-[#234A36]">
             {title}
             <br />

@@ -259,7 +259,7 @@ function HamperCard({ content }: { content: QrPageContent }) {
     : content.hamper.bullets.map((line) => ({ title: line, description: "", image_url: "", image_alt: line }));
 
   return (
-    <LuxuryCard className="relative p-6">
+    <LuxuryCard className="ticket-link relative p-6">
       <div className="qr-gold-orb -right-8 top-8 h-40 w-40 opacity-80" aria-hidden />
       <p className="section-kicker">{content.hamper.kicker}</p>
       <h2 className="mt-2 font-display text-3xl text-cream">{content.hamper.title}</h2>
@@ -272,7 +272,7 @@ function HamperCard({ content }: { content: QrPageContent }) {
       ) : (
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {cards.map((card, i) => (
-            <div key={`${card.title}-${i}`} className="rounded-2xl border border-gold/20 bg-deep/40 p-3">
+            <div key={`${card.title}-${i}`} className="experience-flip-wrap rounded-2xl border border-gold/20 bg-deep/40 p-3 transition-transform duration-500 hover:-rotate-1 hover:scale-[1.02]">
               {card.image_url ? (
                 <QrMediaImage src={card.image_url} alt={card.image_alt} className="h-28 w-full rounded-xl object-cover" width={400} height={224} />
               ) : null}

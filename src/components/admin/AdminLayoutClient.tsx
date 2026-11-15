@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
+import { BOUNCY_PILL_SPRING } from "@/components/framer-ui/motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { adminMobileTabs } from "@/lib/admin-nav";
@@ -64,11 +66,18 @@ export function AdminMainColumn({ live, children }: { live: boolean; children: R
               <Link
                 key={tab.href}
                 href={tab.href}
-                className={`shrink-0 rounded-full px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] transition ${
-                  active ? "bg-gold/20 text-cream" : "bg-white/5 text-champagne hover:bg-white/10"
+                className={`relative shrink-0 rounded-full px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.1em] transition ${
+                  active ? "text-cream" : "text-champagne hover:bg-white/10"
                 }`}
               >
-                {tab.label}
+                {active ? (
+                  <motion.span
+                    layoutId="admin-mobile-tab"
+                    transition={BOUNCY_PILL_SPRING}
+                    className="absolute inset-0 rounded-full bg-gold/20"
+                  />
+                ) : null}
+                <span className="relative z-10">{tab.label}</span>
               </Link>
             );
           })}

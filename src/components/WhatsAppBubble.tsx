@@ -1,25 +1,33 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { VISRIVA_SPRING } from "@/components/framer-ui/motion";
 import { WHATSAPP_GREETING, whatsAppLink } from "@/lib/whatsapp";
 
 export function WhatsAppBubble() {
   const href = whatsAppLink(WHATSAPP_GREETING);
 
   return (
-  <a
-    href={href ?? "/quote"}
-    target={href ? "_blank" : undefined}
-    rel={href ? "noreferrer" : undefined}
-    className="whatsapp-bubble group fixed bottom-4 right-3 z-40 flex origin-bottom-right scale-90 items-center justify-center rounded-full border-2 border-[#C9A227] bg-[#07291E] text-[#E5C158] shadow-2xl transition hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(201,162,39,.35)] md:bottom-6 md:right-6 md:origin-bottom-right md:scale-100 md:gap-3 md:rounded-full md:border md:border-[#CBDCC7] md:bg-[#F8F7EF]/95 md:px-4 md:py-3 md:text-[#244936]"
-    aria-label="WhatsApp Visriva"
-  >
-    <span className="relative grid h-[3.25rem] w-[3.25rem] place-items-center md:h-9 md:w-9 md:rounded-full md:bg-[#DCE9D8]">
-      <span className="absolute inset-0 animate-ping rounded-full border border-[#C9A227]/40 opacity-40 md:hidden" aria-hidden />
-      <WhatsAppGlyph className="h-6 w-6 fill-current md:h-4 md:w-4 md:text-[#947D34]" />
-    </span>
-    <span className="hidden text-left md:block">
-      <span className="block text-[.58rem] font-semibold uppercase tracking-[.18em] text-[#947D34]">Talk to the team</span>
-      <span className="block text-sm font-medium text-[#244936]">WhatsApp</span>
-    </span>
-  </a>
+    <motion.a
+      href={href ?? "/quote"}
+      target={href ? "_blank" : undefined}
+      rel={href ? "noreferrer" : undefined}
+      initial={false}
+      whileHover={{ scale: 1.04, y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      transition={VISRIVA_SPRING}
+      className="whatsapp-bubble group fixed bottom-4 right-3 z-40 flex origin-bottom-right scale-90 items-center justify-center rounded-full border-2 border-[#C9A227] bg-[#07291E] text-[#E5C158] shadow-2xl hover:shadow-[0_16px_40px_rgba(201,162,39,.35)] md:bottom-6 md:right-6 md:origin-bottom-right md:scale-100 md:gap-3 md:rounded-full md:border md:border-[#CBDCC7] md:bg-[#F8F7EF]/95 md:px-4 md:py-3 md:text-[#244936]"
+      aria-label="WhatsApp Visriva"
+    >
+      <span className="relative grid h-[3.25rem] w-[3.25rem] place-items-center md:h-9 md:w-9 md:rounded-full md:bg-[#DCE9D8]">
+        <span className="absolute inset-0 animate-ping rounded-full border border-[#C9A227]/40 opacity-40 md:hidden" aria-hidden />
+        <WhatsAppGlyph className="h-6 w-6 fill-current md:h-4 md:w-4 md:text-[#947D34]" />
+      </span>
+      <span className="hidden text-left md:block">
+        <span className="block text-[.58rem] font-semibold uppercase tracking-[.18em] text-[#947D34]">Talk to the team</span>
+        <span className="block text-sm font-medium text-[#244936]">WhatsApp</span>
+      </span>
+    </motion.a>
   );
 }
 

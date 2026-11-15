@@ -16,22 +16,29 @@ export function CamoLiquidButton({
   label = "Search",
   onClick,
   expanded,
+  compact = false,
 }: {
   label?: string;
   onClick: () => void;
   expanded?: boolean;
+  compact?: boolean;
 }) {
+  const compactShell =
+    "liquid-glass-btn h-8 w-8 shrink-0 rounded-full border border-[#C9A227]/40 bg-[#EBECE6] text-[#C9A227] shadow-md sm:h-10 sm:w-10";
+  const defaultShell =
+    "liquid-glass-btn group h-10 w-10 rounded-full border border-[#C9A227]/45 bg-[linear-gradient(145deg,#0A3326,#041A13)] text-[#E5C158] shadow-lg lg:h-11 lg:w-auto lg:gap-2 lg:px-4";
   return (
     <motion.button
       type="button"
       onClick={onClick}
       aria-expanded={expanded}
-      whileTap={{ scale: 0.96 }}
+      aria-label={label}
+      whileTap={{ scale: 0.94 }}
       transition={VISRIVA_SPRING}
-      className="liquid-glass-btn group inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#C9A227]/45 bg-[linear-gradient(145deg,#0A3326,#041A13)] text-[#E5C158] shadow-lg lg:h-11 lg:w-auto lg:gap-2 lg:px-4"
+      className={`inline-flex items-center justify-center ${compact ? compactShell : defaultShell}`}
     >
-      <Search className="h-4 w-4" strokeWidth={1.75} />
-      <span className="hidden text-[10px] font-bold uppercase tracking-[.14em] lg:inline">{label}</span>
+      <Search className="h-4 w-4" strokeWidth={1.75} aria-hidden />
+      {!compact ? <span className="hidden text-[10px] font-bold uppercase tracking-[.14em] lg:inline">{label}</span> : null}
     </motion.button>
   );
 }
@@ -96,16 +103,19 @@ export function LightBulbButton({ children = "Need a hand?" }: { children?: Reac
 
 export function BackTrigger() {
   return (
-    <button
+    <motion.button
       type="button"
       onClick={() => {
         if (window.history.length > 1) window.history.back();
         else window.location.assign("/");
       }}
-      className="inline-flex items-center gap-2 rounded-full border border-[#C9A227]/35 bg-white/[0.04] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#E6DEC8] transition hover:border-[#E5C158] hover:-translate-x-0.5"
+      whileHover={{ x: -4 }}
+      whileTap={{ scale: 0.97 }}
+      transition={VISRIVA_SPRING}
+      className="inline-flex items-center gap-2 rounded-full border border-[#C9A227]/35 bg-white/[0.04] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#E6DEC8] transition hover:border-[#E5C158]"
     >
       ← Back
-    </button>
+    </motion.button>
   );
 }
 

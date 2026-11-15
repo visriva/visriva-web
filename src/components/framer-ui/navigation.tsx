@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { mobileDrawerNav } from "@/lib/public-nav";
-import { VISRIVA_SPRING, liquidGlassShell, liquidGlassShellScrolled } from "@/components/framer-ui/motion";
+import { BOUNCY_PILL_SPRING, ISLAND_SPRING, VISRIVA_SPRING, liquidGlassShell, liquidGlassShellScrolled } from "@/components/framer-ui/motion";
 
 export function LiquidGlassNavbarShell({
   scrolled,
@@ -75,7 +75,7 @@ export function BouncyNavPill({
             {isActive ? (
               <motion.span
                 layoutId={layoutId}
-                transition={VISRIVA_SPRING}
+                transition={BOUNCY_PILL_SPRING}
                 className={`absolute inset-0 rounded-full ${dark ? "bg-gradient-to-r from-[#C9A227] to-[#E5C158]" : "bg-[#294937]"}`}
               />
             ) : null}
@@ -198,7 +198,12 @@ export function MobileDesignDrawer({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col bg-[#041A13]/95 p-6 text-white backdrop-blur-2xl lg:hidden">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: -8 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={ISLAND_SPRING}
+      className="fixed inset-0 z-[999] flex flex-col bg-[#041812]/95 p-6 text-white backdrop-blur-2xl lg:hidden"
+    >
       <div className="flex items-center justify-between border-b border-[#C9A227]/25 pb-5">
         <Image src="/brand/visriva-logo.png" alt="Visriva" width={100} height={40} className="h-9 w-auto" />
         <button type="button" onClick={onClose} aria-label="Close" className="grid h-10 w-10 place-items-center rounded-full border border-[#C9A227]/40">
@@ -220,6 +225,6 @@ export function MobileDesignDrawer({
         ))}
       </nav>
       {footer}
-    </div>
+    </motion.div>
   );
 }

@@ -7,15 +7,31 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
 
-export function ActivityBadge({ label = "Studio available", dark = false }: { label?: string; dark?: boolean }) {
-  const shell = dark
-    ? "border-[#C9A227]/40 bg-[#041A13]/70 text-[#E5C158]"
-    : "border-[#C9A227]/40 bg-[#0A3326]/80 text-[#E5C158]";
+export function ActivityBadge({
+  label = "Studio available",
+  dark = false,
+  variant = "emerald",
+  className = "",
+}: {
+  label?: string;
+  dark?: boolean;
+  /** sage = homepage hero pills; emerald = dark sections */
+  variant?: "sage" | "emerald";
+  className?: string;
+}) {
+  const shell =
+    variant === "sage"
+      ? "border-[#9DBD9D] bg-[#E2EEE0]/95 text-[#355642]"
+      : dark
+        ? "border-[#C9A227]/40 bg-[#041A13]/70 text-[#E5C158]"
+        : "border-[#C9A227]/40 bg-[#0A3326]/80 text-[#E5C158]";
+  const dot = variant === "sage" ? "bg-[#76A77D]" : "bg-[#65A878]";
+  const ping = variant === "sage" ? "bg-[#76A77D]" : "bg-[#E5C158]";
   return (
-    <span className={`mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-[.16em] backdrop-blur-xl ${shell}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-[.16em] backdrop-blur-xl ${shell} ${className}`}>
       <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E5C158] opacity-40" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-[#65A878]" />
+        <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-40 ${ping}`} />
+        <span className={`relative inline-flex h-2 w-2 rounded-full ${dot}`} />
       </span>
       {label}
     </span>
@@ -71,7 +87,12 @@ export function LiquidGlassPricingCard({
 }
 
 export function PaperBackground({ children }: { children: React.ReactNode }) {
-  return <div className="paper-surface relative overflow-hidden text-[#E6DEC8]">{children}</div>;
+  return (
+    <div className="relative text-[#E6DEC8]">
+      <div className="paper-surface pointer-events-none fixed inset-0 z-0 opacity-[0.55]" aria-hidden />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
 }
 
 export function LiquidGlassFooter({ children, className = "" }: { children: React.ReactNode; className?: string }) {
