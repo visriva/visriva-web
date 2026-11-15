@@ -29,3 +29,15 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/event-images", label: "Event images", ready: true, icon: "eventImages" },
   { href: "/admin/google-reviews", label: "Google reviews", ready: true, icon: "googleReviews" },
 ];
+
+/** Horizontal swipe tabs on admin mobile (labels shortened for narrow screens). */
+export const adminMobileTabs: { href: string; label: string }[] = [
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/leads", label: "Enquiries" },
+  { href: "/admin/website", label: "Website CMS" },
+  { href: "/admin/services", label: "Services" },
+  { href: "/admin/pricing", label: "Pricing" },
+  { href: "/admin/qr", label: "QR giveaway" },
+  { href: "/admin/event-images", label: "Event images" },
+  { href: "/admin/google-reviews", label: "Google reviews" },
+];

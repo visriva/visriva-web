@@ -1,0 +1,30 @@
+# Visriva web — permanent layout guardrails (do not violate)
+
+## SINGLE NAVBAR RULE
+- There is exactly ONE public navigation: `src/components/Navbar.tsx`.
+- Render it ONLY from `src/app/layout.tsx` (via `<Navbar />` inside Suspense). Never add `<header>`, `<nav>`, `Header`, `ModernNavbar`, or duplicate chrome inside `src/app/**/page.tsx` or section components.
+- `Navbar.tsx` MUST return `null` when `pathname.startsWith('/admin')`.
+- Also return `null` on `/qr`, `/docforclient`, `/docforreview` (dedicated flows without public chrome).
+
+## SINGLE ADMIN SHELL RULE
+- Admin chrome (`AdminShell`, `AdminSidebar`, "VISRIVA Studio admin") exists ONLY in `src/app/admin/layout.tsx`.
+- NEVER wrap admin routes with `AdminShell` again in `page.tsx` or client modules.
+
+## MOBILE NAVBAR FIT RULE (< 1024px)
+- Dark emerald glass capsule: `bg-[#07261C]/85 backdrop-blur-xl border border-[#C9A227]/35`, `px-3 py-2 gap-1.5`, fits 320–430px widths.
+- Left: single logo + one `visriva` wordmark (no duplicate text).
+- Right: cream search circle + gold `PLAN EVENT` pill + hamburger (`lg:hidden`).
+- Never use Unicode `↗` in UI — use `ArrowUpRight` from `lucide-react`.
+
+## PORTAL MODAL RULE
+- All modals (especially `/qr` gatekeeper) use `createPortal(..., document.body)`.
+- Root: `fixed inset-0 z-[9999]`.
+- Backdrop: sibling at `z-10` with blur (`bg-black/80 backdrop-blur-md`).
+- Card: sibling at `z-20`, sharp (no blur on card): `bg-[#07291E] border-2 border-[#C9A227]`.
+
+## /qr URL RULE
+- Keep URL exactly `/qr` — no `?tab=`, `?event=`, or photo-state query params.
+- Tab/mode/gatekeeper state in React `useState` only (no `localStorage` for unlock bypass).
+
+## HOMEPAGE AESTHETIC (do not regress)
+- Light sage hero (`#DCE8DF` / `#E4EFE7`), cream `VISRIVA EVENT STUDIO` strip, gold italic `"moment memorable."` — edit in `Hero.tsx` only, not duplicate hero shells on `page.tsx`.

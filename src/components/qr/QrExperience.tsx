@@ -150,7 +150,7 @@ function QrSectionBlock({
                 <MessageCircle className="h-5 w-5" aria-hidden />
               </span>
               <div className="min-w-0">
-                <p className="text-sm font-semibold leading-snug text-cream">{content.whatsapp.body}</p>
+                <p className="text-sm font-bold leading-snug text-cream">{content.whatsapp.body}</p>
                 <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="qr-gold-btn mt-4 inline-flex min-h-11 items-center rounded-full px-5 py-3 text-[10px] font-bold uppercase tracking-[0.14em]">
                   {content.whatsapp.button_text}
                 </a>

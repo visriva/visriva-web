@@ -58,16 +58,14 @@ export function QrLuxuryModal({
       />
 
       {layout === "scroll" ? (
-        <div className="pointer-events-none fixed inset-0 z-20 overflow-y-auto">
-          <div className="pointer-events-auto flex min-h-full justify-center p-4 pb-16 pt-14 sm:p-6 sm:pt-16">
-            <div
-              className={`${PANEL_BASE} relative w-full ${maxWidthClass}`}
-              onClick={(e) => e.stopPropagation()}
-              role="document"
-            >
-              <ModalClose onClose={onClose} />
-              {children}
-            </div>
+        <div className="pointer-events-none fixed inset-0 z-20 flex items-start justify-center overflow-y-auto p-4 pb-16 pt-14 sm:p-6 sm:pt-16">
+          <div
+            className={`${PANEL_BASE} pointer-events-auto relative my-auto w-full ${maxWidthClass}`}
+            onClick={(e) => e.stopPropagation()}
+            role="document"
+          >
+            <ModalClose onClose={onClose} />
+            {children}
           </div>
         </div>
       ) : (

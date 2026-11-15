@@ -1,12 +1,2 @@
-"use client";
-
-import { Suspense } from "react";
-import { usePathname } from "next/navigation";
-import { Header } from "@/components/Header";
-
-export function SiteChrome() {
-  const pathname = usePathname();
-  if (pathname.startsWith("/admin") || pathname.startsWith("/qr") || pathname.startsWith("/docforclient") || pathname.startsWith("/docforreview")) return null;
-
-  return <Suspense fallback={<div className="h-20" />}><Header /></Suspense>;
-}
+/** @deprecated Use `<Navbar />` in `src/app/layout.tsx` only. */
+export { Navbar as SiteChrome } from "@/components/Navbar";
