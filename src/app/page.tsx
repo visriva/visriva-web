@@ -5,7 +5,6 @@ import { ExperienceDeck } from "@/components/ExperienceDeck";
 import { Hero } from "@/components/Hero";
 import { Reveal } from "@/components/Reveal";
 import { StatsBar } from "@/components/StatsBar";
-import { RateList } from "@/components/RateList";
 import { getPublishedCatalog } from "@/lib/services-catalog";
 import { getSiteGlobals } from "@/lib/site-globals";
 import { visibleSectionIds } from "@/lib/page-section-layout";
