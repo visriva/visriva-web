@@ -29,7 +29,7 @@ export default async function DocForClientPage() {
   ]);
 
   return (
-    <main id="content" className="docforclient-page min-h-[100svh] bg-[#E6EFE3] px-4 py-10 print:bg-white print:py-0 sm:px-6">
+    <div className="docforclient-page min-h-[100svh] bg-[#E6EFE3] px-4 py-10 print:bg-white print:py-0 sm:px-6">
       <div className="mx-auto max-w-[1100px]">
         <p className="mb-6 text-center text-sm text-[#0B3D2E]/80 print:hidden">
           Two printable sheets — guest hub + Google reviews. Use <strong>Print handout</strong> for both pages.
@@ -83,7 +83,7 @@ export default async function DocForClientPage() {
           </a>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

@@ -99,22 +99,6 @@ export function LiquidGlassFooter({ children, className = "" }: { children: Reac
   return <div className={`glass-footer-panel rounded-[1.5rem] p-6 backdrop-blur-2xl sm:p-8 ${className}`}>{children}</div>;
 }
 
-export function GoogleMapEmbed({ address }: { address?: string }) {
-  if (!address)
-    return (
-      <div className="rounded-2xl border border-dashed border-[#C9A227]/35 bg-white/[0.04] p-5 text-xs leading-6 text-[#E6DEC8]">
-        Map location will appear once billing address is set in Site globals.
-      </div>
-    );
-  const src = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
-  return (
-    <div className="overflow-hidden rounded-2xl border border-[#C9A227]/25 bg-[#0A3326]/40 shadow-lg">
-      <iframe title="Visriva billing location map" src={src} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="h-64 w-full border-0" allowFullScreen />
-      <p className="px-4 py-3 text-xs text-[#E6DEC8]">{address}</p>
-    </div>
-  );
-}
-
 export function WhatsAppChatTeaser({ href, phone }: { href: string; phone: string }) {
   return (
     <a href={href} target="_blank" rel="noreferrer" className="glass-footer-panel flex items-center gap-3 rounded-2xl p-4 transition hover:border-[#E5C158]/50">

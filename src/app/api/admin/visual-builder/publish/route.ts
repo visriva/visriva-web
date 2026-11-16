@@ -35,8 +35,13 @@ export async function POST(request: Request) {
     if (pageKey === "reviews") revalidatePath("/reviews");
     if (pageKey === "services") {
       revalidatePath("/photo-booths");
+      revalidatePath("/services/photo-booth");
       revalidatePath("/ai-merchandise");
       revalidatePath("/games-vr");
+      revalidatePath("/services/magnet-station");
+      revalidatePath("/services/tote-tshirt-station");
+      revalidatePath("/services/mug-printing");
+      revalidatePath("/services/keychain-station");
     }
 
     return NextResponse.json({ ok: true, pageKey });

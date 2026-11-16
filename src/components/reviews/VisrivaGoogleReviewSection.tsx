@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 import { Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import { openGoogleReview } from "@/lib/open-google-review";
@@ -57,13 +58,24 @@ export function VisrivaGoogleReviewSection({ settings, variant = "page" }: Props
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <button
-                type="button"
-                onClick={() => openGoogleReview(settings.review_url)}
-                className={onQr || variant === "page" ? "qr-gold-btn min-h-12 rounded-full px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em]" : "liquid-button min-h-12 rounded-full px-7 py-3.5 text-xs font-bold uppercase tracking-[0.14em]"}
-              >
-                {settings.cta_primary}
-              </button>
+              {onQr || variant === "page" ? (
+                <button
+                  type="button"
+                  onClick={() => openGoogleReview(settings.review_url)}
+                  className="qr-gold-btn min-h-12 rounded-full px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em]"
+                >
+                  {settings.cta_primary}
+                </button>
+              ) : (
+                <LiquidButton
+                  type="button"
+                  onClick={() => openGoogleReview(settings.review_url)}
+                  variant="gradient"
+                  className="min-h-12 px-7 py-3.5 text-xs font-bold tracking-[0.14em]"
+                >
+                  {settings.cta_primary}
+                </LiquidButton>
+              )}
               {variant === "page" ? (
                 <a
                   href="#review-wall"

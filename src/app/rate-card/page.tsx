@@ -2,6 +2,7 @@ import { PageHero } from "@/components/PageHero";
 import { PolicyStrip } from "@/components/PolicyStrip";
 import { RateList } from "@/components/RateList";
 import { PaperBackground, TearTicket, WaveRevealButton } from "@/components/FramerSuite";
+import PricingEstimator from "@/components/PricingEstimator";
 import { RateCardConfigurator } from "@/components/rate-card/RateCardConfigurator";
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
@@ -26,6 +27,7 @@ export default async function RateCardPage() {
       />
       <section className="mx-auto max-w-[1500px] px-4 py-10 sm:px-6 lg:px-10">
         <RateCardConfigurator services={catalog.list} />
+        <PricingEstimator />
       </section>
       <section className="mx-auto max-w-[1500px] px-4 pb-16 sm:px-6 lg:px-10">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-5">

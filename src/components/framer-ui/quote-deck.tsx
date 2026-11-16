@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 import { useEffect, useState } from "react";
 import type { HomeQuote } from "@/lib/home-content-types";
 import { DEFAULT_HOME_CONTENT } from "@/lib/home-content-types";
@@ -34,9 +34,9 @@ export function QuoteDeck({ content }: { content?: HomeQuote }) {
         <h3 className="mt-5 max-w-2xl font-display text-4xl leading-[.98] text-white sm:text-5xl">{item.title}</h3>
         <p className="mt-4 max-w-xl text-sm leading-7 text-[#E6DEC8]">{item.copy}</p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <Link href={c.primary_cta_href} className="liquid-button rounded-full px-6 py-3.5 text-[10px] font-bold uppercase tracking-[.14em]">
+          <LiquidButton href={c.primary_cta_href} variant="gradient" className="px-6 py-3.5 text-[10px] font-bold tracking-[.14em]">
             {c.primary_cta_label.replace(/\s*↗\s*$/, "")}
-          </Link>
+          </LiquidButton>
           <button type="button" onClick={() => setIndex((v) => (v + 1) % prompts.length)} className="rounded-full border border-[#D4AF37]/35 px-5 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-[#E6DEC8]">
             {c.next_label}
           </button>

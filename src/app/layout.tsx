@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { VisualBuilderGate } from "@/components/visual-builder/VisualBuilderGate";
 import { FooterServer } from "@/components/FooterServer";
 import { SiteFooterWrapper } from "@/components/SiteFooterWrapper";
+import { EditMainPad } from "@/components/EditMainPad";
 import { WhatsAppBubble } from "@/components/WhatsAppBubble";
 import { siteUrl } from "@/lib/site";
 
@@ -32,17 +33,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-IN" className={`${outfit.variable} ${cormorant.variable} ${cinzel.variable} h-full max-w-[100vw] overflow-x-hidden antialiased`}>
-      <body className="min-h-full max-w-[100vw] overflow-x-hidden bg-[#E6EFE3] text-cream">
+    <html lang="en-IN" className={`${outfit.variable} ${cormorant.variable} ${cinzel.variable} h-full w-full overflow-x-hidden antialiased`}>
+      <body className="flex min-h-screen w-full flex-col overflow-x-hidden bg-[#041A13] text-white antialiased">
         <a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
         <JsonLd />
         <VisualBuilderGate>
           <Suspense fallback={null}>
             <Navbar />
           </Suspense>
-          {children}
+          <main id="content" className="flex w-full flex-col">
+            <EditMainPad>{children}</EditMainPad>
+          </main>
         </VisualBuilderGate>
-        <SiteFooterWrapper>
+        <SiteFooterWrapper className="shrink-0">
           <FooterServer />
           <WhatsAppBubble />
         </SiteFooterWrapper>

@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import { Check, Loader2, Search } from "lucide-react";
 import { useState } from "react";
 import { ArrowUpRightIcon } from "@/components/ArrowUpRightIcon";
-import { SwipeLettersLink } from "@/components/ui";
+import { LiquidButtonLabel } from "@/components/ui/LiquidButtonLabel";
+import { SwipeLettersLink } from "@/components/ui/SwipeLettersLink";
 import { VISRIVA_SPRING } from "@/components/framer-ui/motion";
 
 export function SwipeLettersButton(props: { href: string; label: string; className?: string }) {
@@ -144,11 +145,11 @@ export function MotionSubmitButton({
       disabled={pending || success}
       whileTap={phase === "idle" ? { scale: 0.98 } : undefined}
       transition={VISRIVA_SPRING}
-      className={`liquid-button group inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-90 sm:w-auto ${className}`}
+      className={`liquid-button group relative inline-flex min-h-12 w-full items-center justify-center gap-3 overflow-hidden rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[.15em] disabled:cursor-wait disabled:opacity-90 sm:w-auto ${className}`}
     >
-      <span>
+      <LiquidButtonLabel>
         {phase === "pending" ? "Sending…" : phase === "success" ? "Sent" : children}
-      </span>
+      </LiquidButtonLabel>
       {phase === "pending" ? <Loader2 className="h-4 w-4 animate-spin" /> : phase === "success" ? <Check className="h-4 w-4" /> : <ArrowUpRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />}
     </motion.button>
   );

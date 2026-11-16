@@ -43,7 +43,7 @@ export function Hero({ pageContent }: { pageContent?: HeroPageContent | null }) 
     (pageContent?.eyebrow || "Bengaluru's live engagement studio");
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#DCE8DF] via-[#E4EFE7] to-[#E6EFE3] pt-4 text-[#203F30] sm:pt-6">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#DCE8DF] via-[#E4EFE7] to-[#E6EFE3] pt-2 text-[#203F30] sm:pt-4">
       <div className="pointer-events-none absolute -right-24 -top-24 h-[34rem] w-[34rem] rounded-full bg-[#B7D0B2]/55 blur-[100px]" />
       <div className="pointer-events-none absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[#F5EEDB]/80 blur-[100px]" />
 

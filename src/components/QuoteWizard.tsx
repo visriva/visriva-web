@@ -11,6 +11,7 @@ import { inr } from "@/lib/format";
 import { emptyDraft, quoteMessage, type QuoteDraft } from "@/lib/quote";
 import { categoryMeta, countsFromIds, estimateWithLookup, type Service, type ServiceCategory } from "@/lib/services";
 import { requirements } from "@/lib/site";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 import { whatsAppLink } from "@/lib/whatsapp";
 import { isValidIndianMobile } from "@/lib/validation";
 
@@ -165,7 +166,11 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
           <h1 className="display-heading mt-3 text-6xl text-[#244936]">Your event brief<br/><em className="gold-gradient">is on its way.</em></h1>
           <p className="mt-6 text-base leading-8 text-[#617768]">{done.saved ? "Your request has been saved for the Visriva team. WhatsApp should also open with a copy of your brief." : "Your brief is ready in WhatsApp. Send that message so the studio receives the details directly."}</p>
           <div className="mt-8 grid gap-3 rounded-2xl bg-[#eaf1e6] p-5 text-sm text-[#4b6652]"><p><strong className="text-[#244936]">What happens next?</strong></p><p>01 · Our team checks the date and the selected stations.</p><p>02 · We share a tailored quote and event plan.</p><p>03 · Your date is confirmed once the advance is received.</p></div>
-          {done.href ? <a href={done.href} target="_blank" rel="noreferrer" className="liquid-button mt-8 inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[.15em]">Open WhatsApp brief ↗</a> : null}
+          {done.href ? (
+            <LiquidButton href={done.href} external variant="gradient" className="mt-8 px-7 py-4 text-xs font-semibold tracking-[.15em]">
+              Open WhatsApp brief ↗
+            </LiquidButton>
+          ) : null}
           <div className="mt-8 flex flex-wrap gap-4"><Link href="/" className="text-sm font-semibold text-[#607768] underline underline-offset-4">Return home</Link><Link href="/gallery" className="text-sm font-semibold text-[#607768] underline underline-offset-4">Explore the gallery</Link></div>
         </div>
       </section>
@@ -174,7 +179,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
 
   return (
     <PaperBackground>
-    <main id="content" className="min-h-screen px-4 pb-24 pt-[112px] sm:px-6 lg:px-10">
+    <div className="min-h-screen px-4 pb-24 pt-8 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-[1420px]">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div><p className="section-kicker">Visriva booking studio</p><h1 className="display-heading mt-2 text-5xl text-[#F4F0DF] sm:text-6xl">Let's plan something<br className="hidden sm:block"/><em className="text-[#E5C158] not-italic">worth remembering.</em></h1><p className="mt-4 max-w-2xl text-sm leading-7 text-[#C9D6CB]">Build your event request in a few simple steps. You can review everything before sending, and there is no payment at this stage.</p></div>
@@ -279,7 +284,9 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
                             <button type="button" aria-label={"Add one " + service.name} onClick={()=>setQuantity(service.id,quantity+1)} className="grid h-8 w-8 place-items-center rounded-full bg-[#294937] text-base text-white shadow-sm transition hover:bg-[#42654A]">+</button>
                           </div>
                         :
-                          <button type="button" disabled={!canBook} onClick={()=>toggle(service.id)} className="liquid-button shrink-0 rounded-full px-5 py-3 text-[9px] font-bold uppercase tracking-[.13em] disabled:cursor-not-allowed disabled:opacity-50">Add station +</button>
+                          <LiquidButton type="button" disabled={!canBook} onClick={() => toggle(service.id)} variant="gradient" className="shrink-0 px-5 py-3 text-[9px] font-bold tracking-[.13em] disabled:cursor-not-allowed disabled:opacity-50">
+                            Add station +
+                          </LiquidButton>
                         }
                       </div>
                     </div>
@@ -334,7 +341,15 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
             {error?<p role="alert" className="mt-6 rounded-xl border border-[#d7b5a5] bg-[#fbefeb] px-4 py-3 text-sm text-[#9a4d37]">{error}</p>:null}
             <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[#dce6d8] pt-6">
               {step>0?<button type="button" onClick={()=>{setStep((value)=>value-1);setError("");}} className="rounded-full border border-[#c6d7c1] px-6 py-3.5 text-xs font-semibold text-[#48634f] transition hover:bg-[#edf3e9]">← Back</button>:<span className="text-xs text-[#8a9a8a]">Your progress is saved in this browser.</span>}
-              {step<3?<button type="button" onClick={nextStep} className="liquid-button rounded-full px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em]">Continue to {steps[step+1].label} →</button>:<MotionSubmitButton pending={sending} onClick={submit}>Send event request</MotionSubmitButton>}
+              {step < 3 ? (
+                <LiquidButton type="button" onClick={nextStep} variant="gradient" className="px-7 py-3.5 text-xs font-semibold tracking-[.14em]">
+                  Continue to {steps[step + 1].label} →
+                </LiquidButton>
+              ) : (
+                <MotionSubmitButton pending={sending} onClick={submit}>
+                  Send event request
+                </MotionSubmitButton>
+              )}
             </div>
           </section>
 
@@ -348,7 +363,7 @@ export function QuoteWizard({ catalog, bookable }: QuoteWizardProps) {
           </aside>
         </div>
       </div>
-    </main>
+    </div>
     </PaperBackground>
   );
 }

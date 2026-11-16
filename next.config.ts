@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  trailingSlash: false,
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
@@ -18,10 +19,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Preserve legacy URLs that already have Google Search Console visibility.
-      { source: "/services/photo-booth", destination: "/photo-booths", permanent: true },
-      { source: "/services/tote-tshirt-station", destination: "/ai-merchandise", permanent: true },
-      { source: "/services/magnet-station", destination: "/ai-merchandise", permanent: true },
-      { source: "/services/keychain-station", destination: "/ai-merchandise", permanent: true },
       { source: "/ai-photo-booth-experiences", destination: "/photo-booths", permanent: true },
       { source: "/vr-engagement", destination: "/games-vr", permanent: true },
       { source: "/wedding-photo-booth-bangalore", destination: "/photo-booths", permanent: true },
@@ -32,6 +29,7 @@ const nextConfig: NextConfig = {
       { source: "/live/:path*", destination: "/", permanent: true },
 
       { source: "/review", destination: "/reviews", permanent: true },
+      { source: "/contact", destination: "/quote", permanent: true },
     ];
   },
   async headers() {

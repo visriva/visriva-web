@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 import type { HomeFeatured } from "@/lib/home-content-types";
 import type { Service } from "@/lib/services";
 import { EditableText } from "@/components/visual-builder/EditableText";
@@ -31,9 +31,9 @@ export function HomeFeaturedSection({ featured, services }: { featured: HomeFeat
           <RateList services={services} liveEdit />
         </div>
         <div className="mt-8 flex justify-end">
-          <Link href={ctaHref} className="liquid-button inline-flex rounded-full px-7 py-4 text-xs font-semibold uppercase tracking-[0.15em]">
+          <LiquidButton href={ctaHref} variant="gradient" className="px-7 py-4 text-xs font-semibold tracking-[0.15em]">
             <EditableText fieldKey="featured_cta_text" defaultValue={featured.cta_text} as="span" />
-          </Link>
+          </LiquidButton>
         </div>
       </div>
     </section>

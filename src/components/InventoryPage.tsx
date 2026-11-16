@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 import type { Service } from "@/lib/services";
 
 type Highlight = { number: string; title: string; body: string };
@@ -63,7 +64,9 @@ export function InventoryPage({
             </h1>
             <p className="mt-8 max-w-2xl text-base leading-8 text-white/80 sm:text-lg">{pageDescription}</p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/quote" className="liquid-button inline-flex items-center rounded-full px-7 py-4 text-[10px] font-bold uppercase tracking-[.16em]">Plan your experience ↗</Link>
+              <LiquidButton href="/quote" variant="gradient" className="px-7 py-4 text-[10px] font-bold tracking-[.16em]">
+                Plan your experience ↗
+              </LiquidButton>
               <Link href="/rate-card" className="inline-flex items-center rounded-full border border-white/40 bg-white/10 px-7 py-4 text-[10px] font-bold uppercase tracking-[.16em] text-white backdrop-blur transition hover:bg-white/20">Explore starting prices</Link>
             </div>
           </div>
@@ -151,7 +154,9 @@ export function InventoryPage({
             <h2 className="mt-4 font-display text-5xl leading-[.9] text-[#244936] sm:text-7xl">{pageClosingTitle}</h2>
             <p className="mt-6 max-w-2xl text-sm leading-7 text-[#718574] sm:text-base">{pageClosingCopy}</p>
           </div>
-          <Link href="/quote" className="liquid-button inline-flex shrink-0 items-center justify-center rounded-full px-8 py-4 text-[10px] font-bold uppercase tracking-[.16em]">Build your event brief ↗</Link>
+          <LiquidButton href="/quote" variant="gradient" className="shrink-0 px-8 py-4 text-[10px] font-bold tracking-[.16em]">
+            Build your event brief ↗
+          </LiquidButton>
         </div>
       </section>
     </main>

@@ -22,7 +22,7 @@ export default async function DocForReviewPage() {
   });
 
   return (
-    <main id="content" className="docforclient-page min-h-[100svh] bg-[#E6EFE3] px-4 py-10 print:bg-white print:py-0 sm:px-6">
+    <div className="docforclient-page min-h-[100svh] bg-[#E6EFE3] px-4 py-10 print:bg-white print:py-0 sm:px-6">
       <div className="mx-auto max-w-[720px]">
         <article className="overflow-hidden rounded-[2rem] border-2 border-[#C9A227] bg-[#07291E] shadow-[0_24px_70px_rgba(0,0,0,.35)] print:rounded-none print:border-[#C9A227] print:shadow-none">
           <header className="border-b border-[#C9A227]/35 px-6 py-8 text-center sm:px-10">
@@ -77,6 +77,6 @@ export default async function DocForReviewPage() {
           </a>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

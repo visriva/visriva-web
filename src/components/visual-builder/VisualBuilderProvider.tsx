@@ -65,7 +65,12 @@ const VisualBuilderContext = createContext<Ctx | null>(null);
 function resolvePageKey(pathname: string): VisualBuilderPageKey {
   if (pathname.startsWith("/qr")) return "qr";
   if (pathname.startsWith("/reviews") || pathname === "/review") return "reviews";
-  if (pathname.startsWith("/photo-booths") || pathname.startsWith("/ai-merchandise") || pathname.startsWith("/games-vr")) {
+  if (
+    pathname.startsWith("/photo-booths") ||
+    pathname.startsWith("/ai-merchandise") ||
+    pathname.startsWith("/games-vr") ||
+    pathname.startsWith("/services/")
+  ) {
     return "services";
   }
   return "home";
@@ -276,14 +281,9 @@ export function VisualBuilderProvider({ children }: { children: React.ReactNode 
     [pageKey, isAdmin, editorOn, previewMode, viewport, history, patch, publish, publishing, setEditorOnWrapped, initHomeLayout],
   );
 
-  const shellClass =
-    viewport === "mobile" && value.isEditMode
-      ? "mx-auto min-h-full max-w-[430px] overflow-x-hidden border-x border-[#C9A227]/30 shadow-2xl"
-      : "";
-
   return (
     <VisualBuilderContext.Provider value={value}>
-      <div className={shellClass} data-vb-viewport={viewport}>
+      <div className="flex w-full flex-col" data-vb-viewport={viewport}>
         {children}
       </div>
     </VisualBuilderContext.Provider>

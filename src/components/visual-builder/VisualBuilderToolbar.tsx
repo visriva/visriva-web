@@ -73,7 +73,6 @@ export function VisualBuilderToolbar() {
           </button>
         </div>
       </div>
-      <div className="h-12 shrink-0" aria-hidden />
       <LiveEditHub />
       {drawerOpen ? (
         <RestoreDrawer

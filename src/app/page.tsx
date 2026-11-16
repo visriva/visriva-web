@@ -13,6 +13,7 @@ import { siteUrl } from "@/lib/site";
 import { DesignStudioNav, QuoteDeck, TestimonialsLoopCarousel, WaveRevealButton } from "@/components/FramerSuite";
 import { VisrivaGoogleReviewSection } from "@/components/reviews/VisrivaGoogleReviewSection";
 import { getGoogleReviewSettings } from "@/lib/google-review";
+import { HomeContextualServiceIntro } from "@/components/HomeContextualServiceIntro";
 import { HomeFeaturedSection } from "@/components/visual-builder/HomeFeaturedSection";
 import { HomeLayoutSeed } from "@/components/visual-builder/HomeLayoutSeed";
 import { VisualSection } from "@/components/visual-builder/VisualSection";
@@ -46,7 +47,7 @@ export default async function HomePage() {
   const show = new Set(visibleSectionIds(globals.home_layout));
 
   return (
-    <main id="content" className="page-enter bg-[#E6EFE3]">
+    <div className="w-full bg-[#E6EFE3]">
       <HomeLayoutSeed layout={globals.home_layout} />
       {show.has("hero") ? (
         <VisualSection id="hero" label="Hero">
@@ -68,6 +69,7 @@ export default async function HomePage() {
         </>
         </VisualSection>
       ) : null}
+      <HomeContextualServiceIntro />
       {show.has("stats") ? (
         <VisualSection id="stats" label="Stats">
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
@@ -213,6 +215,6 @@ export default async function HomePage() {
         </section>
         </VisualSection>
       ) : null}
-    </main>
+    </div>
   );
 }

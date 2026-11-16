@@ -17,7 +17,7 @@ export default async function ReviewsPage() {
   const settings = await getGoogleReviewSettings();
 
   return (
-    <main id="content" className="bg-[#041A13] px-4 pb-24 pt-24 sm:px-6 lg:px-10">
+    <div className="bg-[#041A13] px-4 pb-24 pt-6 sm:px-6 lg:px-10">
       <ReviewsPageChrome>
       <div className="mx-auto max-w-[1100px] pt-6">
         <p className="font-royal text-[0.62rem] uppercase tracking-[0.28em] text-[#E8D48A]">Visriva · Client feedback</p>
@@ -30,6 +30,6 @@ export default async function ReviewsPage() {
         </p>
       </div>
       </ReviewsPageChrome>
-    </main>
+    </div>
   );
 }

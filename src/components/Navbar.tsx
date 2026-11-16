@@ -86,7 +86,7 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`pointer-events-none fixed inset-x-0 z-[100] mx-auto w-full max-w-7xl bg-transparent px-3 sm:px-6 ${editorChrome ? "top-14 sm:top-14" : "top-3"}`}
+        className={`pointer-events-none sticky z-[100] mx-auto w-full max-w-7xl bg-transparent px-3 pb-2 pt-2 sm:px-6 sm:pb-3 sm:pt-3 ${editorChrome ? "top-12" : "top-0"}`}
       >
         <motion.div
           ref={capsuleRef}
@@ -192,8 +192,6 @@ export function Navbar() {
           </div>
         ) : null}
       </header>
-
-      <div className={`shrink-0 ${editorChrome ? "h-12 sm:h-14" : "h-16 sm:h-20"}`} aria-hidden />
 
       <MobileDesignDrawer
         open={open}
