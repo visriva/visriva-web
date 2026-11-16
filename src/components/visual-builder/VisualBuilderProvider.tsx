@@ -121,8 +121,12 @@ export function VisualBuilderProvider({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const urlEdit = searchParams.get("edit") === "1" || searchParams.get("edit") === "true";
+  const studio = searchParams.get("studio") === "true" || searchParams.get("studio") === "1";
+    if (typeof window !== "undefined" && !urlEdit && !studio) {
+      localStorage.removeItem(STORAGE_EDITOR);
+    }
     const stored = typeof window !== "undefined" && localStorage.getItem(STORAGE_EDITOR) === "1";
-    const on = isAdmin && (urlEdit || stored);
+    const on = isAdmin && !studio && (urlEdit || stored);
     setEditorOn(on);
     if (on && typeof window !== "undefined") localStorage.setItem(STORAGE_EDITOR, "1");
   }, [isAdmin, searchParams]);
@@ -132,8 +136,14 @@ export function VisualBuilderProvider({ children }: { children: React.ReactNode 
     async function load() {
       const pubRes = await fetch(`/api/visual-builder/runtime?page=${pageKey}`);
       const pubBody = pubRes.ok ? await pubRes.json() : null;
-      if (!cancelled && pubBody?.state) {
-        dispatch({ type: "set", next: pubBody.state as VisualBuilderState });
+      const pub = pubBody?.state as VisualBuilderState | undefined;
+      const pubHas =
+        pub &&
+        (Object.keys(pub.texts ?? {}).length > 0 ||
+          Object.keys(pub.images ?? {}).length > 0 ||
+          (pub.home_layout && pub.home_layout.sections?.length));
+      if (!cancelled && pubHas) {
+        dispatch({ type: "set", next: pub });
       }
       if (!isAdmin || !editorOn) return;
       const local = localStorage.getItem(`${STORAGE_DRAFT}-${pageKey}`);

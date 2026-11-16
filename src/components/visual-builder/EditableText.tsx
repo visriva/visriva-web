@@ -48,11 +48,7 @@ export function EditableText({ fieldKey, defaultValue, as: Tag = "span", classNa
         <span className="pointer-events-none absolute -top-6 left-0 rounded-full bg-[#07261C] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#E5C158]">
           ✎ Editing
         </span>
-      ) : (
-        <span className="pointer-events-none absolute -top-5 left-0 rounded bg-[#07261C]/80 px-1.5 py-0.5 text-[8px] font-semibold uppercase text-[#E5C158]/90 opacity-80">
-          Edit
-        </span>
-      )}
+      ) : null}
       {focused ? (
         <FormatBar
           onBold={() => document.execCommand("bold")}

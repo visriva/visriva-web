@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-IN" className={`${outfit.variable} ${cormorant.variable} ${cinzel.variable} h-full max-w-[100vw] overflow-x-hidden antialiased`}>
-      <body className="min-h-full max-w-[100vw] overflow-x-hidden bg-ink text-cream">
+      <body className="min-h-full max-w-[100vw] overflow-x-hidden bg-[#E6EFE3] text-cream">
         <a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
         <JsonLd />
         <VisualBuilderGate>

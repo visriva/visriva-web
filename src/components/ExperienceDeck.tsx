@@ -15,7 +15,6 @@ import {
   StationGoldPagination,
   SwipeLettersButton,
 } from "@/components/framer-ui";
-import { STATION_FILTER_SPRING } from "@/components/framer-ui/motion";
 
 type TabId = "all" | ServiceCategory;
 
@@ -99,17 +98,13 @@ export function ExperienceDeck({ services, content }: { services: Service[]; con
         </div>
 
         <ExperienceStationRail ref={railRef} itemCount={filtered.length} onActiveIndexChange={setActiveDot} className="mt-0">
-            {filtered.map((service, index) => {
+            {filtered.map((service) => {
               const isFlipped = flipped === service.id;
               const isCompared = compareIds.includes(service.id);
               return (
-                <motion.article
-                  key={`${active}-${service.id}`}
-                  initial={reduce ? false : { opacity: 0, y: 20, scale: 0.96 }}
-                  animate={reduce ? undefined : { opacity: 1, y: 0, scale: 1 }}
-                  transition={{ ...STATION_FILTER_SPRING, delay: index * 0.08 }}
+                <article
+                  key={service.id}
                   className="w-[min(84vw,390px)] shrink-0 snap-start"
-                  style={reduce ? undefined : { transformOrigin: "center center" }}
                 >
                   <LiquidGlassStationFlipCard
                     flipped={isFlipped}
@@ -175,7 +170,7 @@ export function ExperienceDeck({ services, content }: { services: Service[]; con
                       {isCompared ? "✓ Added" : "Compare +"}
                     </button>
                   </div>
-                </motion.article>
+                </article>
               );
             })}
           {filtered.length === 0 ? (

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { StudioCanvasBridge } from "@/components/studio/StudioCanvasBridge";
 import { StudioCommandBar } from "@/components/studio/StudioCommandBar";
 import { StudioInspector } from "@/components/studio/StudioInspector";
 import { StudioLayersPanel } from "@/components/studio/StudioLayersPanel";
@@ -44,7 +43,6 @@ export function StudioProShell({ children }: { children: React.ReactNode }) {
         </div>
         <StudioInspector />
       </div>
-      <StudioCanvasBridge />
     </div>
   );
 }

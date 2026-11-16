@@ -1,32 +1,47 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { StudioCanvasBridge } from "@/components/studio/StudioCanvasBridge";
 import { StudioProShell } from "@/components/studio/StudioProShell";
-import { StudioRuntimeProvider, useStudioOptional } from "@/components/studio/StudioRuntimeProvider";
+import { StudioRuntimeProvider } from "@/components/studio/StudioRuntimeProvider";
 import { VisualBuilderToolbar } from "@/components/visual-builder/VisualBuilderToolbar";
-import { StudioRuntimeApplier } from "@/components/studio/StudioRuntimeApplier";
 
-function StudioChrome({ children }: { children: React.ReactNode }) {
-  const studio = useStudioOptional();
-  if (studio?.isStudioMode) {
-    return <StudioProShell>{children}</StudioProShell>;
+function StudioGateInner({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const studioOn = searchParams.get("studio") === "true" || searchParams.get("studio") === "1";
+
+  if (!studioOn) {
+    return (
+      <>
+        <VisualBuilderToolbar />
+        {children}
+      </>
+    );
   }
+
   return (
-    <>
-      <VisualBuilderToolbar />
-      {children}
-    </>
+    <StudioRuntimeProvider>
+      <StudioProShell>
+        {children}
+        <StudioCanvasBridge />
+      </StudioProShell>
+    </StudioRuntimeProvider>
   );
 }
 
-/** Wraps the public site — single studio gate (.cursorrules). */
+/** Pro Studio only loads when ?studio=true — public pages skip studio runtime (no flash). */
 export function StudioGate({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense fallback={children}>
-      <StudioRuntimeProvider>
-        <StudioRuntimeApplier />
-        <StudioChrome>{children}</StudioChrome>
-      </StudioRuntimeProvider>
+    <Suspense
+      fallback={
+        <>
+          <VisualBuilderToolbar />
+          {children}
+        </>
+      }
+    >
+      <StudioGateInner>{children}</StudioGateInner>
     </Suspense>
   );
 }
